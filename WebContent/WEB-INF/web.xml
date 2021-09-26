@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+	id="WebApp_ID" version="4.0">
+	<display-name>CFA102G3</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<resource-ref>
+		<description>DB Connection</description>
+		<res-ref-name>jdbc/TestDB</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+
+	<servlet>
+		<servlet-name>AdServlet</servlet-name>
+		<servlet-class>com.ad.controller.AdServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdServlet</servlet-name>
+		<url-pattern>/ad/ad.do</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MemberServlet</servlet-name>
+		<servlet-class>com.member.controller.MemberServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MemberServlet</servlet-name>
+		<url-pattern>/member/member</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>FriendServlet</servlet-name>
+		<servlet-class>com.friend.controller.FriendServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FriendServlet</servlet-name>
+		<url-pattern>/friend/friend</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ChatServlet</servlet-name>
+		<servlet-class>com.chat.controller.ChatServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ChatServlet</servlet-name>
+		<url-pattern>/chat/chat</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>LoginoutServlet</servlet-name>
+		<servlet-class>com.emp.controller.LoginoutServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginoutServlet</servlet-name>
+		<url-pattern>/emp/emploginout.do</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MemPersonalPageServlet</servlet-name>
+		<servlet-class>com.mempersonalpage.controller.MemPersonalPageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MemPersonalPageServlet</servlet-name>
+		<url-pattern>/memPersonalPage/MemPersonalPageServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ExpertPersonalPageServlet</servlet-name>
+		<servlet-class>com.expertpersonalpage.controller.ExpertPersonalPageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExpertPersonalPageServlet</servlet-name>
+		<url-pattern>/expertPersonalPage/ExpertPersonalPageServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PostServlet</servlet-name>
+		<servlet-class>com.post.controller.PostServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PostServlet</servlet-name>
+		<url-pattern>/post/PostServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PostTypeServlet</servlet-name>
+		<servlet-class>com.posttype.controller.PostTypeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PostTypeServlet</servlet-name>
+		<url-pattern>/postType/PostTypeServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PostReportServlet</servlet-name>
+		<servlet-class>com.postreport.controller.PostReportServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PostReportServlet</servlet-name>
+		<url-pattern>/postReport/PostReportServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PostMessageServlet</servlet-name>
+		<servlet-class>com.postmessage.controller.PostMessageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PostMessageServlet</servlet-name>
+		<url-pattern>/postMessage/PostMessageServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MessageReportServlet</servlet-name>
+		<servlet-class>com.messagereport.controller.MessageReportServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MessageReportServlet</servlet-name>
+		<url-pattern>/messageReport/MessageReportServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ExpertArticleServlet</servlet-name>
+		<servlet-class>com.expertarticle.controller.ExpertArticleServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExpertArticleServlet</servlet-name>
+		<url-pattern>/expertArticle/ExpertArticleServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ActivityServlet</servlet-name>
+		<servlet-class>com.activity.controller.ActivityServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ActivityServlet</servlet-name>
+		<url-pattern>/activity/activity.do</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ExpertServlet</servlet-name>
+		<servlet-class>com.expert.controller.ExpertServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExpertServlet</servlet-name>
+		<url-pattern>/expert.do</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Dateappoorder</servlet-name>
+		<servlet-class>com.dateappoorder.controller.DateappoorderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Dateappoorder</servlet-name>
+		<url-pattern>/dateappoorder/dateappoorder.do</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MemTime</servlet-name>
+		<servlet-class>com.memTime.controller.MemTimeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MemTime</servlet-name>
+		<url-pattern>/memTime/memTime.do</url-pattern>
+	</servlet-mapping>
+
+</web-app>

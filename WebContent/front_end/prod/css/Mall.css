@@ -1,0 +1,134 @@
+@charset "BIG5";
+.card{
+  
+}
+.container-fluid{
+	border-bottom:3px solid #ff8000;
+}
+.fz-2{
+  font-size: 14px;
+  font-weight: 350;
+  line-height: 1.8;
+  
+}
+.price mr-1{
+ color: #ff0000!important;
+}
+
+.pro-title{
+    height: 40px;
+    overflow: hidden;
+ } 
+
+.text-basic {
+	 color: #000000!important;
+}
+ .text-basic:hover, .text-basic:focus {
+	 color: #502092 !important;
+}
+.pro-item .pro-wrap {
+	 position: relative;
+	 overflow: hidden;
+}
+ .pro-item .pro-wrap .pro-flags {
+	 position: absolute;
+	 border-radius: 0;
+	 z-index: 1;
+}
+ .pro-item .pro-wrap .pro-photo {
+	 display: block;
+}
+ .pro-item .pro-wrap .pro-photo img {
+	 width: 100%;
+	 
+}
+
+ 
+ ._com-icon {
+	 overflow: hidden;
+	 
+}
+._box-border:hover, ._box-border:focus {
+	 border-color: #8000ff;
+	
+	 border-width:2px
+}
+ ._com-icon .icon {
+ 	 border-radius:10px;
+	 position: absolute;
+	 transition: all 0.5s;
+	 z-index: 1;
+	 
+	 
+}
+ ._com-icon._down-up .icon[no="2"] {
+	 transition-delay: 0.5s;
+	 transform: translateX(-50%) translateY(-50%);
+	 top: 50%;
+	 left: 60%;	
+	 font-size: 20px;
+	 color: white;
+	 top: 150%;
+	 text-shadow: 0 0 10px rgba(0, 0, 0, .3);
+	 background:#ff8000;
+}
+
+
+ ._com-icon._down-up .icon {
+	 transform: translateX(-50%) translateY(-50%);
+	 top: 50%;
+	 left: 40%;	
+	 font-size: 20px;
+	 color: #ff8000;
+	 top: 150%;
+	 text-shadow: 0 0 10px rgba(0, 0, 0, .3);
+}
+ ._com-icon._down-up:hover .icon {
+	 top: 50%;
+}
+
+
+._img-dark::before {
+	 content: '';
+	 position: absolute;
+	 right: 0;
+	 bottom: 0;
+	 top: 0;
+	 left: 0;
+	 background-image: radial-gradient(50% 99%, rgba(0, 0, 0, .6) 50%, rgba(0, 0, 0, .8) 99%);
+	 opacity: 0;
+	 transition: opacity 0.3s ease;
+}
+ ._img-dark:hover::before {
+	 opacity: 0.5;
+}
+.select-option h3{
+	 border-left:5px solid #ff0000;
+	 padding :5px
+}
+.cool-link {
+  	padding :5px;
+	 border-left:5px solid #804000;
+	 display: inline-block;
+	 color: black;
+	 text-decoration: none;
+}
+.cool-link:hover{
+	display: inline-block;
+	text-decoration: none;
+}
+ .cool-link::after {
+	 content: '';
+	 display: block;
+	 width: 0;
+	 height: 2px;
+	 background:#ff8000 ;
+	 transition: width 0.3s;
+	
+}
+ .cool-link:hover::after {
+	 width: 100%;
+	
+}
+ 
+ 

@@ -1,0 +1,112 @@
+@charset "BIG5";
+body {
+    background-color: #ecedee
+}
+
+.card {
+    border: none;
+    overflow: hidden
+}
+.pn{
+	font-size:24px;
+	font-weight:550;
+}
+.ctpnpc{
+	background-color:rgb(248,246,232);
+}
+.pnpc{
+	font-size:40px;
+	font-weight:450;
+	color:red
+}
+.thumbnail_images ul {
+    list-style: none;
+    justify-content: center;
+    display: flex;
+    align-items:center;
+    margin-top: 10px;
+    margin-right: 40px
+}
+
+.thumbnail_images ul li {
+    margin: 5px;
+    padding: 10px;
+    border: 2px solid #eee;
+    cursor: pointer;
+    transition: all 0.5s
+}
+
+.thumbnail_images ul li:hover {
+    border: 2px solid #000
+}
+
+.main_image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    height: 400px;
+    width: 100%;
+    overflow: hidden
+}
+
+
+.content p {
+    font-size: 12px
+}
+
+.ratings span {
+    font-size: 14px;
+    margin-left: 12px
+}
+.search-option {
+    position: absolute;
+    background-color: #000;
+    overflow: hidden;
+    align-items: center;
+    color: #fff;
+    width: 200px;
+    height: 200px;
+    border-radius: 49% 51% 50% 50% / 68% 69% 31% 32%;
+    left: 30%;
+    bottom: -250px;
+    transition: all 0.5s;
+    cursor: pointer
+}
+
+.search-option .first-search {
+    position: absolute;
+    top: 20px;
+    left: 90px;
+    font-size: 20px;
+    opacity: 1000
+}
+
+.search-option .inputs {
+    opacity: 0;
+    transition: all 0.5s ease;
+    transition-delay: 0.5s;
+    position: relative
+}
+
+.search-option .inputs input {
+    position: absolute;
+    top: 200px;
+    left: 30px;
+    padding-left: 20px;
+    background-color: transparent;
+    width: 300px;
+    border: none;
+    color: #fff;
+    border-bottom: 1px solid #eee;
+    transition: all 0.5s;
+    z-index: 10
+}
+
+
+
+.buttons .btn {
+    height: 50px;
+    width: 150px;
+    border-radius: 0px !important
+}

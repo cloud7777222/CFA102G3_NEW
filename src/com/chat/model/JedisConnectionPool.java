@@ -1,0 +1,32 @@
+package com.chat.model;
+
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+
+public class JedisConnectionPool {
+	private static JedisPool pool = null;
+
+	private JedisConnectionPool() {
+	}
+
+	public static JedisPool getJedisPool() {
+		// double lock
+		if (pool == null) {
+			synchronized(JedisConnectionPool.class) {
+				if (pool == null) {
+					JedisPoolConfig config = new JedisPoolConfig();
+					config.setMaxTotal(8);
+					config.setMaxIdle(8);
+					config.setMaxWaitMillis(10000);
+					pool = new JedisPool(config, "localhost", 6379);
+				}
+			}
+		}
+		return pool;
+	}
+
+	public static void shutdownJedisPool() {
+		if (pool != null)
+			pool.destroy();
+	}
+}

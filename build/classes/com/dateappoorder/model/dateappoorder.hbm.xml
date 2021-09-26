@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.dateappoorder.model.DateappoorderVO" table="dateappoorder" >
+        
+        <id name="dateOrderNo" column="dateOrderNo">
+            <generator class="identity" />
+        </id>
+        
+        
+        <property name="memberNoA" column="memberNoA" />
+        <property name="memberNoB" column="memberNoB" />
+        <property name="dateOrderDate" column="dateOrderDate" />
+        <property name="dateAppoDate" column="dateAppoDate" />
+        <property name="dateOrderState" column="dateOrderState" />
+        <property name="dateStarRateA" column="dateStarRateA" />
+        <property name="dateStarRateB" column="dateStarRateB" />
+        <property name="dateCE" column="dateCE" />
+        
+    </class>
+</hibernate-mapping>
