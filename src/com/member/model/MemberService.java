@@ -1,7 +1,9 @@
 package com.member.model;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MemberService {
 	
@@ -19,10 +21,14 @@ public class MemberService {
 		dao.update(memberVO);
 	}
 	
+	public void updatePhoto(String memberAccount,byte[] memberPhoto) {
+		dao.updatePhoto(memberAccount, memberPhoto);
+	}
 	
 	public void updatePassword(String memberAccount,String memberPassword) {
 		dao.updatePassword(memberAccount,memberPassword);
 	}
+	
 	
 	public void updatePoint(String memberAccount,Integer memberPoint) {
 		dao.updatePoint(memberAccount,memberPoint);
@@ -32,15 +38,25 @@ public class MemberService {
 		dao.updateBlackList(memberAccount,memberBlackList);
 	}
 	
+	public byte[] getPhoto(String memberAccount) {
+		return dao.getPhoto(memberAccount);
+	}
 	
 	public MemberVO getOneMember(String memberAccount) {
 		return dao.getOne(memberAccount);
 	}
-	public MemberVO getOneMemberByNo(Integer memberno) {
-		return dao.getOneByNo(memberno);
+	
+	public MemberVO getOneMember(Integer memberNoA) {
+		return dao.getOne(memberNoA);
 	}
+	
 	public List<MemberVO> getAllMember(){
 		return dao.getAll();
+	}
+	
+	
+	public Set<MemberVO> getAllMemberExceptMeBySet(Integer memberNoA){
+		return dao.getAllExceptMeBySet(memberNoA);
 	}
 	
 	public boolean checkAccount(String memberAccount) {
@@ -58,6 +74,7 @@ public class MemberService {
 	public boolean checkAccountEmail(String memberAccount,String memberEmail) {
 		return dao.checkAccountEmail(memberAccount,memberEmail);
 	}
+	
 	
 	
 }

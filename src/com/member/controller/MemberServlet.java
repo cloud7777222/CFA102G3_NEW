@@ -1,6 +1,7 @@
 package com.member.controller;
 
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,6 +99,16 @@ public class MemberServlet extends HttpServlet {
 				 }
 				 /***************************2.開始新增資料***************************************/
 				 memberService.addMember(memberVO);//Service在前面宣告過了
+				 
+				 FileInputStream fis=new FileInputStream("C:/test/dog.jpg");
+				 BufferedInputStream bis = new BufferedInputStream(fis);
+				 byte[] memberPhotoBytes=new byte[fis.available()];
+				 bis.read(memberPhotoBytes);
+				 bis.close();
+				 fis.close();
+				 
+				 memberService.updatePhoto(memberAccount, memberPhotoBytes);
+				 
 				 /***************************3.新增完成,準備轉交(Send the Success view)***********/
 				 req.setAttribute("memberVO", memberVO);
 				 String url="/front_end/member/updateMember.jsp";
@@ -121,15 +132,16 @@ public class MemberServlet extends HttpServlet {
 				
 			String memberAccount = req.getParameter("memberAccount");//從jsp抓帳號
 			Part memberPhoto=req.getPart("memberPhoto");
+			MemberService memberService=new MemberService();
 			
 			InputStream memberPhotoPart=memberPhoto.getInputStream();
 			byte[] memberPhotoBytes=new byte[memberPhotoPart.available()];
+			if(memberPhotoBytes.length==0) {
+				memberPhotoBytes=memberService.getPhoto(memberAccount);
+			}
 			memberPhotoPart.read(memberPhotoBytes);
 			memberPhotoPart.close();
 			
-			if(memberPhotoBytes.length==0) {
-				errorMsgs.add("請上傳圖片");
-			}
 			
 			String memberName=req.getParameter("memberName").trim();
 			String memberNameReg = "^[(\u4e00-\u9fa5)(a-zA-Z)]{2,20}$";
@@ -207,13 +219,13 @@ public class MemberServlet extends HttpServlet {
 			
 			
 			/***************************2.開始修改資料*****************************************/
-			MemberService memberService=new MemberService();
+			
 			
 			memberService.updateMember(memberVO);
-			
+			memberService.updatePhoto(memberAccount, memberPhotoBytes);
 			/***************************3.修改完成,準備轉交(Send the Success view)*************/
 			req.setAttribute("memberVO", memberVO);
-			String url="/front_end/member/memberProfile.jsp";//路徑要換!!!!!!!!!!!!!!!!!!!!!!!
+			String url="/front_end/member/memberProfileByMe.jsp";//路徑要換!!!!!!!!!!!!!!!!!!!!!!!
 			RequestDispatcher successView=req.getRequestDispatcher(url);
 			successView.forward(req, res);
 			/***************************其他可能的錯誤處理*************************************/
@@ -225,9 +237,30 @@ public class MemberServlet extends HttpServlet {
 			}
 		}
 		
+		if("member_Profile_By_Me".equals(action)) {//來自memberProfileByMe.jsp的請求
+			List<String> errorMsgs=new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			try {
+			/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
+			String memberAccount=req.getParameter("memberAccount");
+			/***************************2.準備轉交(Send the Success view)*************/
+			MemberService memberService=new MemberService();
+			MemberVO memberVO=new MemberVO();
+			memberVO=memberService.getOneMember(memberAccount);
+			req.setAttribute("memberVO", memberVO);
+			String url = "/front_end/member/memberProfileByMe.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url); //轉交memberProfileByMe.jsp
+			successView.forward(req, res);
+			}
+			/***************************其他可能的錯誤處理*************************************/
+			catch(Exception e) {
+				errorMsgs.add("資料傳送失敗:"+e.getMessage());
+				RequestDispatcher failureView=req.getRequestDispatcher("/front_end/member/lohInMember.jsp");//發生無法控制的錯誤送回select_page.jsp
+				failureView.forward(req, res);
+			}
+		}
 		
-		
-		if("update_Member_Profile".equals(action)) {//來自memberProfile.jsp的請求
+		if("update_Member_Profile".equals(action)) {//來自memberProfileByMe.jsp的請求
 			List<String> errorMsgs=new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 			try {
@@ -245,13 +278,13 @@ public class MemberServlet extends HttpServlet {
 			/***************************其他可能的錯誤處理*************************************/
 			catch(Exception e) {
 				errorMsgs.add("資料傳送失敗:"+e.getMessage());
-				RequestDispatcher failureView=req.getRequestDispatcher("/front_end/member/memberProfile.jsp");//發生無法控制的錯誤送回select_page.jsp
+				RequestDispatcher failureView=req.getRequestDispatcher("/front_end/member/memberProfileByMe.jsp");//發生無法控制的錯誤送回select_page.jsp
 				failureView.forward(req, res);
 			}
 		}
 		
 		
-		if("update_Password_Member_Profile".equals(action)) {//來自memberProfile.jsp的請求
+		if("update_Password_Member_Profile".equals(action)) {//來自memberProfileByMe.jsp的請求
 			List<String> errorMsgs=new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 			try {
@@ -269,7 +302,7 @@ public class MemberServlet extends HttpServlet {
 			/***************************其他可能的錯誤處理*************************************/
 			catch(Exception e) {
 				errorMsgs.add("資料傳送失敗:"+e.getMessage());
-				RequestDispatcher failureView=req.getRequestDispatcher("/front_end/member/memberProfile.jsp");//發生無法控制的錯誤送回select_page.jsp
+				RequestDispatcher failureView=req.getRequestDispatcher("/front_end/member/memberProfileByMe.jsp");//發生無法控制的錯誤送回select_page.jsp
 				failureView.forward(req, res);
 			}
 		}
@@ -568,7 +601,7 @@ public class MemberServlet extends HttpServlet {
 			}
 			
 			if (!errorMsgs.isEmpty()) {
-				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/member/logInMember.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/member/logInMember.jsp");
 				failureView.forward(req, res);
 				return;
 			}
@@ -578,7 +611,7 @@ public class MemberServlet extends HttpServlet {
 		
 			if(memberVO.getMemberName()==null) {
 				req.setAttribute("memberVO", memberVO);
-				RequestDispatcher notFillProfile=req.getRequestDispatcher("/back_end/member/updateMember.jsp");
+				RequestDispatcher notFillProfile=req.getRequestDispatcher("/front_end/member/updateMember.jsp");
 				notFillProfile.forward(req, res);
 				return;
 			}
@@ -597,10 +630,10 @@ public class MemberServlet extends HttpServlet {
 			}
 			/***************************3.登入完成,準備轉交(Send the Success view)*************/
 //			res.sendRedirect(req.getContextPath()+"/member/select_page.jsp");//路徑要改!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			req.setAttribute("memberVO", memberVO);
-			String url="/front_end/member/memberProfile.jsp";
+			req.getSession().setAttribute("memberVO", memberVO);
+			String url="/front_end/friend/browseMember.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneMember.jsp
-			successView.forward(req, res);
+			successView.forward(req, res);	
 			}
 			catch(Exception e) {
 				errorMsgs.add("登入失敗:"+e.getMessage());

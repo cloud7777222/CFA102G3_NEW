@@ -2,7 +2,7 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.ad.model.*"%>
-
+<%@ page import="com.member.model.*"%>
 
 
 <html>
@@ -81,19 +81,20 @@ input, textarea, button {
 
 <body id="page-top">
 
-<form METHOD="post"
-												ACTION="<%=request.getContextPath()%>/memTime/memTime.do" name="form1"
-												>
-												
-												<div class="form-group">
-<!-- 												<input type="hidden" name="memberNoA" value="3"> -->
-												<input type="hidden" name="memberNoB" value="8">
-												<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
-													<input type="hidden" name="action" value="datingCheck">
-													<button type="submit" class="btn btn-primary" >送出新增</button>
-												</div>
+	<form METHOD="post"
+		ACTION="<%=request.getContextPath()%>/memTime/memTime.do" name="form1">
 
-											</form>
+		<div class="form-group">
+			<input type="hidden" name="memberNoA"
+				value="<%=((MemberVO) session.getAttribute("memberVO")).getMemberNo()%>">
+			<input type="hidden" name="memberNoB" value="3"> <input
+				type="hidden" name="requestURL"
+				value="<%=request.getServletPath()%>"> <input type="hidden"
+				name="action" value="datingCheck">
+			<button type="submit" class="btn btn-primary">送出新增</button>
+		</div>
+
+	</form>
 
 
 </body>

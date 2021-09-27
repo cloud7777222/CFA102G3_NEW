@@ -2,7 +2,11 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.member.model.*"%>
-<jsp:useBean id="memberSvc" scope="page" class="com.member.model.MemberService" />
+<%
+MemberService memberSvc = new MemberService();
+MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("memberNoB")));
+%>
+<%-- <jsp:useBean id="memberSvc" scope="page" class="com.member.model.MemberService" /> --%>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -83,7 +87,7 @@
                   method="post"
                   action="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
                 >
-                  <h2>To:${memberSvc.getOneMemberByNo(request.getParameter("memberNoB")) }</h2>
+                  <h2>To:<%=memberVO.getMemberName() %></h2>
                   <div class="control-group">
                     <input
                       type="text"
@@ -95,7 +99,7 @@
                   <div class="control-group">
                     <div id="select_datetime">
                       <input
-                        type="text"
+                        type="hidden"
                         class="date_output"
                         name="dateAppoDate"
                       />
@@ -110,19 +114,7 @@
                     ></textarea>
                   </div>
                   <div>
-                    <%--
-                    <input
-                      type="hidden"
-                      name="memberNoA"
-                      value="${memberVO.adNo}"
-                    />
-                    --%> <%--
-                    <input
-                      type="hidden"
-                      name="memberNoB"
-                      value="${memberVO.adNo}"
-                    />
-                    --%>
+
 
 <!--                     <input type="text" name="memberNoA" value="6" /> -->
 <!--                     <input type="text" name="memberNoB" value="3" /> -->

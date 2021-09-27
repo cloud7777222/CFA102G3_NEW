@@ -88,7 +88,7 @@ public class MemTimeServlet extends HttpServlet {
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("jsonDataA", jsonDataA);
 				req.setAttribute("jsonDataB", jsonDataB);// 資料庫取出的dateappoorderVO物件,存入req
-				String url = "/front_end/dateappoorder/NewFile.jsp";
+				String url = "/front_end/dateappoorder/addDateappoorder.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneDateappoorder.jsp
 				successView.forward(req, res);
 
