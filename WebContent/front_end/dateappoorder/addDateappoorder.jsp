@@ -67,6 +67,7 @@
 
       <!-- dating Start -->
       
+      
       <%-- <%=((MemberVO) session.getAttribute("memberVO")).getMemberNo()%> --%>
 
       <div class="container">
