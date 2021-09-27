@@ -86,8 +86,8 @@ input, textarea, button {
 												>
 												
 												<div class="form-group">
-												<input type="hidden" name="memberNoA" value="3">
-												<input type="hidden" name="memberNoB" value="6">
+<!-- 												<input type="hidden" name="memberNoA" value="3"> -->
+												<input type="hidden" name="memberNoB" value="8">
 												<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 													<input type="hidden" name="action" value="datingCheck">
 													<button type="submit" class="btn btn-primary" >送出新增</button>

@@ -122,7 +122,8 @@ public class DateappoorderServlet extends HttpServlet {
 				/*************************** ��L�i�઺���~�B�z **********************************/
 			} catch (Exception e) {
 				errorMsgs.add("無法取得要修改的資料:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/dateappoorder/listAllDateappoorder.jsp");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front_end/dateappoorder/listAllDateappoorder.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -162,7 +163,7 @@ public class DateappoorderServlet extends HttpServlet {
 				Integer dateOrderState = new Integer(req.getParameter("dateOrderState").trim());
 				Integer dateStarRateA = new Integer(req.getParameter("dateStarRateA").trim());
 				Integer dateStarRateB = new Integer(req.getParameter("dateStarRateB").trim());
-				Integer dateCE = (dateStarRateA+dateStarRateB)/2;
+				Integer dateCE = (dateStarRateA + dateStarRateB) / 2;
 
 				DateappoorderVO dateappoorderVO = new DateappoorderVO();
 				dateappoorderVO.setDateOrderNo(dateOrderNo);
@@ -216,7 +217,7 @@ public class DateappoorderServlet extends HttpServlet {
 			// Store this set in the request scope, in case we need to
 			// send the ErrorPage view.
 			req.setAttribute("errorMsgs", errorMsgs);
-			
+
 			String requestURL = req.getParameter("requestURL");
 
 			try {
@@ -227,12 +228,8 @@ public class DateappoorderServlet extends HttpServlet {
 				Integer memberNoB = new Integer(req.getParameter("memberNoB").trim());
 
 				java.sql.Timestamp dateOrderDate = null;
-				try {
-					dateOrderDate = new java.sql.Timestamp(Long.parseLong(req.getParameter("dateOrderDate").trim()));
-				} catch (IllegalArgumentException e) {
-					dateOrderDate = new java.sql.Timestamp(System.currentTimeMillis());
-					errorMsgs.add("訂單日期有誤!");
-				}
+
+				dateOrderDate = new java.sql.Timestamp(System.currentTimeMillis());
 
 				java.sql.Timestamp dateAppoDate = null;
 				try {
@@ -242,10 +239,10 @@ public class DateappoorderServlet extends HttpServlet {
 					errorMsgs.add("約會日期有誤!");
 				}
 
-				Integer dateOrderState = new Integer(req.getParameter("dateOrderState").trim());
-				Integer dateStarRateA = new Integer(req.getParameter("dateStarRateA").trim());
-				Integer dateStarRateB = new Integer(req.getParameter("dateStarRateB").trim());
-				Integer dateCE = new Integer(req.getParameter("dateCE").trim());
+				Integer dateOrderState = 1;
+				Integer dateStarRateA = 1;
+				Integer dateStarRateB = 1;
+				Integer dateCE = 1;
 
 				DateappoorderVO dateappoorderVO = new DateappoorderVO();
 
@@ -261,7 +258,8 @@ public class DateappoorderServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("dateappoorderVO", dateappoorderVO); // �t����J�榡���~��dateappoorderVO����,�]�s�Jreq
-					RequestDispatcher failureView = req.getRequestDispatcher("/front_end/dateappoorder/addDateappoorder.jsp");
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/front_end/dateappoorder/addDateappoorder.jsp");
 					failureView.forward(req, res);
 					return;
 				}
@@ -270,8 +268,8 @@ public class DateappoorderServlet extends HttpServlet {
 				 * 2.�}�l�s�W���
 				 ***************************************/
 				DateappoorderService dateappoorderSvc = new DateappoorderService();
-				dateappoorderVO = dateappoorderSvc.addDateappoorder(memberNoA, memberNoB, dateOrderDate,
-						dateAppoDate, dateOrderState, dateStarRateA, dateStarRateB, dateCE);
+				dateappoorderVO = dateappoorderSvc.addDateappoorder(memberNoA, memberNoB, dateOrderDate, dateAppoDate,
+						dateOrderState, dateStarRateA, dateStarRateB, dateCE);
 
 				/***************************
 				 * 3.�s�W����,�ǳ����(Send the Success view)
@@ -283,7 +281,8 @@ public class DateappoorderServlet extends HttpServlet {
 				/*************************** ��L�i�઺���~�B�z **********************************/
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/dateappoorder/addDateappoorder.jsp");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front_end/dateappoorder/addDateappoorder.jsp");
 				failureView.forward(req, res);
 			}
 		}

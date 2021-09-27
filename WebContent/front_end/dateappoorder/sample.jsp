@@ -51,11 +51,7 @@
 			
 		<h2>我要約會</h2>
 	<!-- https://www.cssscript.com/feature-rich-datetime-picker/ -->
-	<div id="select_date"></div>
-	<div id="select_date_2">
-		<input type="text" class="date_output">
-	</div>
-	<div id="select_date_3"></div>
+	
 
 	<h2>我要約會</h2>
 	<pre>
@@ -75,10 +71,10 @@
 	<div id="select_datetime">
 		<form METHOD="post"
 			ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do">
-			<%--       <input type="hidden" name="memberNoA" value="${memberVO.adNo}"> --%>
+			      <input type="text" name="memberNoA" value="${memberVO.adNo}">
 			<%--       <input type="hidden" name="memberNoB" value="${memberVO.adNo}"> --%>
 
-			<%--       <input type="hidden" name="memberNoA" value="<%=((MemberVO)session.getAttribute("memberVO")).getMemberNo() %>"> --%>
+<%-- 			      <input type="text" name="memberNoA" value="<%=((MemberVO)session.getAttribute("memberVO")).getMemberNo() %>"> --%>
 			<input type="hidden" name="memberNoA" value="6"> <input
 				type="hidden" name="memberNoB" value="4"> <input type="text"
 				name="dateOrderDate"> <input type="text" class="date_output"
@@ -160,20 +156,20 @@
 
     // new DateTimePickerComponent.DatePicker('select_date');
 
-    new DateTimePickerComponent.DatePicker('select_date_2', {
-      first_date: new Date(),
-      start_date: new Date(),
-      last_date: new Date(date.getFullYear(), date.getMonth() + 1, date.getDate() - 1),
-      first_day_no: 0,
-      date_output: "timestamp",
-      l10n: it,
-      date_output: "short_ISO",
-      styles: {
-        active_background: '#fec601',
-        active_color: '#000'
-      },
+//     new DateTimePickerComponent.DatePicker('select_date_2', {
+//       first_date: new Date(),
+//       start_date: new Date(),
+//       last_date: new Date(date.getFullYear(), date.getMonth() + 1, date.getDate() - 1),
+//       first_day_no: 0,
+//       date_output: "timestamp",
+//       l10n: it,
+//       date_output: "short_ISO",
+//       styles: {
+//         active_background: '#fec601',
+//         active_color: '#000'
+//       },
 
-    });
+//     });
 
     // new DateTimePickerComponent.DatePicker('select_date_3', {
     //   first_date: "2030-01-02",

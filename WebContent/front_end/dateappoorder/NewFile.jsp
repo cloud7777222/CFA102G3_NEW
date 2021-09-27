@@ -9,11 +9,16 @@
 <body>
 <h2>kkkk<%=request.getParameter("memberNoA") %> <%=request.getAttribute("jsonDataA") %></h2>
 <script>
-
+function aa(){
+	let data=<%=request.getAttribute("jsonDataA") %>;
+	return data;
+}
 	let data=<%=request.getAttribute("jsonDataA") %>;
 	console.log(data);
 	data=<%=request.getAttribute("jsonDataB") %>;
 	console.log(data);
+	console.log("jjjjjjjj");
+	console.log(aa());
 
 </script>
 </body>
