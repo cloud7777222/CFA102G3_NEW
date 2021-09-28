@@ -7,6 +7,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.dateappoorder.model.*;
+import com.member.model.MemberService;
+
+import email.MailService;
 
 public class DateappoorderServlet extends HttpServlet {
 
@@ -254,6 +257,33 @@ public class DateappoorderServlet extends HttpServlet {
 				dateappoorderVO.setDateStarRateA(dateStarRateA);
 				dateappoorderVO.setDateStarRateB(dateStarRateB);
 				dateappoorderVO.setDateCE(dateCE);
+				
+				//email
+				MemberService memberSvc = new MemberService();
+				
+				String to = "cloud7777222@yahoo.com.tw";
+				String memberNoA_name = memberSvc.getOneMember(memberNoA).getMemberName();
+				String memberNoB_name = memberSvc.getOneMember(memberNoB).getMemberName();
+				String subject = req.getParameter("subject").trim();
+				if (subject == null || subject.trim().length() == 0) {
+					errorMsgs.add("主題請勿空白");
+				}
+				
+				String message = req.getParameter("message").trim();
+				String messageText = "Hello! "
+						+ memberNoB_name
+						+" 您好"
+						+ "\n"
+						+"於"
+						+dateOrderDate.toString().substring(0,19)
+						+"\n收到會員:"
+						+memberNoA_name
+						+"\n的約會邀請訊息如下:\n"
+						+message;
+				if (message == null || message.trim().length() == 0) {
+					errorMsgs.add("訊息請勿空白");
+				}
+				
 
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
@@ -274,6 +304,10 @@ public class DateappoorderServlet extends HttpServlet {
 				/***************************
 				 * 3.�s�W����,�ǳ����(Send the Success view)
 				 ***********/
+				//send email
+				MailService mailSv= new MailService();
+				mailSv.sendMail(to, subject, messageText);
+				
 				String url = requestURL;
 				RequestDispatcher successView = req.getRequestDispatcher(url); // �s�W���\�����listAllDateappoorder.jsp
 				successView.forward(req, res);

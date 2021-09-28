@@ -91,7 +91,7 @@ input, textarea, button {
 				type="hidden" name="requestURL"
 				value="<%=request.getServletPath()%>"> <input type="hidden"
 				name="action" value="datingCheck">
-			<button type="submit" class="btn btn-primary">送出新增</button>
+			<button type="submit" class="btn btn-primary">立即預約</button>
 		</div>
 
 	</form>

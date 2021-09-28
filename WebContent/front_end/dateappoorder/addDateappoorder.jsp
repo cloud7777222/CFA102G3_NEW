@@ -92,7 +92,8 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
                     <input
                       type="text"
                       class="form-control"
-                      placeholder="Name"
+                      name="subject"
+                      placeholder="subject"
                       required="required"
                     />
                   </div>
@@ -109,6 +110,7 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
                     <textarea
                       id="message"
                       class="form-control"
+                      name="message"
                       placeholder="留下您的留言"
                       required="required"
                     ></textarea>
