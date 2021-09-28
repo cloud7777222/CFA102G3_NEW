@@ -183,8 +183,7 @@ table td {
 												<th>訂單成立日期</th>
 												<th>約會日期</th>
 												<th>約會狀態</th>
-												<th>約會評價A</th>
-												<th>約會評價B</th>
+												<th>約會評價</th>
 												<th>綜合評價</th>
 												<th>修改</th>
 											</tr>
@@ -197,8 +196,7 @@ table td {
 												<th>訂單成立日期</th>
 												<th>約會日期</th>
 												<th>約會狀態</th>
-												<th>約會評價A</th>
-												<th>約會評價B</th>
+												<th>約會評價</th>
 												<th>綜合評價</th>
 												<th>修改</th>
 											</tr>
@@ -219,11 +217,17 @@ table td {
 														<button type="submit" class="btn btn-info">${dateappoorderVO.dateOrderNo}</button>
 													</FORM>
 													</td>
-													<td>${memberSvc.getOneMemberByNo(dateappoorderVO.memberNoA).memberName }</td>
-													<td>${memberSvc.getOneMemberByNo(dateappoorderVO.memberNoB).memberName }</td>
+													<td>${memberSvc.getOneMember(dateappoorderVO.memberNoA).memberName }</td>
+													<td>${memberSvc.getOneMember(dateappoorderVO.memberNoB).memberName }</td>
 													<td>${dateappoorderVO.dateOrderDate}</td>
 													<td>${dateappoorderVO.dateAppoDate}</td>
 													<td>${dateappoorderVO.dateOrderState}</td>
+													<c:if test="${not empty errorMsgs}">
+												      <div class="alert alert-warning" role="alert">預約失敗:</div>
+												      <c:forEach var="message" items="${errorMsgs}">
+												        <div class="alert alert-danger" role="alert">${message}</div>
+												      </c:forEach>
+												    </c:if>
 													<td>${dateappoorderVO.dateStarRateA}</td>
 													<td>${dateappoorderVO.dateStarRateB}</td>
 													<td>${dateappoorderVO.dateCE}</td>
