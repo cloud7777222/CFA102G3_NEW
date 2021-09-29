@@ -100,7 +100,7 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
                   <div class="control-group">
                     <div id="select_datetime">
                       <input
-                        type="hidden"
+                        type="text"
                         class="date_output"
                         name="dateAppoDate"
                       />
@@ -411,9 +411,7 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
         // 		console.log("hhhhhhh")
       };
 
-      document.querySelector("input[name='dateOrderDate']").value = Date.now();
-      // 	console.log(document.querySelector("input[name='dateOrderDate']"));
-
+    
       let newsText = ["大受歡迎", "名額有限", "成為受歡迎對象吧"];
       let i = 0;
 

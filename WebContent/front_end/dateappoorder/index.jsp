@@ -3,15 +3,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.dateappoorder.model.*"%>
+<%@ page import="com.member.model.*"%>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
 
 <%
 	DateappoorderService dateappoorderSvc = new DateappoorderService();
+	Integer userNo =((MemberVO) session.getAttribute("memberVO")).getMemberNo();
+// dateappoorderSvc.getOneDateappoorder(dateOrderNo)
 // 	boolean isNull = request.getAttribute("keyword") == null;
 	List<DateappoorderVO> list = dateappoorderSvc.getAll();
 	pageContext.setAttribute("list", list);
 %>
 <jsp:useBean id="memberSvc" scope="page" class="com.member.model.MemberService" />
+
 	
 <html>
 
@@ -183,8 +187,8 @@ table td {
 												<th>訂單成立日期</th>
 												<th>約會日期</th>
 												<th>約會狀態</th>
+												<th>留下評價</th>
 												<th>約會評價</th>
-												<th>綜合評價</th>
 												<th>修改</th>
 											</tr>
 										</thead>
@@ -196,8 +200,8 @@ table td {
 												<th>訂單成立日期</th>
 												<th>約會日期</th>
 												<th>約會狀態</th>
+												<th>留下評價</th>
 												<th>約會評價</th>
-												<th>綜合評價</th>
 												<th>修改</th>
 											</tr>
 										</tfoot>
@@ -222,20 +226,15 @@ table td {
 													<td>${dateappoorderVO.dateOrderDate}</td>
 													<td>${dateappoorderVO.dateAppoDate}</td>
 													<td>${dateappoorderVO.dateOrderState}</td>
-													<c:if test="${not empty errorMsgs}">
-												      <div class="alert alert-warning" role="alert">預約失敗:</div>
-												      <c:forEach var="message" items="${errorMsgs}">
-												        <div class="alert alert-danger" role="alert">${message}</div>
-												      </c:forEach>
-												    </c:if>
-													<td>${dateappoorderVO.dateStarRateA}</td>
-													<td>${dateappoorderVO.dateStarRateB}</td>
+<!-- 												    ((MemberVO)session.getAttribute("memberVO")).getMemberNo() -->
+													<td>${sessionScope.memberVO.memberNo==dateappoorderVO.memberNoA?dateappoorderVO.dateStarRateA:dateappoorderVO.dateStarRateB}</td>
 													<td>${dateappoorderVO.dateCE}</td>
 													<td>
 														<FORM METHOD="post"
 															ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
 															style="margin-bottom: 0px;">
 															<input type="hidden" name="dateOrderNo" value="${dateappoorderVO.dateOrderNo}">
+															<input type="hidden" name="memberNoB" value="${dateappoorderVO.memberNoB}">
 															<input type="hidden" name="action"
 																value="getOne_For_Update"> <input type="hidden"
 																name="requestURL" value="<%=request.getServletPath()%>">

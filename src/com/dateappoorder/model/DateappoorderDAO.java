@@ -110,7 +110,7 @@ public class DateappoorderDAO implements DateappoorderDAO_interface {
 		dateappoorderVO1.setMemberNoA(new Integer(2));
 		dateappoorderVO1.setMemberNoB(new Integer(3));
 		dateappoorderVO1.setDateOrderDate(java.sql.Timestamp.valueOf("2011-01-01 11:11:22"));
-		dateappoorderVO1.setDateAppoDate(java.sql.Timestamp.valueOf("2011-01-01 11:11:22"));
+		dateappoorderVO1.setDateAppoDate(java.sql.Timestamp.valueOf("2019-01-01 11:11:22"));
 		dateappoorderVO1.setDateOrderState(1);
 		dateappoorderVO1.setDateStarRateA(1);
 		dateappoorderVO1.setDateStarRateB(1);
@@ -122,8 +122,8 @@ public class DateappoorderDAO implements DateappoorderDAO_interface {
 		dateappoorderVO2.setDateOrderNo(2);
 		dateappoorderVO2.setMemberNoA(new Integer(2));
 		dateappoorderVO2.setMemberNoB(new Integer(3));
-		dateappoorderVO2.setDateOrderDate(java.sql.Timestamp.valueOf("2011-01-01 11:11:22"));
-		dateappoorderVO2.setDateAppoDate(java.sql.Timestamp.valueOf("2011-01-01 11:11:44"));
+		dateappoorderVO2.setDateOrderDate(java.sql.Timestamp.valueOf("2020-01-01 11:11:22"));
+		dateappoorderVO2.setDateAppoDate(java.sql.Timestamp.valueOf("2022-01-01 19:11:44"));
 		dateappoorderVO2.setDateOrderState(1);
 		dateappoorderVO2.setDateStarRateA(1);
 		dateappoorderVO2.setDateStarRateB(1);

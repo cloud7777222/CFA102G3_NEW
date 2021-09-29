@@ -37,7 +37,7 @@ public class DateappoorderService {
 		dateappoorderVO.setMemberNoA(memberNoA);
 		dateappoorderVO.setMemberNoB(memberNoB);
 		dateappoorderVO.setDateOrderDate(dateOrderDate);
-		dateappoorderVO.setDateOrderDate(dateAppoDate);
+		dateappoorderVO.setDateAppoDate(dateAppoDate);
 		dateappoorderVO.setDateOrderState(dateOrderState);
 		dateappoorderVO.setDateStarRateA(dateStarRateA);
 		dateappoorderVO.setDateStarRateB(dateStarRateB);

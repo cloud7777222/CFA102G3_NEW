@@ -85,8 +85,8 @@ input, textarea, button {
 		ACTION="<%=request.getContextPath()%>/memTime/memTime.do" name="form1">
 
 		<div class="form-group">
-			<input type="hidden" name="memberNoA"
-				value="<%=((MemberVO) session.getAttribute("memberVO")).getMemberNo()%>">
+<!-- 			<input type="hidden" name="memberNoA" value="6"> -->
+<%-- 				value="<%=((MemberVO) session.getAttribute("memberVO")).getMemberNo()%>"> --%>
 			<input type="hidden" name="memberNoB" value="3"> <input
 				type="hidden" name="requestURL"
 				value="<%=request.getServletPath()%>"> <input type="hidden"

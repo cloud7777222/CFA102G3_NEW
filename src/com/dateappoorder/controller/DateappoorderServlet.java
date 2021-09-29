@@ -106,8 +106,8 @@ public class DateappoorderServlet extends HttpServlet {
 				/***************************
 				 * 1.�����ШD�Ѽ�
 				 ****************************************/
-				Integer dateOrderNo = new Integer(req.getParameter("dateOrderNo"));
-
+				Integer dateOrderNo = new Integer(Integer.valueOf(req.getParameter("dateOrderNo")));
+				System.out.println(dateOrderNo);
 				/***************************
 				 * 2.�}�l�d�߸��
 				 ****************************************/
@@ -143,17 +143,15 @@ public class DateappoorderServlet extends HttpServlet {
 				/***************************
 				 * 1.�����ШD�Ѽ� - ��J�榡�����~�B�z
 				 **********************/
-				Integer dateOrderNo = new Integer(req.getParameter("dateOrderNo").trim());
-				Integer memberNoA = new Integer(req.getParameter("memberNoA").trim());
-				Integer memberNoB = new Integer(req.getParameter("memberNoB").trim());
+				Integer dateOrderNo = new Integer(Integer.valueOf(req.getParameter("dateOrderNo").trim()));
+//				Integer memberNoA = new Integer(req.getParameter("memberNoA").trim());
+//				Integer memberNoB = new Integer(req.getParameter("memberNoB").trim());
+				Integer memberNoA = 6;
+				Integer memberNoB = 3;
 
 				java.sql.Timestamp dateOrderDate = null;
-				try {
-					dateOrderDate = java.sql.Timestamp.valueOf(req.getParameter("dateOrderDate").trim());
-				} catch (IllegalArgumentException e) {
-					dateOrderDate = new java.sql.Timestamp(System.currentTimeMillis());
-					errorMsgs.add("訂單日期有誤!");
-				}
+
+				dateOrderDate = new java.sql.Timestamp(System.currentTimeMillis());
 
 				java.sql.Timestamp dateAppoDate = null;
 				try {
@@ -163,21 +161,45 @@ public class DateappoorderServlet extends HttpServlet {
 					errorMsgs.add("訂單日期有誤!");
 				}
 
-				Integer dateOrderState = new Integer(req.getParameter("dateOrderState").trim());
-				Integer dateStarRateA = new Integer(req.getParameter("dateStarRateA").trim());
-				Integer dateStarRateB = new Integer(req.getParameter("dateStarRateB").trim());
-				Integer dateCE = (dateStarRateA + dateStarRateB) / 2;
+				Integer dateOrderState = 1;
+				Integer dateStarRateA = 1;
+				Integer dateStarRateB = 1;
+				Integer dateCE = 1;
 
-				DateappoorderVO dateappoorderVO = new DateappoorderVO();
+				DateappoorderVO dateappoorderVO = new DateappoorderDAO().findByPrimaryKey(dateOrderNo);
 				dateappoorderVO.setDateOrderNo(dateOrderNo);
 				dateappoorderVO.setMemberNoA(memberNoA);
 				dateappoorderVO.setMemberNoB(memberNoB);
 				dateappoorderVO.setDateOrderDate(dateOrderDate);
 				dateappoorderVO.setDateAppoDate(dateAppoDate);
-				dateappoorderVO.setDateOrderState(dateOrderState);
-				dateappoorderVO.setDateStarRateA(dateStarRateA);
-				dateappoorderVO.setDateStarRateB(dateStarRateB);
-				dateappoorderVO.setDateCE(dateCE);
+//				dateappoorderVO.setDateOrderState(dateOrderState);
+//				dateappoorderVO.setDateStarRateA(dateStarRateA);
+//				dateappoorderVO.setDateStarRateB(dateStarRateB);
+//				dateappoorderVO.setDateCE(dateCE);
+				System.out.println("dateOrderDate" + dateappoorderVO.getDateOrderDate());
+				System.out.println("dateAppoDate" + dateappoorderVO.getDateAppoDate());
+
+				// email
+				MemberService memberSvc = new MemberService();
+
+				String toA = memberSvc.getOneMember(memberNoA).getMemberEmail();
+				String toB = memberSvc.getOneMember(memberNoB).getMemberEmail();
+				System.out.println(toA);
+				System.out.println(toB);
+				String memberNoA_name = memberSvc.getOneMember(memberNoA).getMemberName();
+				String memberNoB_name = memberSvc.getOneMember(memberNoB).getMemberName();
+				String subject = req.getParameter("subject").trim();
+				if (subject == null || subject.trim().length() == 0) {
+					errorMsgs.add("主題請勿空白");
+				}
+				subject="[系統通知信]"+subject;
+				String message = req.getParameter("message").trim();
+				String messageText = "Hello! 感謝您的使用" + "\n" + memberNoB_name + "於"
+						+ dateOrderDate.toString().substring(0, 19) + "\n約會邀請成功!" + memberNoA_name + "\n的約會邀請訊息如下:\n"
+						+ message;
+				if (message == null || message.trim().length() == 0) {
+					errorMsgs.add("訊息請勿空白");
+				}
 
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
@@ -193,13 +215,19 @@ public class DateappoorderServlet extends HttpServlet {
 				 *****************************************/
 				DateappoorderService dateappoorderSvc = new DateappoorderService();
 				dateappoorderVO = dateappoorderSvc.updateDateappoorder(dateOrderNo, memberNoA, memberNoB, dateOrderDate,
-						dateAppoDate, dateOrderState, dateStarRateA, dateStarRateB, dateCE);
+						dateappoorderVO.getDateAppoDate(), dateOrderState, dateStarRateA, dateStarRateB, dateCE);
 
 				/***************************
 				 * 3.�ק粒��,�ǳ����(Send the Success view)
 				 *************/
+
+				// send email
+				MailService mailSv = new MailService();
+				mailSv.sendMail(toA, subject, messageText);
+				mailSv.sendMail(toB, subject, messageText);
+
 				req.setAttribute("dateappoorderVO", dateappoorderVO); // ��Ʈwupdate���\��,���T����dateappoorderVO����,�s�Jreq
-				String url = requestURL;
+				String url = "/front_end/dateappoorder/update_dateappoorder_input.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // �ק令�\��,���listOneDateappoorder.jsp
 				successView.forward(req, res);
 
@@ -257,33 +285,31 @@ public class DateappoorderServlet extends HttpServlet {
 				dateappoorderVO.setDateStarRateA(dateStarRateA);
 				dateappoorderVO.setDateStarRateB(dateStarRateB);
 				dateappoorderVO.setDateCE(dateCE);
-				
-				//email
+
+				System.out.println("dateOrderDate" + dateappoorderVO.getDateOrderDate());
+				System.out.println("dateAppoDate" + dateappoorderVO.getDateAppoDate());
+
+				// email
 				MemberService memberSvc = new MemberService();
-				
-				String to = "cloud7777222@yahoo.com.tw";
+
+				String toA = memberSvc.getOneMember(memberNoA).getMemberEmail();
+				String toB = memberSvc.getOneMember(memberNoB).getMemberEmail();
+				System.out.println(toA);
+				System.out.println(toB);
 				String memberNoA_name = memberSvc.getOneMember(memberNoA).getMemberName();
 				String memberNoB_name = memberSvc.getOneMember(memberNoB).getMemberName();
 				String subject = req.getParameter("subject").trim();
 				if (subject == null || subject.trim().length() == 0) {
 					errorMsgs.add("主題請勿空白");
 				}
-				
+				subject="[系統通知信]"+subject;
 				String message = req.getParameter("message").trim();
-				String messageText = "Hello! "
-						+ memberNoB_name
-						+" 您好"
-						+ "\n"
-						+"於"
-						+dateOrderDate.toString().substring(0,19)
-						+"\n收到會員:"
-						+memberNoA_name
-						+"\n的約會邀請訊息如下:\n"
-						+message;
+				String messageText = "Hello! 感謝您的使用" + "\n" + memberNoB_name + "於"
+						+ dateOrderDate.toString().substring(0, 19) + "\n約會邀請成功!" + memberNoA_name + "\n的約會邀請訊息如下:\n"
+						+ message;
 				if (message == null || message.trim().length() == 0) {
 					errorMsgs.add("訊息請勿空白");
 				}
-				
 
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
@@ -304,10 +330,11 @@ public class DateappoorderServlet extends HttpServlet {
 				/***************************
 				 * 3.�s�W����,�ǳ����(Send the Success view)
 				 ***********/
-				//send email
-				MailService mailSv= new MailService();
-				mailSv.sendMail(to, subject, messageText);
-				
+				// send email
+				MailService mailSv = new MailService();
+				mailSv.sendMail(toA, subject, messageText);
+				mailSv.sendMail(toB, subject, messageText);
+
 				String url = requestURL;
 				RequestDispatcher successView = req.getRequestDispatcher(url); // �s�W���\�����listAllDateappoorder.jsp
 				successView.forward(req, res);
