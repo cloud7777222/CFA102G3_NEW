@@ -133,7 +133,7 @@ DateappoorderVO dateappoorderVO = (DateappoorderVO) request.getAttribute("dateap
                     <input
                       type="hidden"
                       name="requestURL"
-                      value="<%=request.getServletPath()%>"
+                      value='<%=request.getParameter("requestURL")%>'
                     />
                     <button class="btn btn-custom" type="submit">
                      	 確認送出
