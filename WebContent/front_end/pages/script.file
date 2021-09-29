@@ -13,3 +13,4 @@
 
     <!-- Template Javascript -->
     <script src="<%=request.getContextPath()%>/front_end/js/main.js"></script>
+    

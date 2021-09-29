@@ -75,7 +75,9 @@ public class DateappoorderServlet extends HttpServlet {
 //					failureView.forward(req, res);
 					return;// �{�����_
 				}
+				
 
+				
 				/***************************
 				 * 3.�d�ߧ���,�ǳ����(Send the Success view)
 				 *************/
@@ -245,7 +247,12 @@ public class DateappoorderServlet extends HttpServlet {
 					failureView.forward(req, res);
 					return; // �{�����_
 				}
-
+				
+				String successMsgs = "資料更新成功";
+				// Store this set in the request scope, in case we need to
+				// send the ErrorPage view.
+				req.setAttribute("successMsgs", successMsgs);
+				
 				/***************************
 				 * 2.�}�l�ק���
 				 *****************************************/
@@ -355,6 +362,11 @@ public class DateappoorderServlet extends HttpServlet {
 					failureView.forward(req, res);
 					return;
 				}
+				
+				String successMsgs = "資料新增成功";
+				// Store this set in the request scope, in case we need to
+				// send the ErrorPage view.
+				req.setAttribute("successMsgs", successMsgs);
 
 				/***************************
 				 * 2.�}�l�s�W���

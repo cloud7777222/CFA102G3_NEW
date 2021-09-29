@@ -135,6 +135,11 @@ DateappoorderVO dateappoorderVO = (DateappoorderVO) request.getAttribute("dateap
                       name="requestURL"
                       value='<%=request.getParameter("requestURL")%>'
                     />
+                    <input
+                      type="hidden"
+                      name="requestURL"
+                      value='<%=request.getParameter("whichPage")%>'
+                    />
                     <button class="btn btn-custom" type="submit">
                      	 確認送出
                     </button>

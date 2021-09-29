@@ -85,8 +85,21 @@ img {
 }
 
 table td {
+	padding:10px;
 	width: 120px;
 	overflow-wrap: anywhere;
+}
+
+#close{
+	width: 200px;
+    height: 150px;
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -100px;
+    margin-top: -75px;
+    border: 2px solid black;
+    background-color: gray;
 }
 </style>
 </head>
@@ -123,11 +136,11 @@ table td {
 										<div class="alert alert-warning" role="alert">請修正以下錯誤:</div>
 										<c:forEach var="message" items="${errorMsgs}">
 											<div class="alert alert-danger" role="alert">
-												${message}</div>
-
+												${message}
+											</div>
 										</c:forEach>
 
-									</c:if>
+									</c:if>									
 								</div>
 							</div>
 							<div class="card mb-4">
@@ -309,8 +322,19 @@ table td {
 	</div>
 
 	<%@ include file="/front_end/pages/script.file"%>
-
+	
+	    <!-- 	成功訊息 -->
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<c:if test="${not empty successMsgs}">
+		<script>
+			$(document).ready(()=>{
+			swal(`${successMsgs}`, "請確認!" , "success");
+			})
+		</script>
+	</c:if>
+	
 	<script>
+	
         // $(".nav-item.dropdown").click(()=>{
         //     console.log("ijoioi")
         // //    $(this).next().toggle();
