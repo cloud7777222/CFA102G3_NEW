@@ -86,6 +86,7 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
                 <form
                   method="post"
                   action="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
+                  id="dating"
                 >
                   <h2>To:<%=memberVO.getMemberName() %></h2>
                   <div class="control-group">
@@ -129,9 +130,9 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
                     <input
                       type="hidden"
                       name="requestURL"
-                      value="<%=request.getServletPath()%>"
+                      value="<%=request.getParameter("requestURL")%>"
                     />
-                    <button class="btn btn-custom" type="submit">
+                    <button id="check" class="btn btn-custom" type="button">
                      	 確認送出
                     </button>
                   </div>
@@ -441,21 +442,21 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
         console.log("抓日期時間  ");
         let btn = document.getElementById("check");
         btn.addEventListener("click", () => {
-          let selectDate = document.getElementById("select_datetime").getElementsByClassName("date_output")[0];
-          //抓日期時間 
-          let selectDateVal = selectDate.value;
-          let getDay = selectDateVal.substring(0, 10);
-          let getTime = selectDateVal.substring(11, 12) == "0" ? selectDateVal.substring(12, 13) : selectDateVal.substring(11, 13);
-          console.log(getDay)
-          console.log(getTime)
+//           selectDate = document.getElementById("select_datetime").getElementsByClassName("date_output")[0];
+//           //抓日期時間 
+//           selectDateVal = selectDate.value;
+//           getDay = selectDateVal.substring(0, 10);
+//           getTime = selectDateVal.substring(11, 12) == "0" ? selectDateVal.substring(12, 13) : selectDateVal.substring(11, 13);
+//           console.log(getDay)
+//           console.log(getTime)
           d = getDay;
           h = getTime;
           try {
 
-            detial = data[d][h];
+            let detial = data[d][h];
             if (detial == undefined) {
               console.log("可預約1")
-              btn.submit();
+              $("#dating").submit();
               return;
             } else {
               detial = detial == "不可預約" ? "不可預約" : "您已有約會訂單編號[" + detial["dateOrderNo"] + "]的行程，請確認！";
@@ -463,11 +464,12 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
               swal("您不可選擇這天!", detial, message);
               console.log("detial");
               console.log(detial);
+              return;
             }
 
           } catch (e) {
             console.log("可預約2");
-            btn.submit();
+            $("#dating").submit();
             return;
           }
 

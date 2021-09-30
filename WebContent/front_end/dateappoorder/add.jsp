@@ -107,21 +107,6 @@ input, textarea, button {
 <script
 	src="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.full.js"></script>
 
-<script>
-<%-- console.log("<%=bb.getStr() %>"); --%>
-// console.log("${bb.getStr()}");err
-	
-<%-- 	let data=<%=bb.getStr() %>; --%>
-<%-- let aa='<%=bb.getStr() %>'; --%>
-// console.log(aa);
-	let data=JSON.parse(aa);
-	console.log(data);
-	
-<%-- 	let jsonData='<%=bb.getJsonData() %>'; --%>
-// 	console.log(jsonData);
-// 		let data2=JSON.parse(jsonData);
-// 		console.log(data2);
-	
-	</script>
+
 
 </html>
