@@ -410,7 +410,12 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
         dom.value = dom.value.replace("T", " ");
         // 		console.log("hhhhhhh")
       };
-
+      
+      let dataA=<%=request.getAttribute("jsonDataA") %>;
+      let dataB=<%=request.getAttribute("jsonDataB") %>;
+      
+      console.log(dataA);
+      console.log(dataB);
     
       let newsText = ["大受歡迎", "名額有限", "成為受歡迎對象吧"];
       let i = 0;

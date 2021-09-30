@@ -323,15 +323,7 @@ table td {
 
 	<%@ include file="/front_end/pages/script.file"%>
 	
-	    <!-- 	成功訊息 -->
-	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	<c:if test="${not empty successMsgs}">
-		<script>
-			$(document).ready(()=>{
-			swal(`${successMsgs}`, "請確認!" , "success");
-			})
-		</script>
-	</c:if>
+	    
 	
 	<script>
 	

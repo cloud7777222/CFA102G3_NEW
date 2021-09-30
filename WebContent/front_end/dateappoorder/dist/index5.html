@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang='en'>
+
+<head>
+  <title>date-time-picker-component@1.1.2</title>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name="format-detection" content="telephone=no">
+  <link href="./css/date-time-picker-component.min.css" rel="stylesheet">
+  <link href="./css/demo.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- https://www.cssscript.com/feature-rich-datetime-picker/ -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <div id="select_date"></div>
+  <div id="select_date_2">
+    <input type="text" class="date_output">
+  </div>
+  <div id="select_date_3"></div>
+
+  <h2>我要約會</h2>
+  <pre>
+    private Integer dateOrderNo;
+    private Integer memberNoA;
+    private Integer memberNoB;
+    private Timestamp dateOrderDate;
+    private Timestamp dateAppoDate;
+    private Integer dateOrderState;
+    private Integer dateStarRateA;
+    private Integer dateStarRateB;
+    private Integer dateCE;
+  </pre>
+
+  <div id="select_datetime">
+
+    <!-- <form METHOD="post" ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"> -->
+    <!-- <input type="hidden" name="memberNoA" value="${memberVO.adNo}">
+      <input type="hidden" name="memberNoB" value="${memberVO.adNo}"> -->
+    <input type="hidden" name="memberNoA" value="3">
+    <input type="hidden" name="memberNoB" value="4">
+    <input type="hidden" name="dateOrderDate" value="2020-03-03 11:11:33">
+    <input type="text" class="date_output" name="dateOrderDate">
+
+    <input type="hidden" name="action" value="insert">
+    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
+    <!-- <input type="hidden" name="whichPage" value="<%=whichPage%>"> -->
+
+  </div>
+  <button class="btn btn-success" id="check">約會邀請送出</button>
+
+
+
+
+  <script src="./js/date-time-picker-component.min.js"></script>
+  <script src="./js/demo.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js'
+    integrity='sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ=='
+    crossorigin='anonymous'></script>
+
+  <script>
+    let date = new Date();
+    const it = {
+      'jan': '一月',
+      'feb': '二月',
+      'mar': '三月',
+      'apr': '四月',
+      'may': '五月',
+      'jun': '六月',
+      'jul': '七月',
+      'aug': '八月',
+      'sep': '九月',
+      'oct': '十月',
+      'nov': '十一月',
+      'dec': '十二月',
+      'jan_': '一月',
+      'feb_': '二月',
+      'mar_': '三月',
+      'apr_': '四月',
+      'may_': '五月',
+      'jun_': '六月',
+      'jul_': '七月',
+      'aug_': '八月',
+      'sep_': '九月',
+      'oct_': '十月',
+      'nov_': '十一月',
+      'dec_': '十二月',
+      'mon': '週一',
+      'tue': '週二',
+      'wed': '週三',
+      'thu': '週四',
+      'fri': '週五',
+      'sat': '週六',
+      'sun': '週日',
+      'mon_': '週一',
+      'tue_': '週二',
+      'wed_': '週三',
+      'thu_': '週四',
+      'fri_': '週五',
+      'sat_': '週六',
+      'sun_': '週日',
+      'done': 'Imposta'
+    };
+
+
+
+    new DateTimePickerComponent.DateTimePicker('select_datetime', {
+      first_date: new Date(),
+      start_date: new Date(),
+      last_date: new Date(date.getFullYear(), date.getMonth() + 1, date.getDate() - 1),
+      first_day_no: 0,
+      date_output: "timestamp",
+      l10n: it,
+      date_output: "full_ISO",
+      styles: {
+        active_background: '#fec601',
+        active_color: '#000'
+      },
+    });
+
+
+    let aa = "2020-03-03 03:11:33.0";
+    let bb = aa.split(" ");
+    console.log(bb[1].charAt(1));
+    // let domPicker = document.getElementById("select_date_2");
+
+    function getNewData() {
+      let jsonDataA = [
+        { "dateOrderState": 3, "dateCE": 4, "dateOrderDate": "2020-03-03 11:11:33.0", "dateStarRateB": 3, "memberNoA": 3, "dateStarRateA": 4, "memberNoB": 4, "dateOrderNo": 18, "dateAppoDate": "2021-10-20 16:30:00.0" },
+        { "dateOrderState": 3, "dateCE": 4, "dateOrderDate": "2020-03-03 11:11:33.0", "dateStarRateB": 3, "memberNoA": 3, "dateStarRateA": 4, "memberNoB": 4, "dateOrderNo": 19, "dateAppoDate": "2021-10-21 16:30:00.0" },
+        { "dateOrderState": 3, "dateCE": 4, "dateOrderDate": "2020-03-03 11:11:33.0", "dateStarRateB": 3, "memberNoA": 3, "dateStarRateA": 4, "memberNoB": 4, "dateOrderNo": 21, "dateAppoDate": "2021-10-10 10:00:00.0" },
+        { "dateOrderState": 3, "dateCE": 4, "dateOrderDate": "2020-03-03 11:11:33.0", "dateStarRateB": 3, "memberNoA": 3, "dateStarRateA": 4, "memberNoB": 4, "dateOrderNo": 21, "dateAppoDate": "2021-10-10 11:00:00.0" }];
+
+      let jsonDataB = [
+        { "dateOrderState": 3, "dateCE": 4, "dateOrderDate": "2020-03-03 11:11:33.0", "dateStarRateB": 3, "memberNoA": 3, "dateStarRateA": 4, "memberNoB": 4, "dateOrderNo": 18, "dateAppoDate": "2021-10-20 09:30:00.0" },
+        { "dateOrderState": 3, "dateCE": 4, "dateOrderDate": "2020-03-03 11:11:33.0", "dateStarRateB": 3, "memberNoA": 3, "dateStarRateA": 4, "memberNoB": 4, "dateOrderNo": 19, "dateAppoDate": "2021-09-30 16:30:00.0" },
+        { "dateOrderState": 3, "dateCE": 4, "dateOrderDate": "2020-03-03 11:11:33.0", "dateStarRateB": 3, "memberNoA": 3, "dateStarRateA": 4, "memberNoB": 4, "dateOrderNo": 21, "dateAppoDate": "2021-10-10 09:00:00.0" },
+        { "dateOrderState": 3, "dateCE": 4, "dateOrderDate": "2020-03-03 11:11:33.0", "dateStarRateB": 3, "memberNoA": 3, "dateStarRateA": 4, "memberNoB": 4, "dateOrderNo": 21, "dateAppoDate": "2021-10-10 12:00:00.0" }];
+
+      let newData = {};
+      for (i of jsonDataA) {
+        let { dateOrderState, memberNoA, memberNoB, dateOrderNo, dateAppoDate } = i;
+        let day = dateAppoDate.substring(0, 10);
+        let time = dateAppoDate.substring(11, 12) == "0" ? dateAppoDate.substring(12, 13) : dateAppoDate.substring(11, 13);
+        if (!newData[day]) {
+          newData[day] = {};
+        }
+        newData[day][time] = i;
+      }
+      if (jsonDataB.length != 0) {
+        for (i of jsonDataB) {
+          let { dateAppoDate } = i;
+          let day = dateAppoDate.substring(0, 10);
+          let time = dateAppoDate.substring(11, 12) == "0" ? dateAppoDate.substring(12, 13) : dateAppoDate.substring(11, 13);
+          if (!newData[day]) {
+            newData[day] = {};
+          }
+          if (!newData[day][time]) {
+            newData[day][time] = "不可預約";
+          }
+        }
+      }
+      return newData
+    }
+
+    let data = getNewData();
+    console.log(data);
+    let d;
+    let h;
+
+    let domPicker = document.getElementById("select_datetime");
+    let tr = null;
+    let td = null;
+    let getDayDom = document.getElementsByClassName("day selectable");
+    let getHourDom = document.getElementsByClassName("hour selectable");
+    // =======================抓選擇的day and hours==============
+    // 抓day selectable DOM
+    let selectDate = document.getElementById("select_datetime").getElementsByClassName("date_output")[0];
+    //抓日期時間  
+    let selectDateVal = selectDate.value;
+    let getDay = selectDateVal.substring(0, 10);
+    let getTime = selectDateVal.substring(11, 12) == "0" ? selectDateVal.substring(12, 13) : selectDateVal.substring(11, 13);
+    // 該天訂單message
+    let detial = null;
+
+
+    // if (i != getDay) continue;
+    // console.log("oooooooo");
+    // =======================抓選擇的day and hours-end=================
+
+    domPicker.addEventListener("click", () => {
+      // =======================day顯示pink========================
+      // reflash DOM
+      getDayDom = document.getElementsByClassName("day selectable");
+      getHourDom = document.getElementsByClassName("hour selectable");
+      selectDate = document.getElementById("select_datetime").getElementsByClassName("date_output")[0];
+      selectDateVal = selectDate.value;
+      getDay = selectDateVal.substring(0, 10);
+      getTime = selectDateVal.substring(11, 12) == "0" ? selectDateVal.substring(12, 13) : selectDateVal.substring(11, 13);
+      console.log(getDayDom);
+      console.log(getHourDom);
+      console.log("getDay" + getDay)
+      console.log("getTime" + getTime)
+      d = getDay;
+      h = getTime;
+
+      for (let i in data) {
+        let checkDay = i.substring(8, 10);
+        // console.log("checkDay=" + checkDay);
+
+        //1.判斷該天有行程
+        dayToPink();
+        function dayToPink() {
+          for (let day of getDayDom) {
+            if (checkDay == day.innerHTML) {
+              if (data[i].length == 18) {
+                //滿行程顯示灰色
+                day.style.backgroundColor = "gray";
+                day.classList.add("disabled");
+                day.classList.remove("selectable");
+                day.addEventListener("click", () => {
+                  alert("該天已無可排時間");
+                })
+                // var clone = day.cloneNode(true);
+                // day=clone;
+              } else {
+                //有行程顯示pink
+                day.style.backgroundColor = "pink";
+                console.log("pink")
+              }
+
+            }
+          }
+        }
+      }
+
+      hoursToPink();
+
+    });
+
+
+
+
+    // =======================hour顯示pink=========================================
+    function hoursToPink() {
+      //2.判斷該天小時行程
+      for (let h in data[d]) {
+        for (let hour of getHourDom) {
+          let hourVal = hour.innerHTML;
+          hourVal = hourVal.substring(0, 1) == "0" ? hourVal.substring(1, 2) : hourVal.substring(0, 2);
+          console.log("h=" + h);
+          console.log("hourVal=" + hourVal);
+          if (h == hourVal.substring(0, 2)) {
+            //有行程顯示pink
+            hour.classList.add("disabled");
+            hour.classList.remove("selectable");
+            hour.style.backgroundColor = "pink";
+
+            hour.addEventListener("click", () => {
+              detial = data[d][h];
+              detial = detial == "不可預約" ? "不可預約" : "您已有訂單編號 [" + detial["dateOrderNo"] + "] 的行程，請確認！"
+              // swal("您不可選擇這天!", detial, "warning");
+
+              swal({
+                title: "您不可選擇這天! 需要前往查看相關訊息嗎？",
+                text: detial,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+              })
+                .then((willDelete) => {
+                  if (willDelete) {
+                    // 跳到該頁面
+                    window.location.href="https://www.runoob.com/jsref/jsref-link.html";
+                  } else {
+                    swal("請重新選擇!");
+                  }
+                });
+
+
+            })
+            if (data[d][h] == "不可預約") {
+              //不可選顯示gray
+              hour.classList.add("disabled");
+              hour.classList.remove("selectable");
+              hour.style.backgroundColor = "gray";
+              hour.addEventListener("click", () => {
+                swal("您不可選擇這天!", "請重新選擇", "error");
+              })
+
+            }
+            break;
+          }
+        }
+      }
+    }
+
+
+
+
+
+
+    //0:無 1:約會 2:專家 3:活動 4:公休
+    let type = ["無", "約會", "專家", "活動", "公休"];
+
+    // //新增tr
+
+    // if (!tr) {
+    //   tr = document.createElement("tr");
+    //   td = document.createElement("td");
+    //   td.setAttribute("colspan", "6");
+    //   tr.append(td);
+    // }
+
+    // if (memA[getDay]) {
+    //   // 999999999
+    //   let i = 6;
+    //   for (time of getHourDom) {
+    //     let checkTime = time.innerHTML.substring(0, 1) == "0" ? time.innerHTML.substring(1, 2) : time.innerHTML.substring(0, 2);
+    //     // console.log(getDay);
+    //     // console.log(getTime);
+    //     console.log(i + "點" + type[memA[getDay][i]]);
+
+    //     console.log(checkTime);
+    //     if (i == checkTime) {
+    //       if (memA[getDay][i] != "4" && memA[getDay][i] != "0") {
+    //         time.style.backgroundColor = "yellow"
+    //         // time.classList.add("disabled");
+    //         // time.classList.remove("selectable");
+    //         // let p = document.createElement("p");
+    //         // p.innerHTML="999";
+    //         // time.append(p);
+    //         // time.addEventListener("mouseover",()=>{
+    //         //   console.log( type[memA[getDay][i]]);
+    //         // })
+    //         let tbodyDom = document.getElementsByTagName("tbody")[0];
+    //         //  console.log("99999999999");
+    //         //  console.log(tbodyDom);
+
+    //         tbodyDom.append(tr);
+    //         time.onmouseover = function () {
+    //           // console.log( type[memA[getDay][i]]);
+    //           // console.log(checkTime + "點" + type[memA[getDay][checkTime]]);
+    //           // console.log(memA[getDay][checkTime]);
+    //           td.innerHTML = "time infomation: 您" + checkTime + "點，有" + type[memA[getDay][checkTime]];
+
+    //           // time.onmouseout=function(){
+    //           //   tr.remove();
+    //           // }
+    //         }
+    //       } else if (memA[getDay][i] == "4") {
+    //         time.style.backgroundColor = "gray"
+    //       }
+    //       i++;
+    //     }
+    //   }
+
+    // }
+
+
+
+
+    // ==========================btn================================
+    console.log("抓日期時間  ");
+    let btn = document.getElementById("check");
+    btn.addEventListener("click", () => {
+      let selectDate = document.getElementById("select_datetime").getElementsByClassName("date_output")[0];
+      //抓日期時間 
+      let selectDateVal = selectDate.value;
+      let getDay = selectDateVal.substring(0, 10);
+      let getTime = selectDateVal.substring(11, 12) == "0" ? selectDateVal.substring(12, 13) : selectDateVal.substring(11, 13);
+      console.log(getDay)
+      console.log(getTime)
+      d = getDay;
+      h = getTime;
+      try {
+
+        detial = data[d][h];
+        if (detial == undefined) {
+          console.log("可預約1")
+          btn.submit();
+          return;
+        } else {
+          detial = detial == "不可預約" ? "不可預約" : "您已有約會訂單編號[" + detial["dateOrderNo"] + "]的行程，請確認！";
+          let message = detial == "不可預約" ? "error" : "warning";
+          swal("您不可選擇這天!", detial, message);
+          console.log("detial");
+          console.log(detial);
+        }
+
+      } catch (e) {
+        console.log("可預約2");
+        btn.submit();
+        return;
+      }
+
+
+
+    })
+
+
+  </script>
+</body>
+
+</html>

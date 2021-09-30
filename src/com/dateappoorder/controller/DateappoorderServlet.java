@@ -76,7 +76,7 @@ public class DateappoorderServlet extends HttpServlet {
 					return;// �{�����_
 				}
 				
-
+	
 				
 				/***************************
 				 * 3.�d�ߧ���,�ǳ����(Send the Success view)
@@ -147,7 +147,6 @@ public class DateappoorderServlet extends HttpServlet {
 				 **********************/
 				Integer dateOrderNo = new Integer(Integer.valueOf(req.getParameter("dateOrderNo").trim()));
 				DateappoorderVO dateappoorderVO = new DateappoorderDAO().findByPrimaryKey(dateOrderNo);
-				
 				Integer memberNoA = null;
 				try {
 
@@ -162,6 +161,9 @@ public class DateappoorderServlet extends HttpServlet {
 					memberNoB = new Integer(req.getParameter("memberNoB").trim());
 				} catch (Exception e) {
 					memberNoB = dateappoorderVO.getMemberNoB();
+				}
+				if(memberNoA==memberNoB) {
+					memberNoB=dateappoorderVO.getMemberNoA();
 				}
 
 				java.sql.Timestamp dateOrderDate = null;
