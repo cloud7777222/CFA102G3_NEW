@@ -255,152 +255,227 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
           active_color: "#000",
         },
       });
+<%--       let dataA=<%=request.getAttribute("jsonDataA") %>; --%>
+<%--       let dataB=<%=request.getAttribute("jsonDataB") %>; --%>
+      
+     
 
-      // new DateTimePickerComponent.DateRangePicker('start_date', 'end_date', {
-      //   min_range_hours: 48,
-      // });
-
-      // new DateTimePickerComponent.DateTimeRangePicker('start_date_time', 'end_date_time', {
-      //   first_date: "2030-01-02T10:30:00",
-      //   start_date: "2030-01-05T16:00:00",
-      //   end_date: "2030-01-06T18:00:00",
-      //   last_date: new Date(2030, 0, 29, 14, 0),
-      //   first_day_no: 1,
-      //   round_to: 5,
-      //   date_output: "timestamp",
-      //   styles: {
-      //     active_background: '#e34c26',
-      //     active_color: '#fff',
-      //     inactive_background: '#0366d9',
-      //     inactive_color: '#fff'
-      //   },
-      //   min_range_hours: 18
-      // });
-
-      // let domPicker = document.getElementById("select_date_2");
-
-      let memA = {
-        "2021-09-22": "444444444444444444444444",
-        "2021-09-25": "444444444000044444444444",
-        "2021-09-30": "444444444000044444444444",
-        "2021-10-04": "444444444000011111111444",
-        "2021-10-10": "444444444111144444444444",
-        "2021-10-11": "444444444444444444444444",
-      };
-
-      let domPicker = document.getElementById("select_datetime");
-      let tr = null;
-      let td = null;
-
-      domPicker.addEventListener("click", () => {
-        // 抓day selectable DOM
-        let getDayDom = document.getElementsByClassName("day selectable");
-
-        // console.log(getDayDom[0].innerHTML);
-
-        for (let i in memA) {
-          let checkDay =
-            i.substring(8, 9) == "0" ? i.substring(9, 10) : i.substring(8, 10);
-          console.log("checkDay=" + checkDay);
-
-          //判斷該天有行程
-          for (day of getDayDom) {
-            if (checkDay == day.innerHTML) {
-              if (memA[i] == "444444444444444444444444") {
-                console.log(checkDay + "=" + memA[i]);
-                //滿行程顯示灰色
-                day.style.backgroundColor = "gray";
-                day.classList.add("disabled");
-                day.classList.remove("selectable");
-                day.addEventListener("click", () => {
-                  alert("該天已無可排時間");
-                });
-                // var clone = day.cloneNode(true);
-                // day=clone;
+      function getNewData() {
+          let jsonDataA = <%=request.getAttribute("jsonDataA") %>;
+          let jsonDataB = <%=request.getAttribute("jsonDataB") %>;
+// 	      console.log(jsonDataA);
+// 	      console.log(jsonDataB);
+          
+          let newData = {};
+          for (let i of jsonDataA) {
+            let { dateOrderState, memberNoA, memberNoB, dateOrderNo, dateAppoDate } = i;
+            let day = dateAppoDate.substring(0, 10);
+            let time = dateAppoDate.substring(11, 12) == "0" ? dateAppoDate.substring(12, 13) : dateAppoDate.substring(11, 13);
+            if (!newData[day]) {
+              newData[day] = {};
+            }
+            newData[day][time] = i;
+          }
+          if (jsonDataB.length != 0) {
+            for (let i of jsonDataB) {
+              let { dateAppoDate } = i;
+              let day = dateAppoDate.substring(0, 10);
+              let time = dateAppoDate.substring(11, 12) == "0" ? dateAppoDate.substring(12, 13) : dateAppoDate.substring(11, 13);
+              if (!newData[day]) {
+                newData[day] = {};
               }
-              //有行程顯示黃色
-              else console.log((day.style.backgroundColor = "yellow"));
+              if (!newData[day][time]) {
+                newData[day][time] = "不可預約";
+              }
+            }
+          }
+          return newData
+        }
+
+        let data = getNewData();
+        console.log(data);
+        let d;
+        let h;
+
+        let domPicker = document.getElementById("select_datetime");
+        let tr = null;
+        let td = null;
+        let getDayDom = document.getElementsByClassName("day selectable");
+        let getHourDom = document.getElementsByClassName("hour selectable");
+        // =======================抓選擇的day and hours==============
+        // 抓day selectable DOM
+        let selectDate = document.getElementById("select_datetime").getElementsByClassName("date_output")[0];
+        //抓日期時間  
+        let selectDateVal = selectDate.value;
+        let getDay = selectDateVal.substring(0, 10);
+        let getTime = selectDateVal.substring(11, 12) == "0" ? selectDateVal.substring(12, 13) : selectDateVal.substring(11, 13);
+        // 該天訂單message
+        let detial = null;
+
+
+        // if (i != getDay) continue;
+        // console.log("oooooooo");
+        // =======================抓選擇的day and hours-end=================
+
+        domPicker.addEventListener("click", () => {
+          // =======================day顯示pink========================
+          // reflash DOM
+          getDayDom = document.getElementsByClassName("day selectable");
+          getHourDom = document.getElementsByClassName("hour selectable");
+          selectDate = document.getElementById("select_datetime").getElementsByClassName("date_output")[0];
+          selectDateVal = selectDate.value;
+          getDay = selectDateVal.substring(0, 10);
+          getTime = selectDateVal.substring(11, 12) == "0" ? selectDateVal.substring(12, 13) : selectDateVal.substring(11, 13);
+          console.log(getDayDom);
+          console.log(getHourDom);
+          console.log("getDay" + getDay)
+          console.log("getTime" + getTime)
+          d = getDay;
+          h = getTime;
+
+          for (let i in data) {
+            let checkDay = i.substring(8, 9)=="0"
+            	?i.substring(9, 10)
+            	:i.substring(8, 10);
+            // console.log("checkDay=" + checkDay);
+
+            //1.判斷該天有行程
+            dayToPink();
+            function dayToPink() {
+              for (let day of getDayDom) {
+                if (checkDay == day.innerHTML) {
+                  if (data[i].length == 18) {
+                    //滿行程顯示灰色
+                    day.style.backgroundColor = "gray";
+                    day.classList.add("disabled");
+                    day.classList.remove("selectable");
+                    day.addEventListener("click", () => {
+                      alert("該天已無可排時間");
+                    })
+                    // var clone = day.cloneNode(true);
+                    // day=clone;
+                  } else {
+                    //有行程顯示pink
+                    day.style.backgroundColor = "pink";
+                    console.log("pink")
+                  }
+
+                }
+              }
+            }
+          }
+
+          hoursToPink();
+          selectDate.value = selectDate.value.replace("T", " ");
+        });
+
+
+
+
+        // =======================hour顯示pink=========================================
+        function hoursToPink() {
+          //2.判斷該天小時行程
+          for (let h in data[d]) {
+            for (let hour of getHourDom) {
+              let hourVal = hour.innerHTML;
+              hourVal = hourVal.substring(0, 1) == "0" ? hourVal.substring(1, 2) : hourVal.substring(0, 2);
+              console.log("h=" + h);
+              console.log("hourVal=" + hourVal);
+              if (h == hourVal.substring(0, 2)) {
+                //有行程顯示pink
+                hour.classList.add("disabled");
+                hour.classList.remove("selectable");
+                hour.style.backgroundColor = "pink";
+
+                hour.addEventListener("click", () => {
+                  detial = data[d][h];
+                  detial = detial == "不可預約" ? "不可預約" : "您已有訂單編號 [" + detial["dateOrderNo"] + "] 的行程，請確認！"
+                  // swal("您不可選擇這天!", detial, "warning");
+
+                  swal({
+                    title: "您不可選擇這天! 需要前往查看相關訊息嗎？",
+                    text: detial,
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                  })
+                    .then((willDelete) => {
+                      if (willDelete) {
+                        // 跳到該頁面
+                        window.location.href="https://www.runoob.com/jsref/jsref-link.html";
+                      } else {
+                        swal("請重新選擇!");
+                      }
+                    });
+
+
+                })
+                if (data[d][h] == "不可預約") {
+                  //不可選顯示gray
+                  hour.classList.add("disabled");
+                  hour.classList.remove("selectable");
+                  hour.style.backgroundColor = "gray";
+                  hour.addEventListener("click", () => {
+                    swal("您不可選擇這天!", "請重新選擇", "error");
+                  })
+
+                }
+                break;
+              }
             }
           }
         }
-        // 抓day selectable DOM
-        let getHourDom = document.getElementsByClassName("hour selectable");
 
-        //抓日期時間
-        let selectDate = document
-          .getElementById("select_datetime")
-          .getElementsByClassName("date_output")[0];
-        let selectDateVal = selectDate.value;
-        let getDay = selectDateVal.substring(0, 10);
-        let getTime =
-          selectDateVal.substring(11, 12) == "0"
-            ? selectDateVal.substring(12, 13)
-            : selectDateVal.substring(11, 13);
+
+
+
+
+
         //0:無 1:約會 2:專家 3:活動 4:公休
         let type = ["無", "約會", "專家", "活動", "公休"];
 
-        //新增tr
 
-        if (!tr) {
-          tr = document.createElement("tr");
-          td = document.createElement("td");
-          td.setAttribute("colspan", "6");
-          tr.append(td);
-        }
 
-        if (memA[getDay]) {
-          // 999999999
-          let i = 6;
-          for (time of getHourDom) {
-            let checkTime =
-              time.innerHTML.substring(0, 1) == "0"
-                ? time.innerHTML.substring(1, 2)
-                : time.innerHTML.substring(0, 2);
-            // console.log(getDay);
-            // console.log(getTime);
-            console.log(i + "點" + type[memA[getDay][i]]);
 
-            console.log(checkTime);
-            if (i == checkTime) {
-              if (memA[getDay][i] != "4" && memA[getDay][i] != "0") {
-                time.style.backgroundColor = "yellow";
-                // time.classList.add("disabled");
-                // time.classList.remove("selectable");
-                // let p = document.createElement("p");
-                // p.innerHTML="999";
-                // time.append(p);
-                // time.addEventListener("mouseover",()=>{
-                //   console.log( type[memA[getDay][i]]);
-                // })
-                let tbodyDom = document.getElementsByTagName("tbody")[0];
-                //  console.log("99999999999");
-                //  console.log(tbodyDom);
+        // ==========================btn================================
+        console.log("抓日期時間  ");
+        let btn = document.getElementById("check");
+        btn.addEventListener("click", () => {
+          let selectDate = document.getElementById("select_datetime").getElementsByClassName("date_output")[0];
+          //抓日期時間 
+          let selectDateVal = selectDate.value;
+          let getDay = selectDateVal.substring(0, 10);
+          let getTime = selectDateVal.substring(11, 12) == "0" ? selectDateVal.substring(12, 13) : selectDateVal.substring(11, 13);
+          console.log(getDay)
+          console.log(getTime)
+          d = getDay;
+          h = getTime;
+          try {
 
-                tbodyDom.append(tr);
-                time.onmouseover = function () {
-                  // console.log( type[memA[getDay][i]]);
-                  // console.log(checkTime + "點" + type[memA[getDay][checkTime]]);
-                  // console.log(memA[getDay][checkTime]);
-                  td.innerHTML =
-                    "time infomation: 您" +
-                    checkTime +
-                    "點，有" +
-                    type[memA[getDay][checkTime]];
-
-                  // time.onmouseout=function(){
-                  //   tr.remove();
-                  // }
-                };
-              } else if (memA[getDay][i] == "4") {
-                time.style.backgroundColor = "gray";
-              }
-              i++;
+            detial = data[d][h];
+            if (detial == undefined) {
+              console.log("可預約1")
+              btn.submit();
+              return;
+            } else {
+              detial = detial == "不可預約" ? "不可預約" : "您已有約會訂單編號[" + detial["dateOrderNo"] + "]的行程，請確認！";
+              let message = detial == "不可預約" ? "error" : "warning";
+              swal("您不可選擇這天!", detial, message);
+              console.log("detial");
+              console.log(detial);
             }
-          }
-        }
-        selectDate.value = selectDate.value.replace("T", " ");
-      });
 
+          } catch (e) {
+            console.log("可預約2");
+            btn.submit();
+            return;
+          }
+
+
+          selectDate.value = selectDate.value.replace("T", " ");
+        })
+
+        
 
       // formate time	
       document.getElementById("message").onchange = function () {
@@ -411,11 +486,7 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
         // 		console.log("hhhhhhh")
       };
       
-      let dataA=<%=request.getAttribute("jsonDataA") %>;
-      let dataB=<%=request.getAttribute("jsonDataB") %>;
-      
-      console.log(dataA);
-      console.log(dataB);
+
     
       let newsText = ["大受歡迎", "名額有限", "成為受歡迎對象吧"];
       let i = 0;
