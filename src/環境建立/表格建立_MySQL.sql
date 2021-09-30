@@ -118,7 +118,7 @@ CONSTRAINT CK_MEMBER_MEMBERPOINT CHECK (memberPoINT>=0)
 )COMMENT '會員';
 
 INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abe','abe',null,'ABE',1,now(),'學生',1,'1234567890','abe@gmail.com','我是帥哥',default,default);
+VALUES(NULL,'cloud0204','cloud0204',null,'cloud',1,now(),'台灣黑熊',1,'1234567890','cloud7777222@yahoo.com.tw','我是帥哥',default,default);
 INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
 VALUES(NULL,'abee','abe',null,'ABE',1,now(),'學生',1,'1234567890','abee@gmail.com','我是帥哥',default,default);
 INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
@@ -127,6 +127,26 @@ INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,
 VALUES(NULL,'abeeee','abe',null,'ABE',1,now(),'學生',1,'1234567890','abeeee@gmail.com','我是帥哥',default,default);
 INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
 VALUES(NULL,'abeeeee','abe',null,'ABE',1,now(),'學生',1,'1234567890','abeeeee@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'abe1','abe',null,'ABE',1,now(),'學生',1,'1234567890','a4be@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'abee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abe4e@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'abeee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abe4ee@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'abeeee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abe4eee@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'abeeeee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abee4eee@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'ab2e1','abe',null,'ABE',1,now(),'學生',1,'1234567890','a42be@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'abe2e1','abe',null,'ABE',1,now(),'學生',1,'1234567890','ab2e4e@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'abe2ee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','ab2e4ee@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'abe2eee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','ab2e4eee@gmail.com','我是帥哥',default,default);
+INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
+VALUES(NULL,'abe2eeee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abe2e4eee@gmail.com','我是帥哥',default,default);
 
 #======================================分隔線==================================================
 CREATE TABLE `FRIEND`(
