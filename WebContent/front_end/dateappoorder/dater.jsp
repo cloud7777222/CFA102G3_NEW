@@ -298,7 +298,7 @@
                             <% } %>
                                 <c:forEach items="${list}" varStatus="tableCount" step="10">
 <%--                                 	<c:if test="${list.size()}"> --%>
-                                    	<a class="a-${tableCount.count}"
+                                    	<a ${tableCount.count==param.whichPage?"style='color:red;'":""}
                                         href="<%=request.getRequestURI()%>?whichPage=${tableCount.count}">${tableCount.count}</a>
 <%--                                 	</c:if> --%>
                                 </c:forEach>

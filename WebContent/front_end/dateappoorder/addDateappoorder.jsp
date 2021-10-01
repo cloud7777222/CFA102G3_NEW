@@ -403,7 +403,7 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
                     .then((willDelete) => {
                       if (willDelete) {
                         // 跳到該頁面
-                        window.location.href="https://www.runoob.com/jsref/jsref-link.html";
+                        window.location.href="<%=request.getContextPath()%>/front_end/dateappoorder/index.jsp";
                       } else {
                         swal("請重新選擇!");
                       }
