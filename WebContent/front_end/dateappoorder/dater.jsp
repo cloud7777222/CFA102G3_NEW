@@ -2,13 +2,34 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.util.stream.Collectors"%>
 <%-- <%@ page import="com.dateappoorder.model.*"%> --%>
 <%@ page import="com.member.model.*"%>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
 
 <%
 	MemberService memberService = new MemberService();
-	List<MemberVO> list = memberService.getAllMember();
+	boolean isNull = request.getAttribute("keyword")==null;
+	List<MemberVO> list =null;
+	if(isNull){
+		
+		list = memberService.getAllMember();
+	}else{
+		list = memberService.getAllMember().stream()
+				.filter(i->i.toString().indexOf(request.getAttribute("keyword").toString())!=-1)
+				.collect(Collectors.toList());
+	}
+// 	List<MemberVO> list = isNull
+// 			?(List<MemberVO>)request.getAttribute("keywordOfList")
+// 					:memberService.getAllMember();
+// 	try{
+// 		list = (List<MemberVO>)request.getAttribute("keywordOfList");
+// 	}catch(Exception e){
+// 		list = memberService.getAllMember();
+// 	}
+		
+// 	List<DateappoorderVO> list = dateappoorderSvc.getAll();
+
 // 	DateappoorderService dateappoorderSvc = new DateappoorderService();
 // 	boolean isNull = request.getAttribute("keyword") == null;
 // 	List<DateappoorderVO> list = dateappoorderSvc.getAll();
@@ -137,15 +158,30 @@
                     </div>
                     <div class="section-right">
 
-                        <form
+<!--                         <form -->
+<!--                             class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"> -->
+<!--                             <div class="input-group"> -->
+<!--                                 <input type="text" name="keyword" id="keyword" -->
+<!--                                     class="form-control bg-light border-0 small" placeholder="Search for..." -->
+<!--                                     aria-label="Search" aria-describedby="basic-addon2"> -->
+<!--                                 <div class="input-group-append"> -->
+<!--                                     <button class="btn btn-primary" type="button" -->
+<%--                                         onclick="keywordSearch('<%=request.getContextPath()%>/dateappoorder/dateappoorder.do')"> --%>
+<!--                                         <i class="fas fa-search fa-sm"></i> -->
+<!--                                     </button> -->
+<!--                                 </div> -->
+<!--                             </div> -->
+<!--                         </form> -->
+                        
+                        <form METHOD="post" ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
                             class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                             <div class="input-group">
                                 <input type="text" name="keyword" id="keyword"
                                     class="form-control bg-light border-0 small" placeholder="Search for..."
                                     aria-label="Search" aria-describedby="basic-addon2">
+                                <input type="hidden" name="action" value="getAll_For_Keyword">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button"
-                                        onclick="keywordSearch('<%=request.getContextPath()%>/dateappoorder/dateappoorder.do')">
+                                    <button class="btn btn-primary" type="submit">
                                         <i class="fas fa-search fa-sm"></i>
                                     </button>
                                 </div>
@@ -225,6 +261,29 @@
                             </div>
                         </div>
                     </c:forEach>
+                    
+
+          			<div class="causes-item">
+                   		<div class="team">
+	                  		<div class="team-item">
+	                            <div class="team-img">
+	                                <img src="<%=request.getContextPath()%>/front_end/img/join.png" alt="Team Image">
+	                            </div>
+	                            <div class="team-text">
+	                                <h2>join us</h2>
+	                                <p>BELOVED information</p>
+	                                <div class="team-social">
+	                                    <a href=""><i class="fab fa-twitter"></i></a>
+	                                    <a href=""><i class="fab fa-facebook-f"></i></a>
+	                                    <a href=""><i class="fab fa-linkedin-in"></i></a>
+	                                    <a href=""><i class="fab fa-instagram"></i></a>
+	                                </div>
+	                            </div>
+	                        </div>
+                            
+                        </div>
+					</div>
+                    
 
                 </div>
                 <div class="table-footer">

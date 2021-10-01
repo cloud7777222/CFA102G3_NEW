@@ -2,12 +2,14 @@ package com.dateappoorder.controller;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.dateappoorder.model.*;
 import com.member.model.MemberService;
+import com.member.model.MemberVO;
 
 import email.MailService;
 
@@ -22,6 +24,45 @@ public class DateappoorderServlet extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
 
+		if ("getAll_For_Keyword".equals(action)) { // 來自listAllAd.jsp的請求
+
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				/*************************** 1.接收請求參數 ****************************************/
+				String keyword = new String(req.getParameter("keyword"));
+				String keywordReg = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,20}$";
+				if (keyword == null || keyword.trim().length() == 0) {
+					errorMsgs.add("搜尋條件: 請勿空白");
+				} else if (!keyword.trim().matches(keywordReg)) { // 以下練習正則(規)表示式(regular-expression)
+					errorMsgs.add("搜尋條件: 只能是中、英文字母、數字和_ , 且長度必需在2到20之間");
+				}
+
+				/*************************** 2.開始查詢資料 ****************************************/
+				MemberService memberSvc = new MemberService();
+				List<MemberVO> memberVO = memberSvc.getAllMember();
+				List<MemberVO>  keywordOfList= memberVO.stream()
+						.filter(i->i.toString().indexOf(keyword)!=-1)
+						.collect(Collectors.toList());
+				System.out.println(keywordOfList.toString());
+
+				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
+				req.setAttribute("keyword", keyword); // 資料庫取出的adVO物件,存入req
+				String url = "/front_end/dateappoorder/dater.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_ad_input.jsp
+				successView.forward(req, res);
+
+				/*************************** 其他可能的錯誤處理 **********************************/
+			} catch (Exception e) {
+				errorMsgs.add("無法取得要修改的資料:" + e.getMessage());
+				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/dateappoorder/addDateappoorder.jsp");
+				failureView.forward(req, res);
+			}
+		}
+		
 		if ("getOne_For_Display".equals(action)) { // �Ӧ�select_page.jsp���ШD
 
 			List<String> errorMsgs = new LinkedList<String>();
