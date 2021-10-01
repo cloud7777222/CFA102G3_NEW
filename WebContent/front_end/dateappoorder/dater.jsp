@@ -16,7 +16,7 @@
 		list = memberService.getAllMember();
 	}else{
 		list = memberService.getAllMember().stream()
-				.filter(i->i.toString().indexOf(request.getAttribute("keyword").toString())!=-1)
+				.filter(i->i.toString().toLowerCase().indexOf(request.getAttribute("keyword").toString().toLowerCase())!=-1)
 				.collect(Collectors.toList());
 	}
 // 	List<MemberVO> list = isNull
