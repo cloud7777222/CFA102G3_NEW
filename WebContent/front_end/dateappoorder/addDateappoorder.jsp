@@ -101,7 +101,7 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
                   <div class="control-group">
                     <div id="select_datetime">
                       <input
-                        type="text"
+                        type="hidden"
                         class="date_output"
                         name="dateAppoDate"
                       />

@@ -8,7 +8,7 @@
 
 <%
 	DateappoorderService dateappoorderSvc = new DateappoorderService();
-	Integer userNo =((MemberVO) session.getAttribute("memberVO")).getMemberNo();
+// 	Integer userNo =((MemberVO) session.getAttribute("memberVO")).getMemberNo();
 // dateappoorderSvc.getOneDateappoorder(dateOrderNo)
 // 	boolean isNull = request.getAttribute("keyword") == null;
 	List<DateappoorderVO> list = dateappoorderSvc.getAll();

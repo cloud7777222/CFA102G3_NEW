@@ -144,6 +144,9 @@ public class DateappoorderServlet extends HttpServlet {
 			// Store this set in the request scope, in case we need to
 			// send the ErrorPage view.
 			req.setAttribute("errorMsgs", errorMsgs);
+			String whichPage = req.getParameter("whichPage");
+			System.out.println("getOne_For_Update_whichPage="+whichPage);
+			
 
 			try {
 				/***************************
@@ -160,8 +163,9 @@ public class DateappoorderServlet extends HttpServlet {
 				/***************************
 				 * 3.�d�ߧ���,�ǳ����(Send the Success view)
 				 ************/
+				req.setAttribute("datingCheckForUpdate", "datingCheckForUpdate");
 				req.setAttribute("dateappoorderVO", dateappoorderVO); // ��Ʈw���X��dateappoorderVO����,�s�Jreq
-				String url = "/front_end/dateappoorder/update_dateappoorder_input.jsp";
+				String url = "/memTime/memTime.do";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// ���\��� update_dateappoorder_input.jsp
 				successView.forward(req, res);
 
@@ -182,30 +186,19 @@ public class DateappoorderServlet extends HttpServlet {
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			String requestURL = req.getParameter("requestURL");
+			String whichPage = req.getParameter("whichPage");
+			System.out.println("update_whichPage="+whichPage);
 			try {
 				/***************************
 				 * 1.�����ШD�Ѽ� - ��J�榡�����~�B�z
 				 **********************/
 				Integer dateOrderNo = new Integer(Integer.valueOf(req.getParameter("dateOrderNo").trim()));
 				DateappoorderVO dateappoorderVO = new DateappoorderDAO().findByPrimaryKey(dateOrderNo);
-				Integer memberNoA = null;
-				try {
+				Integer memberNoA = dateappoorderVO.getMemberNoA();
+				
 
-					memberNoA = new Integer(req.getParameter("memberNoA").trim());
-				} catch (Exception e) {
-					memberNoA = dateappoorderVO.getMemberNoA();
-				}
-
-				Integer memberNoB = null;
-				try {
-
-					memberNoB = new Integer(req.getParameter("memberNoB").trim());
-				} catch (Exception e) {
-					memberNoB = dateappoorderVO.getMemberNoB();
-				}
-				if(memberNoA==memberNoB) {
-					memberNoB=dateappoorderVO.getMemberNoA();
-				}
+				Integer memberNoB = dateappoorderVO.getMemberNoB();
+				
 
 				java.sql.Timestamp dateOrderDate = null;
 
