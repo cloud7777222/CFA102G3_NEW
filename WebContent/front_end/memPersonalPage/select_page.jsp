@@ -35,11 +35,11 @@
 
 <p>This is the Home page for Beloved MemberPersonalPage</p>
 
-<h3>¸ê®Æ¬d¸ß:</h3>
+<h3>ï¿½ï¿½Æ¬dï¿½ï¿½:</h3>
 	
-<%-- ¿ù»~ªí¦C --%>
+<%-- ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½C --%>
 <c:if test="${not empty errorMsgs}">
-	<font style="color:red">½Ð­×¥¿¥H¤U¿ù»~:</font>
+	<font style="color:red">ï¿½Ð­×¥ï¿½ï¿½Hï¿½Uï¿½ï¿½ï¿½~:</font>
 	<ul>
 	    <c:forEach var="message" items="${errorMsgs}">
 			<li style="color:red">${message}</li>
@@ -53,10 +53,10 @@
   
   <li>
     <FORM METHOD="post" ACTION="MemPersonalPageServlet" >
-        <b>¿é¤J¶K¤å½s¸¹ (¦p01):</b>
+        <b>ï¿½ï¿½Jï¿½Kï¿½ï¿½sï¿½ï¿½ (ï¿½p01):</b>
         <input type="text" name="postNo">
         <input type="hidden" name="action" value="getOne_For_Display">
-        <input type="submit" value="°e¥X">
+        <input type="submit" value="ï¿½eï¿½X">
     </FORM>
   </li>
 
@@ -64,14 +64,14 @@
    
   <li>
      <FORM METHOD="post" ACTION="MemPersonalPageServlet" >
-       <b>¿ï¾Ü¶K¤å½s¸¹ :</b>
+       <b>ï¿½ï¿½Ü¶Kï¿½ï¿½sï¿½ï¿½ :</b>
        <select size="1" name="postNo">
          <c:forEach var="mppVO" items="${mppSvc.all}" > 
           <option value="${mppVO.postNo}">${mppVO.postNo}
          </c:forEach>   
        </select>
        <input type="hidden" name="action" value="getOne_For_Display">
-       <input type="submit" value="°e¥X">
+       <input type="submit" value="ï¿½eï¿½X">
     </FORM>
   </li>
   
@@ -79,7 +79,7 @@
 </ul>
 
 
-<h3>¶K¤åºÞ²z</h3>
+<h3>ï¿½Kï¿½ï¿½Þ²z</h3>
 
 <ul>
   <li><a href='addMemPerPage.jsp'>Add</a> a new MemberPersonalPage</li>

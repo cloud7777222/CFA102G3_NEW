@@ -4,7 +4,7 @@
 
 
 <%
-MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//MemPersonalPageServlet.java (Concroller) 存入req的mppVO物件 (包括幫忙取出的mppVO, 也包括輸入資料錯誤時的mppVO物件)
+MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//MemPersonalPageServlet.java (Concroller) 嚙編嚙皚req嚙踝蕭mppVO嚙踝蕭嚙踝蕭 (嚙稽嚙璀嚙踝蕭嚙踝蕭嚙踝蕭嚙碼嚙踝蕭mppVO, 嚙稽嚙稽嚙璀嚙踝蕭J嚙踝蕭せ嚙踝蕭~嚙褕迎蕭mppVO嚙踝蕭嚙踝蕭)
 %>
 
 <!DOCTYPE html>
@@ -12,16 +12,16 @@ MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//Me
 <head>
 <meta charset="BIG5">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<title>會員個人貼文新增</title>
+<title>嚙罵嚙踝蕭嚙諉人嚙皺嚙踝蕭s嚙磕</title>
 </head>
 
 
 
 <body bgcolor="lightpink">
 
-<%-- 錯誤表列 --%>
+<%-- 嚙踝蕭嚙羯嚙踝蕭嚙瘠 --%>
 <c:if test="${not empty errorMsgs}">
-	<font style="color:red">請修正以下錯誤:</font>
+	<font style="color:red">嚙請修伐蕭嚙瘡嚙磊嚙踝蕭嚙羯:</font>
 	<ul>
 		<c:forEach var="message" items="${errorMsgs}">
 			<li style="color:red">${message}</li>
@@ -37,19 +37,19 @@ MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//Me
         
         <table>
         <tr>
-		<td>會員編號:</td>
+		<td>嚙罵嚙踝蕭嚙編嚙踝蕭:</td>
 		<td><input type="TEXT" name="memberNo" size="45" 
 			 value= "<%= (mppVO==null)? "" : mppVO.getMemberNo()%>" /></td>
 	</tr>
 	<tr>
-		<td>貼文圖片:</td>
+		<td>嚙皺嚙踝蕭洃嚙�:</td>
 		<td><input type="file" name="postPhoto" size="45"
 			 value="<%= (mppVO==null)? "" : mppVO.getPostPhoto()%>" />					 
 		</td>
 	</tr>
 	
 	<tr>
-		<td>貼文內容:</td>
+		<td>嚙皺嚙賢內嚙箴:</td>
 		<td><input type="TEXT" name="postContent" size="100"
 			 value="<%= (mppVO==null)? "" : mppVO.getPostContent()%>" /></td>
 	</tr>
@@ -59,7 +59,7 @@ MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//Me
         
     
 	<input type="hidden" name="action" value="insert">  
-    <input type="submit" value="上傳">    
+    <input type="submit" value="嚙磕嚙踝蕭">    
   </FORM>
   
 

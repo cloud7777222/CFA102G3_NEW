@@ -1,13 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ page import="com.ad.model.*"%>
-<%-- ¦¹­¶¼È½m²ß±Ä¥Î Script ªº¼gªk¨ú­È --%>
+<%-- ï¿½ï¿½ï¿½ï¿½ï¿½È½mï¿½ß±Ä¥ï¿½ Script ï¿½ï¿½ï¿½gï¿½kï¿½ï¿½ï¿½ï¿½ --%>
 
-<%-- ¨ú¥X Concroller AdServlet.java¤w¦s¤JrequestªºAdVOª«¥ó--%>
+<%-- ï¿½ï¿½ï¿½X Concroller AdServlet.javaï¿½wï¿½sï¿½Jrequestï¿½ï¿½AdVOï¿½ï¿½ï¿½ï¿½--%>
 <%AdVO adVO = (AdVO) request.getAttribute("adVO");%>
 
 <html>
 <head>
-<title>­û¤u¸ê®Æ - listOneAd.jsp</title>
+<title>ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ - listOneAd.jsp</title>
 
 <style>
   table#table-1 {
@@ -50,25 +50,25 @@
 </head>
 <body bgcolor='white'>
 
-<h4>¦¹­¶¼È½m²ß±Ä¥Î Script ªº¼gªk¨ú­È:</h4>
+<h4>ï¿½ï¿½ï¿½ï¿½ï¿½È½mï¿½ß±Ä¥ï¿½ Script ï¿½ï¿½ï¿½gï¿½kï¿½ï¿½ï¿½ï¿½:</h4>
 <table id="table-1">
 	<tr><td>
-		 <h3>­û¤u¸ê®Æ - listOneAd.jsp</h3>
-		 <h4><a href="<%=request.getContextPath()%>/back_end/ad/index.jsp"><img src="images/back1.gif" width="100" height="32" border="0">¦^­º­¶</a></h4>
+		 <h3>ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ - listOneAd.jsp</h3>
+		 <h4><a href="<%=request.getContextPath()%>/back_end/ad/index.jsp"><img src="images/back1.gif" width="100" height="32" border="0">ï¿½^ï¿½ï¿½ï¿½ï¿½</a></h4>
 	</td></tr>
 </table>
 
 <table>
 	<tr>
-				<th>¼s§i½s¸¹</th>
-				<th>¼s§i¼ÐÃD</th>
-				<th>¼s§i±Ô­z</th>
-				<th>¹Ï¤ù1</th>
-				<th>¹Ï¤ù2</th>
-				<th>¹Ï¤ù3</th>
-				<th>¼s§iª¬ºA</th>
-				<th>µo§G¤é</th>
-				<th>ºI¤î¤é</th>
+				<th>ï¿½sï¿½iï¿½sï¿½ï¿½</th>
+				<th>ï¿½sï¿½iï¿½ï¿½ï¿½D</th>
+				<th>ï¿½sï¿½iï¿½Ô­z</th>
+				<th>ï¿½Ï¤ï¿½1</th>
+				<th>ï¿½Ï¤ï¿½2</th>
+				<th>ï¿½Ï¤ï¿½3</th>
+				<th>ï¿½sï¿½iï¿½ï¿½ï¿½A</th>
+				<th>ï¿½oï¿½Gï¿½ï¿½</th>
+				<th>ï¿½Iï¿½ï¿½ï¿½</th>
 			</tr>
 	<tr>
 		<td><%=adVO.getAdNo()%></td>

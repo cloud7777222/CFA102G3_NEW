@@ -4,12 +4,12 @@
 
 
 <%
-	MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//MemPersonalPageServlet.java (Concroller) ¦s¤JreqªºmppVOª«¥ó (¥]¬AÀ°¦£¨ú¥XªºmppVO, ¤]¥]¬A¿é¤J¸ê®Æ¿ù»~®ÉªºmppVOª«¥ó)
+	MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//MemPersonalPageServlet.java (Concroller) ï¿½sï¿½Jreqï¿½ï¿½mppVOï¿½ï¿½ï¿½ï¿½ (ï¿½]ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½mppVO, ï¿½]ï¿½]ï¿½Aï¿½ï¿½Jï¿½ï¿½Æ¿ï¿½ï¿½~ï¿½Éªï¿½mppVOï¿½ï¿½ï¿½ï¿½)
 %>
 <%= mppVO==null %>--${mppVO.postNo}--
 <html>
 <head>
-<title>­Ó¤H­¶­±¶K¤å - listOneMemPerPage.jsp</title>
+<title>ï¿½Ó¤Hï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½ï¿½ - listOneMemPerPage.jsp</title>
 
 <style>
   table#table-1 {
@@ -50,14 +50,14 @@
 
 <table id="table-1">
 	<tr><td>
-		 <h3>­Ó¤H­¶­±¶K¤å - listOneMemPerPage.jsp</h3>
-		 <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">¦^­º­¶</a></h4>
+		 <h3>ï¿½Ó¤Hï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½ï¿½ - listOneMemPerPage.jsp</h3>
+		 <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">ï¿½^ï¿½ï¿½ï¿½ï¿½</a></h4>
 	</td></tr>
 </table>
 
-<%-- ¿ù»~ªí¦C --%>
+<%-- ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½C --%>
 <c:if test="${not empty errorMsgs}">
-	<font style="color:red">½Ð­×¥¿¥H¤U¿ù»~:</font>
+	<font style="color:red">ï¿½Ð­×¥ï¿½ï¿½Hï¿½Uï¿½ï¿½ï¿½~:</font>
 	<ul>
 		<c:forEach var="message" items="${errorMsgs}">
 			<li style="color:red">${message}</li>
@@ -67,13 +67,13 @@
 
 <table>
 	<tr>
-		<th>¶K¤å½s¸¹</th>
-		<th>·|­û½s¸¹</th>
-		<th>¶K¤å¹Ï¤ù</th>
-		<th>¶K¤å¤º®e</th>
-		<th>µoªí®É¶¡</th>
-		<th>«öÆg¼Æ</th>
-		<th>¶K¤åª¬ºA</th>
+		<th>ï¿½Kï¿½ï¿½sï¿½ï¿½</th>
+		<th>ï¿½|ï¿½ï¿½ï¿½sï¿½ï¿½</th>
+		<th>ï¿½Kï¿½ï¿½Ï¤ï¿½</th>
+		<th>ï¿½Kï¿½å¤ºï¿½e</th>
+		<th>ï¿½oï¿½ï¿½ï¿½É¶ï¿½</th>
+		<th>ï¿½ï¿½ï¿½gï¿½ï¿½</th>
+		<th>ï¿½Kï¿½åª¬ï¿½A</th>
 	</tr>
 	<tr>
 		<td>${mppVO.postNo}</td>

@@ -38,13 +38,13 @@ public class MemTimeServlet extends HttpServlet {
 //				session.getAttribute(name)
 				MemberVO memberVO= (MemberVO) session.getAttribute("memberVO");
 				String memA = String.valueOf(memberVO.getMemberNo());
-				
+				System.out.println("memA="+memA);
 				
 				if (memA == null || (memA.trim()).length() == 0) {
 					errorMsgs.add("無會員資料，請重新選擇");
 				}
-
 				String memB = req.getParameter("memberNoB");
+				System.out.println("memB="+memB);
 				if (memB == null || (memB.trim()).length() == 0) {
 					errorMsgs.add("無會員資料，請重新選擇");
 				}
@@ -54,7 +54,8 @@ public class MemTimeServlet extends HttpServlet {
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
-
+				System.out.println("memA="+memA);
+				System.out.println("memB="+memB);
 				/*************************** 2.開始查詢資料 *****************************************/
 				DateappoorderService dateappoorderSvcA = new DateappoorderService();
 				List<DateappoorderVO> orderListA = dateappoorderSvcA.getAll();

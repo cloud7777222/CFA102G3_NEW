@@ -19,7 +19,7 @@
 <html>
 
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <title>交友資料</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <meta content="Free Website Template" name="keywords">

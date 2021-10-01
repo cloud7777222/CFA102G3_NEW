@@ -14,7 +14,7 @@
 <%= mppSvc==null %>--
 <html>
 <head>
-<title>©Ò¦³·|­û­Ó¤H­¶­±¶K¤å - listAllMemPerPage.jsp</title>
+<title>ï¿½Ò¦ï¿½ï¿½|ï¿½ï¿½ï¿½Ó¤Hï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½ï¿½ - listAllMemPerPage.jsp</title>
 
 <style>
   table#table-1 {
@@ -55,14 +55,14 @@
 
 <table id="table-1">
 	<tr><td>
-		 <h3>©Ò¦³·|­û­Ó¤H­¶­±¶K¤å - listAllMemPerPage.jsp</h3>
-		 <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">¦^­º­¶</a></h4>
+		 <h3>ï¿½Ò¦ï¿½ï¿½|ï¿½ï¿½ï¿½Ó¤Hï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½ï¿½ - listAllMemPerPage.jsp</h3>
+		 <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">ï¿½^ï¿½ï¿½ï¿½ï¿½</a></h4>
 	</td></tr>
 </table>
 
-<%-- ¿ù»~ªí¦C --%>
+<%-- ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½C --%>
 <c:if test="${not empty errorMsgs}">
-	<font style="color:red">½Ð­×¥¿¥H¤U¿ù»~:</font>
+	<font style="color:red">ï¿½Ð­×¥ï¿½ï¿½Hï¿½Uï¿½ï¿½ï¿½~:</font>
 	<ul>
 		<c:forEach var="message" items="${errorMsgs}">
 			<li style="color:red">${message}</li>
@@ -72,15 +72,15 @@
 
 <table>
 	<tr>
-		<th>¶K¤å½s¸¹</th>
-		<th>·|­û½s¸¹</th>
-		<th>¶K¤å¹Ï¤ù</th>
-		<th>¶K¤å¤º®e</th>
-		<th>¶K¤åµoªí®É¶¡</th>
-		<th>«öÆg¼Æ</th>
-		<th>¶K¤åª¬ºA</th>
-		<th>­×§ï</th>
-		<th>§R°£</th>
+		<th>ï¿½Kï¿½ï¿½sï¿½ï¿½</th>
+		<th>ï¿½|ï¿½ï¿½ï¿½sï¿½ï¿½</th>
+		<th>ï¿½Kï¿½ï¿½Ï¤ï¿½</th>
+		<th>ï¿½Kï¿½å¤ºï¿½e</th>
+		<th>ï¿½Kï¿½ï¿½oï¿½ï¿½ï¿½É¶ï¿½</th>
+		<th>ï¿½ï¿½ï¿½gï¿½ï¿½</th>
+		<th>ï¿½Kï¿½åª¬ï¿½A</th>
+		<th>ï¿½×§ï¿½</th>
+		<th>ï¿½Rï¿½ï¿½</th>
 	</tr>
 	<%@ include file="page1.file" %> 
 	<c:forEach var="mppVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
@@ -95,13 +95,13 @@
 			<td>${mppVO.postState}</td>
 			<td>
 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/memPersonalPage/MemPersonalPageServlet" style="margin-bottom: 0px;">
-			     <input type="submit" value="­×§ï">
+			     <input type="submit" value="ï¿½×§ï¿½">
 			     <input type="hidden" name="postNo"  value="${mppVO.postNo}">
 			     <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
 			</td>
 			<td>
 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/memPersonalPage/MemPersonalPageServlet" style="margin-bottom: 0px;">
-			     <input type="submit" value="§R°£">
+			     <input type="submit" value="ï¿½Rï¿½ï¿½">
 			     <input type="hidden" name="postNo"  value="${mppVO.postNo}">
 			     <input type="hidden" name="action" value="delete"></FORM>
 			</td>

@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.member.model.*"%>
 <%
@@ -9,7 +9,7 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
 <%-- <jsp:useBean id="memberSvc" scope="page" class="com.member.model.MemberService" /> --%>
 <html>
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <title>BELOVED 會員預約</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="Free Website Template" name="keywords" />

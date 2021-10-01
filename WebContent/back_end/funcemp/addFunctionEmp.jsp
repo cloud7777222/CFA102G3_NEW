@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title>Åv­­¸ê®Æ·s¼W - addFunctionEmp.jsp</title>
+<title>ï¿½vï¿½ï¿½ï¿½ï¿½Æ·sï¿½W - addFunctionEmp.jsp</title>
 
 <style>
 table#table-1 {
@@ -53,7 +53,7 @@ th, td {
 
 
 	<c:if test="${not empty errorMsgs}">
-		<font style="color: red">½Ð­×¥¿¥H¤U¿ù»~:</font>
+		<font style="color: red">ï¿½Ð­×¥ï¿½ï¿½Hï¿½Uï¿½ï¿½ï¿½~:</font>
 		<ul>
 			<c:forEach var="message" items="${errorMsgs}">
 				<li style="color: red">${message}</li>
@@ -66,22 +66,22 @@ th, td {
 	<table id="table-1">
 		<tr>
 			<td>
-				<h3>Åv­­¸ê®Æ·s¼W - addFunctionEmp.jsp</h3>
+				<h3>ï¿½vï¿½ï¿½ï¿½ï¿½Æ·sï¿½W - addFunctionEmp.jsp</h3>
 			</td>
 			<td>
 				<h4>
 					<a href="listAllFuncEmp.jsp"><img src="images/back1.gif"
-						width="100" height="100" border="0">¦^­º­¶</a>
+						width="100" height="100" border="0">ï¿½^ï¿½ï¿½ï¿½ï¿½</a>
 				</h4>
 			</td>
 		</tr>
 	</table>
 
-	<h3>¸ê®Æ·s¼W:</h3>
+	<h3>ï¿½ï¿½Æ·sï¿½W:</h3>
 
 
 	<c:if test="${not empty errorMsgs}">
-		<font style="color: red">½Ð­×¥¿¥H¤U¿ù»~:</font>
+		<font style="color: red">ï¿½Ð­×¥ï¿½ï¿½Hï¿½Uï¿½ï¿½ï¿½~:</font>
 		<ul>
 			<c:forEach var="message" items="${errorMsgs}">
 				<li style="color: red">${message}</li>
@@ -95,20 +95,20 @@ th, td {
 		<table>
 
 			<tr>
-				<td>Åv­­½s¸¹:</td>
+				<td>ï¿½vï¿½ï¿½ï¿½sï¿½ï¿½:</td>
 				<td><input type="TEXT" name="funcno" size="45"
 					value="<%=(funcempVO == null) ? "0" : funcempVO.getFuncno()%>" /></td>
 			</tr>
 			<tr>
-				<td>Åv­­¤º®e:</td>
+				<td>ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½e:</td>
 				<td><input type="TEXT" name="funccontent" size="45"
-					value="<%=(funcempVO == null) ? "½Ð¿é¤JÅv­­¤º®e´y­z" : funcempVO.getFunccontent()%>" /></td>
+					value="<%=(funcempVO == null) ? "ï¿½Ð¿ï¿½Jï¿½vï¿½ï¿½ï¿½ï¿½ï¿½eï¿½yï¿½z" : funcempVO.getFunccontent()%>" /></td>
 			</tr>
 
 
 		</table>
 		<br> <input type="hidden" name="action" value="insert"> <input
-			type="submit" value="°e¥X·s¼W">
+			type="submit" value="ï¿½eï¿½Xï¿½sï¿½W">
 	</FORM>
 </body>
 </html>

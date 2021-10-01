@@ -3,20 +3,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.dateappoorder.model.*"%>
-<%@ page import="com.member.model.*"%>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
 
 <%
 	DateappoorderService dateappoorderSvc = new DateappoorderService();
-	Integer userNo =((MemberVO) session.getAttribute("memberVO")).getMemberNo();
-// dateappoorderSvc.getOneDateappoorder(dateOrderNo)
 // 	boolean isNull = request.getAttribute("keyword") == null;
 	List<DateappoorderVO> list = dateappoorderSvc.getAll();
 	pageContext.setAttribute("list", list);
-	request.setAttribute("date",new Date());
 %>
 <jsp:useBean id="memberSvc" scope="page" class="com.member.model.MemberService" />
-
 	
 <html>
 
@@ -29,9 +24,7 @@
 
 <%@ include file="/front_end/pages/link.file"%>
 <style>
-*{
-	text-align: center;
-}
+
 .text p {
 	width: 100%;
 }
@@ -86,25 +79,10 @@ img {
 	line-height: 30px;
 	border-radius: 5px;
 }
-.card-header{
-	text-align:left;
-}
 
 table td {
 	width: 120px;
 	overflow-wrap: anywhere;
-}
-
-#close{
-	width: 200px;
-    height: 150px;
-    position:fixed;
-    top: 50%;
-    left: 50%;
-    margin-left: -100px;
-    margin-top: -75px;
-    border: 2px solid black;
-    background-color: gray;
 }
 </style>
 </head>
@@ -141,11 +119,11 @@ table td {
 										<div class="alert alert-warning" role="alert">請修正以下錯誤:</div>
 										<c:forEach var="message" items="${errorMsgs}">
 											<div class="alert alert-danger" role="alert">
-												${message}
-											</div>
+												${message}</div>
+
 										</c:forEach>
 
-									</c:if>									
+									</c:if>
 								</div>
 							</div>
 							<div class="card mb-4">
@@ -205,8 +183,9 @@ table td {
 												<th>訂單成立日期</th>
 												<th>約會日期</th>
 												<th>約會狀態</th>
-												<th>留下評價</th>
-												<th>約會評價</th>
+												<th>約會評價A</th>
+												<th>約會評價B</th>
+												<th>綜合評價</th>
 												<th>修改</th>
 											</tr>
 										</thead>
@@ -218,9 +197,10 @@ table td {
 												<th>訂單成立日期</th>
 												<th>約會日期</th>
 												<th>約會狀態</th>
-												<th>留下評價</th>
-												<th>約會評價</th>
-												<th width="25%">修改</th>
+												<th>約會評價A</th>
+												<th>約會評價B</th>
+												<th>綜合評價</th>
+												<th>修改</th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -239,75 +219,26 @@ table td {
 														<button type="submit" class="btn btn-info">${dateappoorderVO.dateOrderNo}</button>
 													</FORM>
 													</td>
-													<td>${memberSvc.getOneMember(dateappoorderVO.memberNoA).memberName }</td>
-													<td>${memberSvc.getOneMember(dateappoorderVO.memberNoB).memberName }</td>
+													<td>${memberSvc.getOneMemberByNo(dateappoorderVO.memberNoA).memberName }</td>
+													<td>${memberSvc.getOneMemberByNo(dateappoorderVO.memberNoB).memberName }</td>
 													<td>${dateappoorderVO.dateOrderDate}</td>
 													<td>${dateappoorderVO.dateAppoDate}</td>
-													<td ${dateappoorderVO.dateOrderState==0?"style='color:red;'":"style='color:blue;'"}>${dateappoorderVO.dateOrderState==1?"預約成立":"預約取消"}</td>
-<!-- 												    ((MemberVO)session.getAttribute("memberVO")).getMemberNo() -->
-													<td>${sessionScope.memberVO.memberNo==dateappoorderVO.memberNoA?dateappoorderVO.dateStarRateA:dateappoorderVO.dateStarRateB}</td>
+													<td>${dateappoorderVO.dateOrderState}</td>
+													<td>${dateappoorderVO.dateStarRateA}</td>
+													<td>${dateappoorderVO.dateStarRateB}</td>
 													<td>${dateappoorderVO.dateCE}</td>
 													<td>
-
-													<div class="container">
-												        <div class="row">
-									        				<c:if test="${dateappoorderVO.dateOrderState==1 && dateappoorderVO.dateAppoDate>date}">
-													            <div class="col">
-																	<FORM METHOD="post"
-																		ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
-																		style="margin-bottom: 0px;">
-																		<input type="hidden" name="dateOrderNo" value="${dateappoorderVO.dateOrderNo}">
-																		<input type="hidden" name="memberNoB" value="${dateappoorderVO.memberNoB}">
-																		<input type="hidden" name="action"
-																			value="getOne_For_Update"> <input type="hidden"
-																			name="requestURL" value="<%=request.getServletPath()%>">
-																		<input type="hidden" name="whichPage"
-																			value="<%=whichPage%>">
-																			<button type="submit" class="btn btn-success">修改日期</button>
-																	</FORM>
-													            </div>
-															</c:if>
-															<c:if test="${dateappoorderVO.dateOrderState==1 && dateappoorderVO.dateAppoDate>date}">
-													            <div class="col">
-																	<FORM METHOD="post"
-																		ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
-																		style="margin-bottom: 0px;">
-																		<input type="hidden" name="dateOrderNo" value="${dateappoorderVO.dateOrderNo}">
-																		<input type="hidden" name="memberNoB" value="${dateappoorderVO.memberNoB}">
-																		<input type="hidden" name="action"
-																			value="getOne_For_Update"> <input type="hidden"
-																			name="requestURL" value="<%=request.getServletPath()%>">
-																		<input type="hidden" name="whichPage"
-																			value="<%=whichPage%>">
-																			<button type="submit" class="btn btn-danger">取消預約</button>
-																	</FORM>
-													            </div>
-															</c:if>
-													        
-												            
-															<c:if test="${dateappoorderVO.dateOrderState==1 && dateappoorderVO.dateAppoDate<date}">
-												            	<div class="col">
-																	<FORM METHOD="post"
-																		ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
-																		style="margin-bottom: 0px;">
-																		<input type="hidden" name="dateOrderNo" value="${dateappoorderVO.dateOrderNo}">
-																		<input type="hidden" name="memberNoB" value="${dateappoorderVO.memberNoB}">
-																		<input type="hidden" name="action"
-																			value="getOne_For_Update"> <input type="hidden"
-																			name="requestURL" value="<%=request.getServletPath()%>">
-																		<input type="hidden" name="whichPage"
-																			value="<%=whichPage%>">
-																			<button type="submit" class="btn btn-info">留下評價</button>
-																	</FORM>
-												            	</div>
-															</c:if>
-															  
-												        </div>
-												    </div>
-									
-
-														
-														
+														<FORM METHOD="post"
+															ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
+															style="margin-bottom: 0px;">
+															<input type="hidden" name="dateOrderNo" value="${dateappoorderVO.dateOrderNo}">
+															<input type="hidden" name="action"
+																value="getOne_For_Update"> <input type="hidden"
+																name="requestURL" value="<%=request.getServletPath()%>">
+															<input type="hidden" name="whichPage"
+																value="<%=whichPage%>">
+															<button type="submit" class="btn btn-success">修改</button>
+														</FORM>
 													</td>
 													
 												</tr>
@@ -375,11 +306,8 @@ table td {
 	</div>
 
 	<%@ include file="/front_end/pages/script.file"%>
-	
-	    
-	
+
 	<script>
-	
         // $(".nav-item.dropdown").click(()=>{
         //     console.log("ijoioi")
         // //    $(this).next().toggle();

@@ -14,7 +14,7 @@
 
 <html>
 <head>
-<title>©Ò¦³¥\¯à½s¸¹»P¨ä¥\¯à¤º®e - listAllFunctionEmp.jsp</title>
+<title>ï¿½Ò¦ï¿½ï¿½\ï¿½ï¿½sï¿½ï¿½ï¿½Pï¿½ï¿½\ï¿½à¤ºï¿½e - listAllFunctionEmp.jsp</title>
 
 <style>
 table#table-1 {
@@ -60,13 +60,13 @@ th, td {
 	<table id="table-1">
 		<tr>
 			<td>
-				<h3>©Ò¦³¥\¯à½s¸¹»P¨ä¥\¯à¤º®e - listAllFuncEmp.jsp</h3>
+				<h3>ï¿½Ò¦ï¿½ï¿½\ï¿½ï¿½sï¿½ï¿½ï¿½Pï¿½ï¿½\ï¿½à¤ºï¿½e - listAllFuncEmp.jsp</h3>
 			</td>
 		</tr>
 	</table>
 
 	<c:if test="${not empty errorMsgs}">
-		<font style="color: red">½Ð­×¥¿¥H¤U¿ù»~:</font>
+		<font style="color: red">ï¿½Ð­×¥ï¿½ï¿½Hï¿½Uï¿½ï¿½ï¿½~:</font>
 		<ul>
 			<c:forEach var="message" items="${errorMsgs}">
 				<li style="color: red">${message}</li>
@@ -77,10 +77,10 @@ th, td {
 	<table>
 		<c:forEach var="functionempVO" items="${list}">
 			<tr>
-				<th>Åv­­½s¸¹</th>
-				<th>Åv­­¤º®e»¡©ú</th>
-				<th>­×§ï</th>
-				<th>§R°£</th>
+				<th>ï¿½vï¿½ï¿½ï¿½sï¿½ï¿½</th>
+				<th>ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½</th>
+				<th>ï¿½×§ï¿½</th>
+				<th>ï¿½Rï¿½ï¿½</th>
 			</tr>
 			<tr>
 				<td>${functionempVO.funcno}</td>
@@ -91,7 +91,7 @@ th, td {
 					<FORM METHOD="post"
 						ACTION="<%=request.getContextPath()%>/funcemp/funcemp.do"
 						style="margin-bottom: 0px;">
-						<input type="submit" value="­×§ï"> <input type="hidden"
+						<input type="submit" value="ï¿½×§ï¿½"> <input type="hidden"
 							name="funcno" value="${functionempVO.funcno}"> <input
 							type="hidden" name="action" value="getOne_For_Update">
 					</FORM>
@@ -102,7 +102,7 @@ th, td {
 					<FORM METHOD="post"
 						ACTION="<%=request.getContextPath()%>/funcemp/funcemp.do"
 						style="margin-bottom: 0px;">
-						<input type="submit" value="§R°£"> <input type="hidden"
+						<input type="submit" value="ï¿½Rï¿½ï¿½"> <input type="hidden"
 							name="funcno" value="${functionempVO.funcno}"> <input
 							type="hidden" name="action" value="delete">
 					</FORM>
@@ -111,7 +111,7 @@ th, td {
 		</c:forEach>
 	</table>
 
-	<h3>Åv­­¤º®e·s¼W</h3>
+	<h3>ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½eï¿½sï¿½W</h3>
 	<ul>
 		<li><a href='addFunctionEmp.jsp'>Add</a> NEW Emp---Function</li>
 	</ul>

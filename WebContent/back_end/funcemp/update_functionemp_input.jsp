@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title>Åv­­(emp)¸ê®Æ­×§ï - update_functionemp_input.jsp</title>
+<title>ï¿½vï¿½ï¿½(emp)ï¿½ï¿½Æ­×§ï¿½ - update_functionemp_input.jsp</title>
 
 <style>
 table#table-1 {
@@ -53,19 +53,19 @@ th, td {
 	<table id="table-1">
 		<tr>
 			<td>
-				<h3>Åv­­(emp)¸ê®Æ­×§ï - update_functionemp_input.jsp</h3>
+				<h3>ï¿½vï¿½ï¿½(emp)ï¿½ï¿½Æ­×§ï¿½ - update_functionemp_input.jsp</h3>
 				<h4>
 					<a href="listAllFuncEmp.jsp"><img src="images/back1.gif"
-						width="100" height="32" border="0">¦^­º­¶</a>
+						width="100" height="32" border="0">ï¿½^ï¿½ï¿½ï¿½ï¿½</a>
 				</h4>
 			</td>
 		</tr>
 	</table>
 
-	<h3>¸ê®Æ­×§ï:</h3>
+	<h3>ï¿½ï¿½Æ­×§ï¿½:</h3>
 
 	<c:if test="${not empty errorMsgs}">
-		<font style="color: red">½Ð­×¥¿¥H¤U¿ù»~:</font>
+		<font style="color: red">ï¿½Ð­×¥ï¿½ï¿½Hï¿½Uï¿½ï¿½ï¿½~:</font>
 		<ul>
 			<c:forEach var="message" items="${errorMsgs}">
 				<li style="color: red">${message}</li>
@@ -77,11 +77,11 @@ th, td {
 		ACTION="<%=request.getContextPath()%>/funcemp/funcemp.do" name="form1">
 		<table>
 			<tr>
-				<td>Åv­­½s¸¹:<font color=red><b>*</b></font></td>
+				<td>ï¿½vï¿½ï¿½ï¿½sï¿½ï¿½:<font color=red><b>*</b></font></td>
 				<td><%=funcempVO.getFuncno()%></td>
 			</tr>
 			<tr>
-				<td>Åv­­¤º®e:</td>
+				<td>ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½e:</td>
 				<td><input type="TEXT" name="funccontent" size="45"
 					value="<%=funcempVO.getFunccontent()%>" /></td>
 			</tr>
@@ -89,7 +89,7 @@ th, td {
 		</table>
 		<br> <input type="hidden" name="action" value="update"> <input
 			type="hidden" name="funcno" value="<%=funcempVO.getFuncno()%>">
-		<input type="submit" value="°e¥X­×§ï!">
+		<input type="submit" value="ï¿½eï¿½Xï¿½×§ï¿½!">
 	</FORM>
 </body>
 </html>

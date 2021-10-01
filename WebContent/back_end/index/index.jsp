@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf8"
-	pageEncoding="utf-8"%>
+	pageEncoding="UTF-8"%>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <title>belove後台管理系統</title>
 
 <!-- Custom fonts for this template-->

@@ -40,7 +40,7 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>交友資料</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free Website Template" name="keywords">
@@ -250,13 +250,13 @@
                             </div>
                             <div class="causes-btn">
                                 <a class="btn btn-custom">查看動態</a>
-                                <FORM id="datingBtn" METHOD="post" ACTION="<%=request.getContextPath()%>/memTime/memTime.do"
+                                <FORM id="datingBtn${memberVO.memberNo}" METHOD="post" ACTION="<%=request.getContextPath()%>/memTime/memTime.do"
                                     style="margin-bottom: 0px;">
                                     <input type="hidden" name="memberNoB" value="${memberVO.memberNo}">
                                     <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 									<input type="hidden" name="action" value="datingCheck">
                                 </FORM>
-                                <a class="btn btn-custom" onclick="$('#datingBtn').submit()">立即預約</a>
+                                <a class="btn btn-custom" onclick="$('#datingBtn${memberVO.memberNo}').submit()">立即預約</a>
                                 
                             </div>
                         </div>

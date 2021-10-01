@@ -3,14 +3,14 @@
 <%@ page import="com.mempersonalpage.model.*"%>
 
 <%
-MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//MemPersonalPageServlet.java (Concroller) ¦s¤JreqªºmppVOª«¥ó (¥]¬AÀ°¦£¨ú¥XªºmppVO, ¤]¥]¬A¿é¤J¸ê®Æ¿ù»~®ÉªºmppVOª«¥ó)
+MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//MemPersonalPageServlet.java (Concroller) ï¿½sï¿½Jreqï¿½ï¿½mppVOï¿½ï¿½ï¿½ï¿½ (ï¿½]ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½mppVO, ï¿½]ï¿½]ï¿½Aï¿½ï¿½Jï¿½ï¿½Æ¿ï¿½ï¿½~ï¿½Éªï¿½mppVOï¿½ï¿½ï¿½ï¿½)
 %>
 
 <%= mppVO==null %>--${mppVO.postNo}--
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<title>·|­û­Ó¤H­¶­±¶K¤å­×§ï - update_MemPerPage_input.jsp</title>
+<title>ï¿½|ï¿½ï¿½ï¿½Ó¤Hï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½ï¿½×§ï¿½ - update_MemPerPage_input.jsp</title>
 
 <style>
   table#table-1 {
@@ -49,16 +49,16 @@ MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//Me
 
 <table id="table-1">
 	<tr><td>
-		 <h3>·|­û­Ó¤H­¶­±¶K¤å­×§ï - update_MemPerPage_input.jsp</h3>
-		 <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">¦^­º­¶</a></h4>
+		 <h3>ï¿½|ï¿½ï¿½ï¿½Ó¤Hï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½ï¿½×§ï¿½ - update_MemPerPage_input.jsp</h3>
+		 <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">ï¿½^ï¿½ï¿½ï¿½ï¿½</a></h4>
 	</td></tr>
 </table>
 
-<h3>¸ê®Æ­×§ï:</h3>
+<h3>ï¿½ï¿½Æ­×§ï¿½:</h3>
 
-<%-- ¿ù»~ªí¦C --%>
+<%-- ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½C --%>
 <c:if test="${not empty errorMsgs}">
-	<font style="color:red">½Ð­×¥¿¥H¤U¿ù»~:</font>
+	<font style="color:red">ï¿½Ð­×¥ï¿½ï¿½Hï¿½Uï¿½ï¿½ï¿½~:</font>
 	<ul>
 		<c:forEach var="message" items="${errorMsgs}">
 			<li style="color:red">${message}</li>
@@ -69,34 +69,34 @@ MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//Me
 <FORM METHOD="post" ACTION="MemPersonalPageServlet" name="form1" enctype="multipart/form-data">
 <table>
 	<tr>
-		<td>¶K¤å½s¸¹:<font color=red><b>*</b></font></td>
+		<td>ï¿½Kï¿½ï¿½sï¿½ï¿½:<font color=red><b>*</b></font></td>
 		<td><%=mppVO.getPostNo()%></td>
 	</tr>
 	<tr>
-		<td>·|­û½s¸¹:<font color=red><b>*</b></font></td>
+		<td>ï¿½|ï¿½ï¿½ï¿½sï¿½ï¿½:<font color=red><b>*</b></font></td>
 		<td><%=mppVO.getMemberNo()%></td>
 	</tr>
 	<tr>
-		<td>¶K¤å¹Ï¤ù:</td>
+		<td>ï¿½Kï¿½ï¿½Ï¤ï¿½:</td>
 		<td><input type="file" name="postPhoto" size="45"
 			 value="<%= (mppVO==null)? "" : mppVO.getPostPhoto()%>" /></td>
 	</tr>
 	<tr>
-		<td>¶K¤å¤º®e:</td>
+		<td>ï¿½Kï¿½å¤ºï¿½e:</td>
 		<td><input type="TEXT" name="postContent" size="50"
 			 value="<%=mppVO.getPostContent()%>" /></td>
 	</tr>
 	<tr>
-		<td>µoªí®É¶¡:</td>
+		<td>ï¿½oï¿½ï¿½ï¿½É¶ï¿½:</td>
 		
 		<td><%=mppVO.getPostTime()%></td>
 	</tr>
 	<tr>
-		<td>«öÆg¼Æ:</td>
+		<td>ï¿½ï¿½ï¿½gï¿½ï¿½:</td>
 		<td><%=mppVO.getNumOfLike()%></td>
 	</tr>
 	<tr>
-		<td>¶K¤åª¬ºA:</td>
+		<td>ï¿½Kï¿½åª¬ï¿½A:</td>
 		<td><input type="TEXT" name="postState" size="50"
 			 value="<%=mppVO.getPostState()%>" /></td>
 	</tr>
@@ -108,7 +108,7 @@ MemPersonalPageVO mppVO = (MemPersonalPageVO) request.getAttribute("mppVO");//Me
 <br>
 <input type="hidden" name="action" value="update">
 <input type="hidden" name="postNo" value="<%=mppVO.getPostNo()%>">
-<input type="submit" value="°e¥X­×§ï"></FORM>
+<input type="submit" value="ï¿½eï¿½Xï¿½×§ï¿½"></FORM>
 </body>
 
 </html>
