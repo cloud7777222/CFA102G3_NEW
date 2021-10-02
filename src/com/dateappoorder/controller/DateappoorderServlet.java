@@ -13,7 +13,15 @@ import com.member.model.MemberVO;
 
 import email.MailService;
 
-public class DateappoorderServlet extends HttpServlet {
+public class DateappoorderServlet extends HttpServlet implements Runnable{
+//	String toA, String subject, String messageText
+	String toA, toB, subject, messageText;
+	public void run() {
+		// send email
+		MailService mailSv = new MailService();
+		mailSv.sendMail(toA, subject, messageText);
+		mailSv.sendMail(toB, subject, messageText);
+	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		doPost(req, res);
@@ -617,9 +625,13 @@ public class DateappoorderServlet extends HttpServlet {
 				 * 3.�s�W����,�ǳ����(Send the Success view)
 				 ***********/
 				// send email
-				MailService mailSv = new MailService();
-				mailSv.sendMail(toA, subject, messageText);
-				mailSv.sendMail(toB, subject, messageText);
+				DateappoorderServlet ds = new DateappoorderServlet();
+				ds.toA=toA;
+				ds.toB=toB;
+				ds.subject=subject;
+				ds.messageText=messageText;
+				Thread t=new Thread(ds);
+				t.start();
 
 				String url = requestURL;
 				RequestDispatcher successView = req.getRequestDispatcher(url); // �s�W���\�����listAllDateappoorder.jsp
