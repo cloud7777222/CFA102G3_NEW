@@ -13,9 +13,10 @@ import com.member.model.MemberVO;
 
 import email.MailService;
 
-public class DateappoorderServlet extends HttpServlet implements Runnable{
+public class DateappoorderServlet extends HttpServlet implements Runnable {
 //	String toA, String subject, String messageText
 	String toA, toB, subject, messageText;
+
 	public void run() {
 		// send email
 		MailService mailSv = new MailService();
@@ -384,9 +385,8 @@ public class DateappoorderServlet extends HttpServlet implements Runnable{
 				}
 				subject = "[系統通知信]" + subject;
 				String message = req.getParameter("message").trim();
-				String messageText = "Hello! 感謝您的使用" + "\n" + memberNoB_name + "於"
-						+ dateOrderDate.toString().substring(0, 19) + "\n約會邀請成功!" + memberNoA_name + "\n的約會邀請訊息如下:\n"
-						+ message;
+				String messageText = "Hello! 感謝您的使用" + "\n" + "於" + dateOrderDate.toString().substring(0, 19)
+						+ "\n新增約會訂單成功!\n" + memberNoA_name + "與" + memberNoB_name + "\n的約會邀請訊息如下:\n" + message;
 				if (message == null || message.trim().length() == 0) {
 					errorMsgs.add("訊息請勿空白");
 				}
@@ -417,10 +417,14 @@ public class DateappoorderServlet extends HttpServlet implements Runnable{
 				 *************/
 
 				// send email
-				MailService mailSv = new MailService();
-				mailSv.sendMail(toA, subject, messageText);
-				mailSv.sendMail(toB, subject, messageText);
-
+				DateappoorderServlet ds = new DateappoorderServlet();
+				ds.toA = toA;
+				ds.toB = toB;
+				ds.subject = subject;
+				ds.messageText = messageText;
+				Thread t = new Thread(ds);
+				t.start();
+				
 				req.setAttribute("dateappoorderVO", dateappoorderVO); // ��Ʈwupdate���\��,���T����dateappoorderVO����,�s�Jreq
 				String url = requestURL;
 				RequestDispatcher successView = req.getRequestDispatcher(url); // �ק令�\��,���listOneDateappoorder.jsp
@@ -593,9 +597,8 @@ public class DateappoorderServlet extends HttpServlet implements Runnable{
 				}
 				subject = "[系統通知信]" + subject;
 				String message = req.getParameter("message").trim();
-				String messageText = "Hello! 感謝您的使用" + "\n" + memberNoB_name + "於"
-						+ dateOrderDate.toString().substring(0, 19) + "\n約會邀請成功!" + memberNoA_name + "\n的約會邀請訊息如下:\n"
-						+ message;
+				String messageText = "Hello! 感謝您的使用" + "\n" + "於" + dateOrderDate.toString().substring(0, 19)
+						+ "\n新增約會訂單成功!\n" + memberNoA_name + "與" + memberNoB_name + "\n的約會邀請訊息如下:\n" + message;
 				if (message == null || message.trim().length() == 0) {
 					errorMsgs.add("訊息請勿空白");
 				}
@@ -626,11 +629,11 @@ public class DateappoorderServlet extends HttpServlet implements Runnable{
 				 ***********/
 				// send email
 				DateappoorderServlet ds = new DateappoorderServlet();
-				ds.toA=toA;
-				ds.toB=toB;
-				ds.subject=subject;
-				ds.messageText=messageText;
-				Thread t=new Thread(ds);
+				ds.toA = toA;
+				ds.toB = toB;
+				ds.subject = subject;
+				ds.messageText = messageText;
+				Thread t = new Thread(ds);
 				t.start();
 
 				String url = requestURL;

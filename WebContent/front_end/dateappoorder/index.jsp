@@ -115,11 +115,10 @@ table td {
 
 }
 
-.swal-button:not([disabled]):hover {
-    background-color: transparent;
-    font-size: 30px;
-    color: black;
+.swal-button:hover {
+    background-color: #940a3f;
 }
+
 </style>
 </head>
 
@@ -519,33 +518,24 @@ table td {
                      closeModal: true,
                      button: false,
                  },
-                 defeat: {
+                 cancel: {
                      text: "取消",
-                     value: 1,
+                     value: "cancel",
                      visible: true,
                      className: "face",
-                     closeModal: true,
+                     closeModal: false,
                      button: false,
 
                  }
              },
          }).then((value) => {
-                 switch (value) {
-
-                     case 1:
-                     case 2: 
-                     case 3:
-                     case 4:
-                     case 5:
-                         
-                         break;
-
-                     default:
-                         swal("您未做任何修改!", {
-                             button: false,
-                         });
-                         
-                 }
+        	 if(value=="cancel"){
+        		 swal("您未做任何修改!", {
+                     button: false,
+                 });
+             	return;
+        	 }
+             
                  let id ="#updateState"+dateOrderNo;
                  console.log(id);
                  $("input[name='dateStarRate']").val(value);
