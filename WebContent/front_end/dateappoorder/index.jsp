@@ -281,7 +281,7 @@ table td {
 																			value="<%=whichPage%>">
 																			<button type="submit" class="btn btn-danger">取消預約</button>
 																	</FORM>
-																	<button type="button" class="btn btn-danger" onclick="willCacel(${dateappoorderVO.dateOrderNo})">取消預約</button>
+<%-- 																	<button type="button" class="btn btn-danger" onclick="willCacel(${dateappoorderVO.dateOrderNo})">取消預約</button> --%>
 													            </div>
 															</c:if>
 													        
@@ -300,6 +300,16 @@ table td {
 																			value="<%=whichPage%>">
 																			<button type="submit" class="btn btn-info">留下評價</button>
 																	</FORM>
+												            	</div>
+															</c:if>
+															<c:if test="${dateappoorderVO.dateOrderState==0}">
+												            	<div class="col">
+																	<a class="btn btn-warning btn-icon-split" style="cursor: not-allowed;">
+								                                        <span class="icon text-white-50">
+								                                            <i class="fas fa-exclamation-triangle"></i>
+								                                        </span>
+								                                        <span class="text">此筆約會訂單已取消</span>
+								                                    </a>
 												            	</div>
 															</c:if>
 															  

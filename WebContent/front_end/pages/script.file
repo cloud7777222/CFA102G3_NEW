@@ -22,13 +22,13 @@
 		<script>
 			$(document).ready(()=>{
 			swal(`${successMsgs}`, "please check!" , "success");
-			})
+
 		</script>
 	</c:if>
 	<c:if test="${not empty errorMsgs}">
 		<script>
 			$(document).ready(()=>{
 			swal("失敗了", "please check!" , "error");
-			})
+
 		</script>
 	</c:if>

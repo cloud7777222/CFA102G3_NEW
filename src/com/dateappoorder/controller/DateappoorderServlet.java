@@ -235,13 +235,8 @@ public class DateappoorderServlet extends HttpServlet {
 				} catch (Exception e) {
 					dateStarRateB = dateappoorderVO.getDateStarRateB();
 				}
-				Integer dateCE = null;
-				try {
-
-					dateCE = new Integer(req.getParameter("dateCE").trim());
-				} catch (Exception e) {
-					dateCE = dateappoorderVO.getDateCE();
-				}
+				Integer dateCE = (Integer)((dateStarRateA+dateStarRateB)/2);
+				
 				
 
 				dateappoorderVO.setDateOrderNo(dateOrderNo);
@@ -314,7 +309,7 @@ public class DateappoorderServlet extends HttpServlet {
 				 * 1.�����ШD�Ѽ� - ��J�榡�����~�B�z
 				 **********************/
 				Integer dateOrderNo = new Integer(Integer.valueOf(req.getParameter("dateOrderNo").trim()));
-				DateappoorderVO dateappoorderVO = new DateappoorderDAO().findByPrimaryKey(dateOrderNo);
+				DateappoorderVO dateappoorderVO = new DateappoorderService().getOneDateappoorder(dateOrderNo);
 				Integer memberNoA = dateappoorderVO.getMemberNoA();
 				
 
