@@ -130,7 +130,7 @@ DateappoorderVO dateappoorderVO = (DateappoorderVO) request.getAttribute("dateap
                      <input type="hidden" name="dateOrderNo"
                     value="<%=request.getParameter("dateOrderNo") %>">
                     
-                    <input type="hidden" name="action" value="update" />
+                    <input type="hidden" name="action" value="updateForDate" />
                     <input
                       type="hidden"
                       name="requestURL"
@@ -403,8 +403,8 @@ DateappoorderVO dateappoorderVO = (DateappoorderVO) request.getAttribute("dateap
                     buttons: true,
                     dangerMode: true,
                   })
-                    .then((willDelete) => {
-                      if (willDelete) {
+                    .then((willForward) => {
+                      if (willForward) {
                         // 跳到該頁面
                         window.location.href="<%=request.getContextPath()%>/front_end/dateappoorder/index.jsp";
                       } else {

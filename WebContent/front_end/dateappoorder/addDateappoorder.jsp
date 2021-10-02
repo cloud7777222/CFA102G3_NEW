@@ -400,8 +400,8 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
                     buttons: true,
                     dangerMode: true,
                   })
-                    .then((willDelete) => {
-                      if (willDelete) {
+                    .then((willForward) => {
+                      if (willForward) {
                         // 跳到該頁面
                         window.location.href="<%=request.getContextPath()%>/front_end/dateappoorder/index.jsp";
                       } else {

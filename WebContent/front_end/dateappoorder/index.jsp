@@ -273,14 +273,15 @@ table td {
 																		ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
 																		style="margin-bottom: 0px;">
 																		<input type="hidden" name="dateOrderNo" value="${dateappoorderVO.dateOrderNo}">
-																		<input type="hidden" name="memberNoB" value="${dateappoorderVO.memberNoB}">
+<%-- 																		<input type="hidden" name="memberNoB" value="${dateappoorderVO.memberNoB}"> --%>
 																		<input type="hidden" name="action"
-																			value="getOne_For_Update"> <input type="hidden"
+																			value="update"> <input type="hidden"
 																			name="requestURL" value="<%=request.getServletPath()%>">
 																		<input type="hidden" name="whichPage"
 																			value="<%=whichPage%>">
 																			<button type="submit" class="btn btn-danger">取消預約</button>
 																	</FORM>
+																	<button type="button" class="btn btn-danger" onclick="willCacel(${dateappoorderVO.dateOrderNo})">取消預約</button>
 													            </div>
 															</c:if>
 													        
@@ -407,6 +408,45 @@ table td {
         }, 4000);
 
 
+    </script>
+    <script>
+    function willCacel(dateOrderNo){
+    	let no = dateOrderNo.toString();
+    	console.log(no)
+	    swal({
+	        title: "確定要取消嗎?",
+	        text: "約會編號["+dateOrderNo+"]取消後不可再做任何修改!",
+	        icon: "warning",
+	        buttons: true,
+	        dangerMode: true,
+	      }).then((willCancel) => {
+	          if (willCancel) {
+	            // 刪除
+// 	            swal(no);
+	            $.ajax({
+				    url: "<%=request.getContextPath()%>/dateappoorder/dateappoorder.do",
+				    type: "post",
+				    data: { 
+				    	action: "update",
+				    	dateOrderNo: no,
+				    	dateOrderState: 0,
+				    	requestURL:"<%=request.getServletPath()%>",
+				    	whichPage:1
+				    	},
+				    error:function () {
+		        	  		swal("失敗了");
+					    },
+				    success: function (data) {
+
+	        	  		swal("已取消請確認!");
+				    }
+				  });
+	            
+				
+	          }
+	        });
+    	
+    }
     </script>
 </body>
 
