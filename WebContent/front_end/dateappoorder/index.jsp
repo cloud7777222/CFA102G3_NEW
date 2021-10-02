@@ -106,6 +106,20 @@ table td {
     border: 2px solid black;
     background-color: gray;
 }
+
+.face {
+    color: red;
+    background-color: transparent;
+    font-size: 20px;
+    transition: all .5s;
+
+}
+
+.swal-button:not([disabled]):hover {
+    background-color: transparent;
+    font-size: 30px;
+    color: black;
+}
 </style>
 </head>
 
@@ -289,16 +303,18 @@ table td {
 															<c:if test="${dateappoorderVO.dateOrderState==1 && dateappoorderVO.dateAppoDate<date}">
 												            	<div class="col">
 																	<FORM METHOD="post"
+																		id="updateState${dateappoorderVO.dateOrderNo}"
 																		ACTION="<%=request.getContextPath()%>/dateappoorder/dateappoorder.do"
 																		style="margin-bottom: 0px;">
 																		<input type="hidden" name="dateOrderNo" value="${dateappoorderVO.dateOrderNo}">
 																		<input type="hidden" name="memberNoB" value="${dateappoorderVO.memberNoB}">
+																		<input type="hidden" name="dateStarRate">
 																		<input type="hidden" name="action"
-																			value="getOne_For_Update"> <input type="hidden"
+																			value="updateForRate"> <input type="hidden"
 																			name="requestURL" value="<%=request.getServletPath()%>">
 																		<input type="hidden" name="whichPage"
 																			value="<%=whichPage%>">
-																			<button type="submit" class="btn btn-info">留下評價</button>
+																			<button type="button" class="btn btn-info" onclick="updateState(${dateappoorderVO.dateOrderNo})">留下評價</button>
 																	</FORM>
 												            	</div>
 															</c:if>
@@ -457,6 +473,87 @@ table td {
 	        });
     	
     }
+    </script>
+    <script>
+
+    function updateState(dateOrderNo){
+    	 swal("請選擇您對本次約會評價", {
+             buttons: {
+                 1: {
+                     text: "😖",
+                     value: 1,
+                     visible: true,
+                     className: "face",
+                     closeModal: true,
+                     button: false,
+                 },
+                 2: {
+                     text: "😓",
+                     value: 2,
+                     visible: true,
+                     className: "face",
+                     closeModal: true,
+                     button: false,
+                 },
+                 3: {
+                     text: "😐",
+                     value: 3,
+                     visible: true,
+                     className: "face",
+                     closeModal: true,
+                     button: false,
+                 },
+                 4: {
+                     text: "😏",
+                     value: 4,
+                     visible: true,
+                     className: "face",
+                     closeModal: true,
+                     button: false,
+                 },
+                 5: {
+                     text: "😍",
+                     value: 5,
+                     visible: true,
+                     className: "face",
+                     closeModal: true,
+                     button: false,
+                 },
+                 defeat: {
+                     text: "取消",
+                     value: 1,
+                     visible: true,
+                     className: "face",
+                     closeModal: true,
+                     button: false,
+
+                 }
+             },
+         }).then((value) => {
+                 switch (value) {
+
+                     case 1:
+                     case 2: 
+                     case 3:
+                     case 4:
+                     case 5:
+                         
+                         break;
+
+                     default:
+                         swal("您未做任何修改!", {
+                             button: false,
+                         });
+                         
+                 }
+                 let id ="#updateState"+dateOrderNo;
+                 console.log(id);
+                 $("input[name='dateStarRate']").val(value);
+                 $(id).submit();
+             });
+    }
+
+       
     </script>
 </body>
 

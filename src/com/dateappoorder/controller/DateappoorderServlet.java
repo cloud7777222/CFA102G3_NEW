@@ -205,8 +205,8 @@ public class DateappoorderServlet extends HttpServlet {
 					dateOrderDate = new java.sql.Timestamp(System.currentTimeMillis());
 					errorMsgs.add("訂單日期有誤!");
 				}
-				
-				java.sql.Timestamp dateAppoDate =null;
+
+				java.sql.Timestamp dateAppoDate = null;
 				try {
 					dateAppoDate = dateappoorderVO.getDateAppoDate();
 				} catch (IllegalArgumentException e) {
@@ -235,9 +235,7 @@ public class DateappoorderServlet extends HttpServlet {
 				} catch (Exception e) {
 					dateStarRateB = dateappoorderVO.getDateStarRateB();
 				}
-				Integer dateCE = (Integer)((dateStarRateA+dateStarRateB)/2);
-				
-				
+				Integer dateCE = (Integer) ((dateStarRateA + dateStarRateB) / 2);
 
 				dateappoorderVO.setDateOrderNo(dateOrderNo);
 				dateappoorderVO.setMemberNoA(memberNoA);
@@ -250,8 +248,6 @@ public class DateappoorderServlet extends HttpServlet {
 				dateappoorderVO.setDateCE(dateCE);
 				System.out.println("dateOrderDate" + dateappoorderVO.getDateOrderDate());
 				System.out.println("dateAppoDate" + dateappoorderVO.getDateAppoDate());
-
-				
 
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
@@ -276,8 +272,6 @@ public class DateappoorderServlet extends HttpServlet {
 				/***************************
 				 * 3.�ק粒��,�ǳ����(Send the Success view)
 				 *************/
-				
-				
 
 				req.setAttribute("dateappoorderVO", dateappoorderVO); // ��Ʈwupdate���\��,���T����dateappoorderVO����,�s�Jreq
 				String url = requestURL;
@@ -293,7 +287,7 @@ public class DateappoorderServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
-		
+
 		if ("updateForDate".equals(action)) { // �Ӧ�update_dateappoorder_input.jsp���ШD
 
 			List<String> errorMsgs = new LinkedList<String>();
@@ -303,7 +297,7 @@ public class DateappoorderServlet extends HttpServlet {
 
 			String requestURL = req.getParameter("requestURL");
 			String whichPage = req.getParameter("whichPage");
-			System.out.println("update_whichPage="+whichPage);
+			System.out.println("update_whichPage=" + whichPage);
 			try {
 				/***************************
 				 * 1.�����ШD�Ѽ� - ��J�榡�����~�B�z
@@ -311,10 +305,8 @@ public class DateappoorderServlet extends HttpServlet {
 				Integer dateOrderNo = new Integer(Integer.valueOf(req.getParameter("dateOrderNo").trim()));
 				DateappoorderVO dateappoorderVO = new DateappoorderService().getOneDateappoorder(dateOrderNo);
 				Integer memberNoA = dateappoorderVO.getMemberNoA();
-				
 
 				Integer memberNoB = dateappoorderVO.getMemberNoB();
-				
 
 				java.sql.Timestamp dateOrderDate = null;
 
@@ -327,7 +319,7 @@ public class DateappoorderServlet extends HttpServlet {
 					dateAppoDate = new java.sql.Timestamp(System.currentTimeMillis());
 					errorMsgs.add("訂單日期有誤!");
 				}
-				
+
 				Integer dateOrderState = null;
 				try {
 
@@ -399,12 +391,12 @@ public class DateappoorderServlet extends HttpServlet {
 					failureView.forward(req, res);
 					return; // �{�����_
 				}
-				
+
 				String successMsgs = "資料更新成功";
 				// Store this set in the request scope, in case we need to
 				// send the ErrorPage view.
 				req.setAttribute("successMsgs", successMsgs);
-				
+
 				/***************************
 				 * 2.�}�l�ק���
 				 *****************************************/
@@ -433,6 +425,100 @@ public class DateappoorderServlet extends HttpServlet {
 				errorMsgs.add("修改資料失敗:" + e.getMessage());
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/front_end/dateappoorder/update_dateappoorder_input.jsp");
+				failureView.forward(req, res);
+			}
+		}
+
+		if ("updateForRate".equals(action)) { // �Ӧ�update_dateappoorder_input.jsp���ШD
+
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			HttpSession session = req.getSession();
+			Integer userNo = ((MemberVO) session.getAttribute("memberVO")).getMemberNo();
+			String requestURL = req.getParameter("requestURL");
+			String whichPage = req.getParameter("whichPage");
+			System.out.println("update_whichPage=" + whichPage);
+			try {
+				/***************************
+				 * 1.�����ШD�Ѽ� - ��J�榡�����~�B�z
+				 **********************/
+				Integer dateOrderNo = new Integer(Integer.valueOf(req.getParameter("dateOrderNo").trim()));
+//				DateappoorderService Svc = new DateappoorderService();
+				DateappoorderVO dateappoorderVO = new DateappoorderService().getOneDateappoorder(dateOrderNo);
+				System.out.println("dateappoorderVO==" + dateappoorderVO);
+				Integer memberNoA = dateappoorderVO.getMemberNoA();
+
+				Integer memberNoB = dateappoorderVO.getMemberNoB();
+
+				java.sql.Timestamp dateOrderDate = null;
+				try {
+					dateOrderDate = dateappoorderVO.getDateOrderDate();
+				} catch (IllegalArgumentException e) {
+					dateOrderDate = new java.sql.Timestamp(System.currentTimeMillis());
+					errorMsgs.add("訂單日期有誤!");
+				}
+
+				java.sql.Timestamp dateAppoDate = null;
+				try {
+					dateAppoDate = dateappoorderVO.getDateAppoDate();
+				} catch (IllegalArgumentException e) {
+					dateAppoDate = new java.sql.Timestamp(System.currentTimeMillis());
+					errorMsgs.add("約會日期有誤!");
+				}
+
+				Integer dateOrderState = dateappoorderVO.getDateOrderState();
+
+				Integer dateStarRateA = dateappoorderVO.getDateStarRateA();
+				Integer dateStarRateB = dateappoorderVO.getDateStarRateB();
+				if (userNo == memberNoA) {
+
+					dateStarRateA = new Integer(req.getParameter("dateStarRate").trim());
+
+				} else {
+
+					dateStarRateB = new Integer(req.getParameter("dateStarRate").trim());
+				}
+
+				Integer dateCE = (Integer) ((dateStarRateA + dateStarRateB) / 2);
+
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					req.setAttribute("dateappoorderVO", dateappoorderVO); // �t����J�榡���~��dateappoorderVO����,�]�s�Jreq
+					RequestDispatcher failureView = req.getRequestDispatcher(requestURL);
+					failureView.forward(req, res);
+					return; // �{�����_
+				}
+
+				String successMsgs = "資料更新成功";
+				// Store this set in the request scope, in case we need to
+				// send the ErrorPage view.
+				req.setAttribute("successMsgs", successMsgs);
+
+				/***************************
+				 * 2.�}�l�ק���
+				 *****************************************/
+				DateappoorderService dateappoorderSvc = new DateappoorderService();
+				dateappoorderVO = dateappoorderSvc.updateDateappoorder(dateOrderNo, memberNoA, memberNoB, dateOrderDate,
+						dateAppoDate, dateOrderState, dateStarRateA, dateStarRateB, dateCE);
+
+				/***************************
+				 * 3.�ק粒��,�ǳ����(Send the Success view)
+				 *************/
+
+				req.setAttribute("dateappoorderVO", dateappoorderVO); // ��Ʈwupdate���\��,���T����dateappoorderVO����,�s�Jreq
+				String url = requestURL;
+				RequestDispatcher successView = req.getRequestDispatcher(url); // �ק令�\��,���listOneDateappoorder.jsp
+				successView.forward(req, res);
+
+				/***************************
+				 * ��L�i�઺���~�B�z
+				 *************************************/
+			} catch (Exception e) {
+				errorMsgs.add("修改資料失敗:" + e.getMessage());
+				RequestDispatcher failureView = req.getRequestDispatcher(requestURL);
 				failureView.forward(req, res);
 			}
 		}
