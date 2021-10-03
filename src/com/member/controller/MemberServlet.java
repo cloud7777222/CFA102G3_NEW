@@ -642,6 +642,26 @@ public class MemberServlet extends HttpServlet {
 			}
 			}
 		
+		if("logout".equals(action)) {//updateMember的請求
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			String url="/front_end/index/index.jsp";
+			try {
+				req.getSession().removeAttribute("memberVO");
+				/***************************3.登入完成,準備轉交(Send the Success view)*************/
+//			res.sendRedirect(req.getContextPath()+"/member/select_page.jsp");//路徑要改!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneMember.jsp
+				successView.forward(req, res);
+				
+			}
+			catch(Exception e) {
+				errorMsgs.add("登出失敗:"+e.getMessage());
+				RequestDispatcher failureView = req.getRequestDispatcher(url);
+				failureView.forward(req, res);
+			}
+			}
+		
 		
 		
 	}//我是Post請求
