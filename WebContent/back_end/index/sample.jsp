@@ -15,7 +15,7 @@
 	<div id="wrapper">
 
 		<!-- Sidebar -->
-		<jsp:include page="../sidebar.jsp" flush="true" />
+		<jsp:include page="/back_end/sidebar.jsp" flush="true" />
 		<!-- End of Sidebar -->
 
 		<!-- Content Wrapper -->

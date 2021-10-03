@@ -25,6 +25,7 @@
 			})
 		</script>
 	</c:if>
+	
 	<c:if test="${not empty errorMsgs}">
 		<script>
 			$(document).ready(()=>{

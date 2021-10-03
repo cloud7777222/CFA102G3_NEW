@@ -73,7 +73,7 @@ public class AdServlet extends HttpServlet {
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("adVO", adVO); // 資料庫取出的adVO物件,存入req
-				String url = "/back_end/ad/listOneAd.jsp";
+				String url = "/front_end/ad/index.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneAd.jsp
 				successView.forward(req, res);
 

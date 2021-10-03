@@ -27,7 +27,7 @@ public class MemTimeServlet extends HttpServlet {
 		try {
 			datingCheckForUpdate = req.getAttribute("datingCheckForUpdate").toString();
 		}catch(Exception e) {
-			System.out.println("無此值");
+			System.out.println("會員未登入");
 		}
 
 		if ("datingCheck".equals(action)) { // 來自dateappoorder_page.jsp的請求

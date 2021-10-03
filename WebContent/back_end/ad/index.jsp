@@ -176,7 +176,6 @@ table td {
 											<tr>
 												<th>廣告編號</th>
 												<th>廣告標題</th>
-												<th>廣告敘述</th>
 												<th>圖片1</th>
 												<th>圖片2</th>
 												<th>圖片3</th>
@@ -191,7 +190,6 @@ table td {
 											<tr>
 												<th>廣告編號</th>
 												<th>廣告標題</th>
-												<th>廣告敘述</th>
 												<th>圖片1</th>
 												<th>圖片2</th>
 												<th>圖片3</th>
@@ -219,11 +217,10 @@ table td {
 													</FORM>
 													</td>
 													<td>${adVO.adTitle}</td>
-													<td>${adVO.ad}</td>
 													<td><img src="${adVO.adPic1}"></td>
 													<td><img src="${adVO.adPic2}"></td>
 													<td><img src="${adVO.adPic3}"></td>
-													<td>${adVO.adState}</td>
+													<td ${adVO.adState==0?"style='color:red;'":"style='color:blue;'" }>${adVO.adState==0?"下架":"上架"}</td>
 													<td>${adVO.postTime}</td>
 													<td>${adVO.deadline}</td>
 													<td>
