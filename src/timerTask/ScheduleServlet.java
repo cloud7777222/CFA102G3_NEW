@@ -17,7 +17,6 @@ public class ScheduleServlet extends HttpServlet {
       TimerTask task = new TimerTask(){ 
 	        public void run() {
             System.out.println("i="+i);
-            System.out.println("i="+i);
             i++;	      
 	        } 
       };
