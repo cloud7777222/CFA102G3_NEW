@@ -19,6 +19,7 @@
 				.filter(i->i.toString().toLowerCase().indexOf(request.getAttribute("keyword").toString().toLowerCase())!=-1)
 				.collect(Collectors.toList());
 	}
+	String[] country = {"國外","臺北市","新北市","桃園市","臺中市","臺南市","高雄市","基隆市","新竹市","嘉義市","新竹縣","苗栗縣","彰化縣","南投縣","雲林縣","嘉義縣","屏東縣","宜蘭縣","花蓮縣","臺東縣","澎湖縣"};
 // 	List<MemberVO> list = isNull
 // 			?(List<MemberVO>)request.getAttribute("keywordOfList")
 // 					:memberService.getAllMember();
@@ -34,6 +35,7 @@
 // 	boolean isNull = request.getAttribute("keyword") == null;
 // 	List<DateappoorderVO> list = dateappoorderSvc.getAll();
 	pageContext.setAttribute("list", list);
+	pageContext.setAttribute("country", country);
 %>
 <%-- <jsp:useBean id="memberSvc" scope="page" class="com.member.model.MemberService" /> --%>
 	
@@ -243,8 +245,8 @@
                                         <div class="col-7">生日:${memberVO.memberBirthday}</div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-5">居住地:${memberVO.memberCountry}</div>
-                                        <div class="col-7">職業:${memberVO.memberJob}</div>
+                                        <div class="col-5">職業:${memberVO.memberJob}</div>
+                                        <div class="col-7">居住地:${country[memberVO.memberCountry] }</div>
                                     </div>
                                 </div>
                             </div>
