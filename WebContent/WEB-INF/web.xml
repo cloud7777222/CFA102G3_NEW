@@ -171,5 +171,16 @@
 		<servlet-name>MemTime</servlet-name>
 		<url-pattern>/memTime/memTime.do</url-pattern>
 	</servlet-mapping>
+	
+	<!-- load-on-startup ScheduleServlet的註冊名稱與mapping -->
+    <servlet>
+		    <servlet-name>ScheduleServlet</servlet-name>
+		    <servlet-class>timerTask.ScheduleServlet</servlet-class>
+		    <load-on-startup>10</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		    <servlet-name>ScheduleServlet</servlet-name>
+		    <url-pattern>/ScheduleServlet</url-pattern>
+	</servlet-mapping>
 
 </web-app>
