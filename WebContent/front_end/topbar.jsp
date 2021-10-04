@@ -13,6 +13,20 @@
         width: 50px;
         height: 50px;
     }
+    
+    .dropdown-menu a:hover{
+    	background-color: #FDBE33;
+    }
+    
+/*     .navbar-nav{ */
+/*     line-height: 47px;  */
+/*     } */
+    
+/*     .navbar-nav,.nav-item,.nav-link.dropdown-toggle{ */
+/* 	line-height: 47px;  */
+/* 	height: 100%; */
+/* 	vertial-align: middle; */
+    }
 </style>
 
 </head>
@@ -30,7 +44,7 @@
                         </div>
                         <div class="text">
                             <i class="far fa-comment-dots"></i>
-                            <p id="news">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquam, rerum!
+                            <p id="news">加入BELOVE終結孤單!
                             </p>
                         </div>
                     </div>
@@ -38,8 +52,8 @@
                 <div class="col-md-4">
                     <div class="top-bar-right">
                         <div class="social">
-                            <a href=""><i class="fab fa-github"></i></a>
-                            <a href=""><i class="far fa-envelope"></i></a>
+                            <a href="https://github.com/cloud7777222/CFA102G3_NEW"><i class="fab fa-github"></i></a>
+                            <a href="cfa102g3@gmail.com"><i class="far fa-envelope"></i></a>
                         </div>
                     </div>
                 </div>
@@ -58,8 +72,8 @@
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav ml-auto">
-                    <a href="index.html" class="nav-item nav-link active">Home</a>
-                    <a href="about.html" class="nav-item nav-link">About</a>
+                    <a href="<%=request.getContextPath()%>/front_end/index/index.jsp" class="nav-item nav-link active">Home</a>
+                    <a href="#about" class="nav-item nav-link">About</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>
                         <div class="dropdown-menu">
@@ -70,23 +84,23 @@
                     </div>
                     <a href="causes.html" class="nav-item nav-link">Article</a>
                     <a href="event.html" class="nav-item nav-link">Shop</a>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    <a href="#contact" class="nav-item nav-link">Contact</a>
 
                     <div>
                     
                     	<c:if test="${not empty sessionScope.memberVO}">
-	                        <div class="nav-item dropdown">
-	                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i
-	                                    class="fas fa-user fa-fw"></i></a>
-	                            <ul class="dropdown-menu">
-	                                <li><a class="dropdown-item" href="#">Settings</a></li>
-	                                <li><a class="dropdown-item" href="#">Activity Log</a></li>
-	                                <li>
-	                                    <hr class="dropdown-divider" />
-	                                </li>
-	                                <li><a class="dropdown-item">登出${sessionScope.memberVO.memberName}最新消息<%=((MemberVO) session.getAttribute("memberVO")).getMemberNo()%></a></li>
-	                            </ul>
-	                        </div>
+<!-- 	                        <div class="nav-item dropdown"> -->
+<!-- 	                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i -->
+<!-- 	                                    class="fas fa-user fa-fw"></i></a> -->
+<!-- 	                            <ul class="dropdown-menu"> -->
+<!-- 	                                <li><a class="dropdown-item" href="#">Settings</a></li> -->
+<!-- 	                                <li><a class="dropdown-item" href="#">Activity Log</a></li> -->
+<!-- 	                                <li> -->
+<!-- 	                                    <hr class="dropdown-divider" /> -->
+<!-- 	                                </li> -->
+<%-- 	                                <li><a class="dropdown-item">登出${sessionScope.memberVO.memberName}最新消息<%=((MemberVO) session.getAttribute("memberVO")).getMemberNo()%></a></li> --%>
+<!-- 	                            </ul> -->
+<!-- 	                        </div> -->
 	                        
 	                        <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -118,9 +132,9 @@
 
 <%--                                     <button type="submit" class="btn btn-info">${memberVO.memberNo}</button> --%>
                                 </FORM>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" onclick="$('#logout').submit()">
+                                <a class="dropdown-item"  onclick="$('#logout').submit()">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+                                    	登出
                                 </a>
                             </div>
                         </li>
@@ -137,7 +151,7 @@
 	                                <li>
 	                                    <hr class="dropdown-divider" />
 	                                </li>
-	                                <li><a class="dropdown-item">登入</a></li>
+	                                <li><a class="dropdown-item" href="<%=request.getContextPath()%>/front_end/member/logInMember.jsp"><i class="fas fa-sign-in-alt"></i>登入</a></li>
 	                            </ul>
 	                        </div>
                         </c:if>

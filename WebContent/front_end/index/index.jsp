@@ -4,9 +4,24 @@
 <%@ page import="java.util.*"%>
 <%@ page import="java.util.stream.Collectors"%>
 <%@ page import="com.ad.model.*"%>
+<%@ page import="com.member.model.*"%>
+<%@ page import="com.activity.model.*"%>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
 
-<%
+<%	
+	//抓會員人數
+	MemberService memberService = new MemberService();
+	int memberOfMenSize = memberService.getAllMember().stream()
+			.filter(i->i.getMemberGender().toString().equals("1"))
+			.collect(Collectors.toList()).size();
+	int memberOfWomenSize = memberService.getAllMember().stream()
+			.filter(i->i.getMemberGender().toString().equals("2"))
+			.collect(Collectors.toList()).size();
+	//抓總活動數
+	ActivityService activityService = new ActivityService();
+	int activitySize = activityService.getAll().size();
+	
+			
 	AdService adService = new AdService();
 	List<AdVO> list = adService.getAll().stream()
 			.filter(i->i.getAdState()!=0)
@@ -14,7 +29,7 @@
 			.collect(Collectors.toList());
 	pageContext.setAttribute("list", list);
 	AdVO adVO = (AdVO) request.getAttribute("adVO");
-	request.setAttribute("date",new Date());
+// 	request.setAttribute("date",new Date());
 %>
 <jsp:useBean id="adSvc" scope="page" class="com.ad.model.AdService" />
 
@@ -58,6 +73,9 @@
 /* a{ */
 /* 	cursor: pointer; */
 /* } */
+.about-img{
+height: 100%;
+}
 
 </style>
 </head>
@@ -73,7 +91,7 @@
             <div class="owl-carousel">
                 <div class="carousel-item">
                     <div class="carousel-img">
-                        <img src="img/carousel-1.jpg" alt="Image">
+                        <img src="<%=request.getContextPath()%>/front_end/img/heart.jpg" alt="Image">
                     </div>
                     <div class="carousel-text">
                         <h1>出去玩吧!</h1>
@@ -89,48 +107,30 @@
 
                         <div class="carousel-btn">
                             <a class="btn btn-custom" href="">join Now</a>
-                            <a class="btn btn-custom btn-play" data-toggle="modal"
-                                data-src="https://www.youtube.com/embed/DWRcNpR6Kdc" data-target="#videoModal">Watch
-                                Video</a>
+                       
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <div class="carousel-img">
-                        <img src="img/carousel-2.jpg" alt="Image">
-                    </div>
-                    <div class="carousel-text">
-                        <h1>Get Involved with helping hand</h1>
-                        <p>
-                            Morbi sagittis turpis id suscipit feugiat. Suspendisse eu augue urna. Morbi sagittis, orci
-                            sodales varius fermentum, tortor
-                        </p>
-                        <div class="carousel-btn">
-                            <a class="btn btn-custom" href="">Donate Now</a>
-                            <a class="btn btn-custom btn-play" data-toggle="modal"
-                                data-src="https://www.youtube.com/embed/DWRcNpR6Kdc" data-target="#videoModal">Watch
-                                Video</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="carousel-img">
-                        <img src="img/carousel-3.jpg" alt="Image">
-                    </div>
-                    <div class="carousel-text">
-                        <h1>Bringing smiles to millions</h1>
-                        <p>
-                            Sed ultrices, est eget feugiat accumsan, dui nibh egestas tortor, ut rhoncus nibh ligula
-                            euismod quam. Proin pellentesque odio
-                        </p>
-                        <div class="carousel-btn">
-                            <a class="btn btn-custom" href="">Donate Now</a>
-                            <a class="btn btn-custom btn-play" data-toggle="modal"
-                                data-src="https://www.youtube.com/embed/DWRcNpR6Kdc" data-target="#videoModal">Watch
-                                Video</a>
-                        </div>
-                    </div>
-                </div>
+                <c:forEach var="adVO_list" items="${list}" >
+	                <div class="carousel-item">
+	                    <div class="carousel-img">
+	                        <img src="${adVO_list.adPic1 }" alt="Image">
+	                    </div>
+	                    <div class="carousel-text">
+	                        <h1>${adVO_list.adTitle }</h1>
+	                        <p style="color:white;width:70%;" id="ad${adVO_list.adPic1 }">${adVO_list.ad }</p>
+	                        <div class="carousel-btn">
+		                        <FORM METHOD="post"  onclick="$(this).submit()"
+								ACTION="<%=request.getContextPath()%>/ad/ad.do"
+								style="margin-bottom: 0px;">
+								<input type="hidden" name="adNo" value="${adVO_list.adNo}">
+								<input type="hidden" name="action" value="getOne_For_Display">
+	                            	<a class="btn btn-custom" >查看廣告</a>
+	                            </FORM>
+	                        </div>
+	                    </div>
+	                </div>
+                </c:forEach>
             </div>
         </div>
     </div>
@@ -158,13 +158,11 @@
 
 
     <!-- About Start -->
-    <div class="about">
+    <div class="about" id="about">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="about-img" data-parallax="scroll" data-image-src="img/about.jpg"></div>
-                </div>
-                <div class="col-lg-6">
+                
+                <div class="col-lg-12">
                     <div class="section-header">
                         <p>About Us</p>
                         <h2>BELOVED 發展</h2>
@@ -175,7 +173,7 @@
                                 <a class="nav-link active" data-toggle="pill" href="#tab-content-1">About</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="pill" href="#tab-content-2">Mission</a>
+                                <a class="nav-link" data-toggle="pill" href="#tab-content-2">Together</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="pill" href="#tab-content-3">Vision</a>
@@ -184,21 +182,29 @@
 
                         <div class="tab-content">
                             <div id="tab-content-1" class="container tab-pane active">
-                                近年來科技蓬勃發展 雖然改善了我們的生活卻疏遠了彼此之間的距離
+                            <pre>  近年來科技蓬勃發展 雖然改善了我們的生活卻疏遠了彼此之間的距離
                                 漸漸地科技冷漠成了常態 想當然結交朋友也成了一大難題
 
                                 製作一個平台提供活動及認識新朋友的機會，讓枯燥乏味的生活增添許多樂趣
+                            </pre>
+                              
 
                             </div>
                             <div id="tab-content-2" class="container tab-pane fade">
-                                服務流程 品牌故事 幸福案例 常見問題 關於我
+                                	<pre style="text-align:center;">「BELOVED和你一起開始，尋找愛。」
+乾淨整潔、氣質大方的外在，
+給人良好的第一印象，
+但唯有彼此內在的契合，
+更能融洽的長久相處。
+我們不僅能給予外型上的建議，
+更提供兩性相處的諮詢服務，
+幫助大家建立良好的兩性觀念，
+找尋合適伴侶過程中，
+更瞭解自己，
+進而找到相處自在的另一半。</pre>
                             </div>
-                            <div id="tab-content-3" class="container tab-pane fade">
-                                Aliquam dolor odio, mollis sed feugiat sit amet, feugiat ut sapien. Nunc eu dignissim
-                                lorem. Suspendisse at hendrerit enim. Interdum et malesuada fames ac ante ipsum primis
-                                in faucibus. Sed condimentum semper turpis vel facilisis. Nunc vel faucibus orci. Mauris
-                                ut mauris rhoncus, efficitur nisi at, venenatis quam. Praesent egestas pretium enim sit
-                                amet finibus. Curabitur at erat molestie, tincidunt lorem eget, consequat ligula.
+                            <div id="tab-content-3" class="container tab-pane fade" style="text-align:center;">
+                                2021 CFA102G3 製作
                             </div>
                         </div>
                     </div>
@@ -213,8 +219,8 @@
     <div class="service">
         <div class="container">
             <div class="section-header text-center">
-                <p>What We profer?</p>
-                <h2>We believe that we can enjoy more lifes with you</h2>
+                <p>我們提供什麼服務?</p>
+                <h2>我們相信能讓你的生活更加快樂</h2>
             </div>
             <div class="row">
                 <div class="col-lg-4 col-md-6">
@@ -224,7 +230,7 @@
                         </div>
                         <div class="service-text">
                             <h3>約會</h3>
-                            <p>Lorem ipsum dolor sit amet elit. Phase nec preti facils ornare velit non metus tortor</p>
+                            <p>尋找您感興趣的夥伴，進行預約約會吧!</p>
                         </div>
                     </div>
                 </div>
@@ -235,7 +241,7 @@
                         </div>
                         <div class="service-text">
                             <h3>論壇</h3>
-                            <p>Lorem ipsum dolor sit amet elit. Phase nec preti facils ornare velit non metus tortor</p>
+                            <p>分享您的生活，討論並解結問題吧!</p>
                         </div>
                     </div>
                 </div>
@@ -246,7 +252,7 @@
                         </div>
                         <div class="service-text">
                             <h3>活動</h3>
-                            <p>Lorem ipsum dolor sit amet elit. Phase nec preti facils ornare velit non metus tortor</p>
+                            <p>交流互動，臉紅心跳，體驗令人興奮的活動吧!</p>
                         </div>
                     </div>
                 </div>
@@ -257,32 +263,22 @@
                         </div>
                         <div class="service-text">
                             <h3>線上聊天</h3>
-                            <p>Lorem ipsum dolor sit amet elit. Phase nec preti facils ornare velit non metus tortor</p>
+                            <p>加入好友並進行聊天，增加彼此的感情吧!</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="service-item">
                         <div class="service-icon">
-                            <i class="flaticon-home"></i>
+                            <i class="fas fa-shopping-cart"></i>
                         </div>
                         <div class="service-text">
-                            <h3>Residence Facilities</h3>
-                            <p>Lorem ipsum dolor sit amet elit. Phase nec preti facils ornare velit non metus tortor</p>
+                            <h3>購物</h3>
+                            <p>提供多樣化商品，讓你有更多選擇</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-item">
-                        <div class="service-icon">
-                            <i class="flaticon-social-care"></i>
-                        </div>
-                        <div class="service-text">
-                            <h3>Social Care</h3>
-                            <p>Lorem ipsum dolor sit amet elit. Phase nec preti facils ornare velit non metus tortor</p>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -290,44 +286,41 @@
 
 
     <!-- Facts Start -->
-    <div class="facts" data-parallax="scroll" data-image-src="img/facts.jpg">
+    <div class="facts" data-parallax="scroll" style="background:url('<%=request.getContextPath()%>/front_end/img/offer.jpg') no-repeat 50%;object-fit: fill;">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-6">
+            	<div class="col-lg-3 col-md-4">
+
+                </div>
+                <div class="col-lg-2 col-md-4">
                     <div class="facts-item">
                         <i class="fas fa-male"></i>
                         <div class="facts-text">
-                            <h3 class="facts-plus" data-toggle="counter-up">999</h3>
+                            <h3 class="facts-plus" data-toggle="counter-up"><%=memberOfMenSize %></h3>
                             <p>男性會員數</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-2 col-md-4">
                     <div class="facts-item">
                         <i class="fas fa-female"></i>
                         <div class="facts-text">
-                            <h3 class="facts-plus" data-toggle="counter-up">400</h3>
+                            <h3 class="facts-plus" data-toggle="counter-up"><%=memberOfWomenSize %></h3>
                             <p>女性會員數</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="facts-item">
-                        <i class="fas fa-users"></i>
-                        <div class="facts-text">
-                            <h3 class="facts-plus" data-toggle="counter-up">10000</h3>
-                            <p>專家人數</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-4">
                     <div class="facts-item">
                         <i class="fas fa-chess"></i>
                         <div class="facts-text">
-                            <h3 class="facts-plus" data-toggle="counter-up">5000</h3>
-                            <p>可報名活動</p>
+                            <h3 class="facts-plus" data-toggle="counter-up"><%=activitySize %></h3>
+                            <p>舉辦過的活動</p>
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-2 col-md-4">
+
                 </div>
             </div>
         </div>
@@ -335,173 +328,9 @@
     <!-- Facts End -->
 
 
-    <!-- Causes Start -->
-    <div class="causes">
-        <div class="container">
-            <div class="section-header text-center">
-                <p>Popular Causes</p>
-                <h2>Let's know about charity causes around the world</h2>
-            </div>
-            <div class="owl-carousel causes-carousel">
-                <div class="causes-item">
-                    <div class="causes-img">
-                        <img src="img/causes-1.jpg" alt="Image">
-                    </div>
-                    <div class="causes-progress">
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0"
-                                aria-valuemax="100">
-                                <span>85%</span>
-                            </div>
-                        </div>
-                        <div class="progress-text">
-                            <p><strong>Raised:</strong> $100000</p>
-                            <p><strong>Goal:</strong> $50000</p>
-                        </div>
-                    </div>
-                    <div class="causes-text">
-                        <h3>Lorem ipsum dolor sit</h3>
-                        <p>Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit facilis ornare velit non
-                            vulputa</p>
-                    </div>
-                    <div class="causes-btn">
-                        <a class="btn btn-custom">Learn More</a>
-                        <a class="btn btn-custom">Donate Now</a>
-                    </div>
-                </div>
-                <div class="causes-item">
-                    <div class="causes-img">
-                        <img src="img/causes-2.jpg" alt="Image">
-                    </div>
-                    <div class="causes-progress">
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0"
-                                aria-valuemax="100">
-                                <span>85%</span>
-                            </div>
-                        </div>
-                        <div class="progress-text">
-                            <p><strong>Raised:</strong> $100000</p>
-                            <p><strong>Goal:</strong> $50000</p>
-                        </div>
-                    </div>
-                    <div class="causes-text">
-                        <h3>Lorem ipsum dolor sit</h3>
-                        <p>Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit facilis ornare velit non
-                            vulputa</p>
-                    </div>
-                    <div class="causes-btn">
-                        <a class="btn btn-custom">Learn More</a>
-                        <a class="btn btn-custom">Donate Now</a>
-                    </div>
-                </div>
-                <div class="causes-item">
-                    <div class="causes-img">
-                        <img src="img/causes-3.jpg" alt="Image">
-                    </div>
-                    <div class="causes-progress">
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0"
-                                aria-valuemax="100">
-                                <span>85%</span>
-                            </div>
-                        </div>
-                        <div class="progress-text">
-                            <p><strong>Raised:</strong> $100000</p>
-                            <p><strong>Goal:</strong> $50000</p>
-                        </div>
-                    </div>
-                    <div class="causes-text">
-                        <h3>Lorem ipsum dolor sit</h3>
-                        <p>Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit facilis ornare velit non
-                            vulputa</p>
-                    </div>
-                    <div class="causes-btn">
-                        <a class="btn btn-custom">Learn More</a>
-                        <a class="btn btn-custom">Donate Now</a>
-                    </div>
-                </div>
-                <div class="causes-item">
-                    <div class="causes-img">
-                        <img src="img/causes-4.jpg" alt="Image">
-                    </div>
-                    <div class="causes-progress">
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0"
-                                aria-valuemax="100">
-                                <span>85%</span>
-                            </div>
-                        </div>
-                        <div class="progress-text">
-                            <p><strong>Raised:</strong> $100000</p>
-                            <p><strong>Goal:</strong> $50000</p>
-                        </div>
-                    </div>
-                    <div class="causes-text">
-                        <h3>Lorem ipsum dolor sit</h3>
-                        <p>Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit facilis ornare velit non
-                            vulputa</p>
-                    </div>
-                    <div class="causes-btn">
-                        <a class="btn btn-custom">Learn More</a>
-                        <a class="btn btn-custom">Donate Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Causes End -->
+    
 
-
-    <!-- Donate Start -->
-    <div class="donate" data-parallax="scroll" data-image-src="img/donate.jpg">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-7">
-                    <div class="donate-content">
-                        <div class="section-header">
-                            <p>Donate Now</p>
-                            <h2>Let's donate to needy people for better lives</h2>
-                        </div>
-                        <div class="donate-text">
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare
-                                velit non. Aliquam metus tortor, auctor id gravida, viverra quis sem. Curabitur non nisl
-                                nec nisi maximus. Aenean convallis porttitor. Aliquam interdum at lacus non blandit.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="donate-form">
-                        <form>
-                            <div class="control-group">
-                                <input type="text" class="form-control" placeholder="Name" required="required" />
-                            </div>
-                            <div class="control-group">
-                                <input type="email" class="form-control" placeholder="Email" required="required" />
-                            </div>
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn btn-custom active">
-                                    <input type="radio" name="options" checked> $10
-                                </label>
-                                <label class="btn btn-custom">
-                                    <input type="radio" name="options"> $20
-                                </label>
-                                <label class="btn btn-custom">
-                                    <input type="radio" name="options"> $30
-                                </label>
-                            </div>
-                            <div>
-                                <button class="btn btn-custom" type="submit">Donate Now</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Donate End -->
+    
 
 
     <!-- Event Start -->
@@ -558,215 +387,20 @@
     <!-- Event End -->
 
 
-    <!-- Team Start -->
-    <div class="team">
-        <div class="container">
-            <div class="section-header text-center">
-                <p>Meet Our Team</p>
-                <h2>Awesome guys behind our charity activities</h2>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="team-item">
-                        <div class="team-img">
-                            <img src="img/team-1.jpg" alt="Team Image">
-                        </div>
-                        <div class="team-text">
-                            <h2>Donald John</h2>
-                            <p>Founder & CEO</p>
-                            <div class="team-social">
-                                <a href=""><i class="fab fa-twitter"></i></a>
-                                <a href=""><i class="fab fa-facebook-f"></i></a>
-                                <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                <a href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="team-item">
-                        <div class="team-img">
-                            <img src="img/team-2.jpg" alt="Team Image">
-                        </div>
-                        <div class="team-text">
-                            <h2>Adam Phillips</h2>
-                            <p>Chef Executive</p>
-                            <div class="team-social">
-                                <a href=""><i class="fab fa-twitter"></i></a>
-                                <a href=""><i class="fab fa-facebook-f"></i></a>
-                                <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                <a href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="team-item">
-                        <div class="team-img">
-                            <img src="img/team-3.jpg" alt="Team Image">
-                        </div>
-                        <div class="team-text">
-                            <h2>Thomas Olsen</h2>
-                            <p>Chef Advisor</p>
-                            <div class="team-social">
-                                <a href=""><i class="fab fa-twitter"></i></a>
-                                <a href=""><i class="fab fa-facebook-f"></i></a>
-                                <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                <a href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="team-item">
-                        <div class="team-img">
-                            <img src="img/team-4.jpg" alt="Team Image">
-                        </div>
-                        <div class="team-text">
-                            <h2>James Alien</h2>
-                            <p>Advisor</p>
-                            <div class="team-social">
-                                <a href=""><i class="fab fa-twitter"></i></a>
-                                <a href=""><i class="fab fa-facebook-f"></i></a>
-                                <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                <a href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Team End -->
+    
 
 
-    <!-- dater Start -->
-    <div class="dater" data-parallax="scroll" data-image-src="img/dater.jpg">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5">
-                    <div class="dater-form">
-                        <form>
-                            <div class="control-group">
-                                <input type="text" class="form-control" placeholder="Name" required="required" />
-                            </div>
-                            <div class="control-group">
-                                <input type="email" class="form-control" placeholder="Email" required="required" />
-                            </div>
-                            <div class="control-group">
-                                <textarea class="form-control" placeholder="Why you want to become a dater?"
-                                    required="required"></textarea>
-                            </div>
-                            <div>
-                                <button class="btn btn-custom" type="submit">Become a dater</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-lg-7">
-                    <div class="dater-content">
-                        <div class="section-header">
-                            <p>Become A dater</p>
-                            <h2>Let’s make a difference in the lives of others</h2>
-                        </div>
-                        <div class="dater-text">
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare
-                                velit non. Aliquam metus tortor, auctor id gravida, viverra quis sem. Curabitur non nisl
-                                nec nisi maximus. Aenean convallis porttitor. Aliquam interdum at lacus non blandit.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- dater End -->
-
-
-    <!-- Testimonial Start -->
-    <div class="testimonial">
-        <div class="container">
-            <div class="section-header text-center">
-                <p>Testimonial</p>
-                <h2>What people are talking about our charity activities</h2>
-            </div>
-            <div class="owl-carousel testimonials-carousel">
-                <div class="testimonial-item">
-                    <div class="testimonial-profile">
-                        <img src="img/testimonial-1.jpg" alt="Image">
-                        <div class="testimonial-name">
-                            <h3>Person Name</h3>
-                            <p>Profession</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-text">
-                        <p>
-                            Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu
-                            metus tortor, auctor id gravid vivera quis
-                        </p>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-profile">
-                        <img src="img/testimonial-2.jpg" alt="Image">
-                        <div class="testimonial-name">
-                            <h3>Person Name</h3>
-                            <p>Profession</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-text">
-                        <p>
-                            Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu
-                            metus tortor, auctor id gravid vivera quis
-                        </p>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-profile">
-                        <img src="img/testimonial-3.jpg" alt="Image">
-                        <div class="testimonial-name">
-                            <h3>Person Name</h3>
-                            <p>Profession</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-text">
-                        <p>
-                            Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu
-                            metus tortor, auctor id gravid vivera quis
-                        </p>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-profile">
-                        <img src="img/testimonial-4.jpg" alt="Image">
-                        <div class="testimonial-name">
-                            <h3>Person Name</h3>
-                            <p>Profession</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-text">
-                        <p>
-                            Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu
-                            metus tortor, auctor id gravid vivera quis
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Testimonial End -->
-
+   
 
     <!-- Contact Start -->
-    <div class="contact">
+    <div class="contact" id="contact">
         <div class="container">
             <div class="section-header text-center">
-                <p>Get In Touch</p>
-                <h2>Contact for any query</h2>
+                <p>Contact us</p>
+                <h2>聯絡我們</h2>
             </div>
             <div class="contact-img">
-                <img src="img/contact.jpg" alt="Image">
+                <img style="background:url('<%=request.getContextPath()%>/front_end/img/contact.jpg') no-repeat 50% 20%;object-fit: fill;">
             </div>
             <div class="contact-form">
                 <div id="success"></div>
@@ -801,73 +435,7 @@
     <!-- Contact End -->
 
 
-    <!-- Blog Start -->
-    <div class="blog">
-        <div class="container">
-            <div class="section-header text-center">
-                <p>Our Blog</p>
-                <h2>Latest news & articles directly from our blog</h2>
-            </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="blog-item">
-                        <div class="blog-img">
-                            <img src="img/blog-1.jpg" alt="Image">
-                        </div>
-                        <div class="blog-text">
-                            <h3><a href="#">Lorem ipsum dolor sit</a></h3>
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Neca pretim miura bitur facili ornare velit non vulpte
-                                liqum metus tortor
-                            </p>
-                        </div>
-                        <div class="blog-meta">
-                            <p><i class="fa fa-user"></i><a href="">Admin</a></p>
-                            <p><i class="fa fa-comments"></i><a href="">15 Comments</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="blog-item">
-                        <div class="blog-img">
-                            <img src="img/blog-2.jpg" alt="Image">
-                        </div>
-                        <div class="blog-text">
-                            <h3><a href="#">Lorem ipsum dolor sit</a></h3>
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Neca pretim miura bitur facili ornare velit non vulpte
-                                liqum metus tortor
-                            </p>
-                        </div>
-                        <div class="blog-meta">
-                            <p><i class="fa fa-user"></i><a href="">Admin</a></p>
-                            <p><i class="fa fa-comments"></i><a href="">15 Comments</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="blog-item">
-                        <div class="blog-img">
-                            <img src="img/blog-3.jpg" alt="Image">
-                        </div>
-                        <div class="blog-text">
-                            <h3><a href="#">Lorem ipsum dolor sit</a></h3>
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Neca pretim miura bitur facili ornare velit non vulpte
-                                liqum metus tortor
-                            </p>
-                        </div>
-                        <div class="blog-meta">
-                            <p><i class="fa fa-user"></i><a href="">Admin</a></p>
-                            <p><i class="fa fa-comments"></i><a href="">15 Comments</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Blog End -->
-
+   
 	<!-- Footer Start -->
 	<jsp:include page="/front_end/footer.jsp" flush="true" />
 	<!-- Footer End -->

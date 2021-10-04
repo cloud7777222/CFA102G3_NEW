@@ -16,11 +16,11 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-contact">
                         <h2>Our Head Office</h2>
-                        <p><i class="fa fa-map-marker-alt"></i>123 Street, New York, USA</p>
-                        <p><i class="fa fa-phone-alt"></i>+012 345 67890</p>
-                        <p><i class="fa fa-envelope"></i>info@example.com</p>
+                        <p><i class="fa fa-map-marker-alt"></i>台灣</p>
+<!--                         <p><i class="fa fa-phone-alt"></i>09+012 345 67890</p> -->
+                        <p><i class="fa fa-envelope"></i>cfa102g3@gmail.com</p>
                         <div class="footer-social">
-                            <a class="btn btn-custom" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-custom" href="https://github.com/cloud7777222/CFA102G3_NEW"><i class="fab fa-github"></i></a>
                             <a class="btn btn-custom" href=""><i class="fab fa-facebook-f"></i></a>
                             <a class="btn btn-custom" href=""><i class="fab fa-youtube"></i></a>
                             <a class="btn btn-custom" href=""><i class="fab fa-instagram"></i></a>
@@ -31,7 +31,7 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-link">
                         <h2>Popular Links</h2>
-                        <a href="">About Us</a>
+                        <a href="#about">About Us</a>
                         <a href="">Contact Us</a>
                         <a href="">Popular Causes</a>
                         <a href="">Upcoming Events</a>
