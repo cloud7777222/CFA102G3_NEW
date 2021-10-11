@@ -3,6 +3,7 @@ package com.member.model;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class MemberService {
@@ -75,6 +76,7 @@ public class MemberService {
 		return dao.checkAccountEmail(memberAccount,memberEmail);
 	}
 	
-	
-	
+	public List<MemberVO> compositeQuery(Map<String, String[]> map){
+		return dao.compositeQuery(map);
+	}
 }

@@ -49,5 +49,5 @@ public class OrderlistService {
 	public List<OrderlistVO> getOrderDetail(Integer orderno){
 		return dao.getOrderList(orderno);
 	}
-
+	
 }

@@ -1,6 +1,7 @@
 package com.activity.model;
 
 import java.util.*;
+import java.io.InputStream;
 import java.sql.*;
 import java.sql.Date;
 
@@ -8,7 +9,7 @@ public class ActivityJDBCDAO implements ActivityDAO_interface {
 
 	
 	String driver = "com.mysql.cj.jdbc.Driver";
-	String url = "jdbc:mysql://localhost:3306/belovedb?serverTimezone=Asia/Taipei";
+	String url = "jdbc:mysql://localhost:3306/beloveDB?serverTimezone=Asia/Taipei";
 	String userid = "David";
 	String passwd = "123456";
 
@@ -18,10 +19,12 @@ public class ActivityJDBCDAO implements ActivityDAO_interface {
 		"SELECT actNo,actType,actName,actDate,actLocation,actDirection,MaxParticipant,MinParticipant,actState,actHoldState,actRegisterStartDate,actRegisterDeadLine,actPicture,TotalStar,TotalEvaluator FROM ACTIVITY order by actNo";
 	private static final String GET_ONE_STMT = 
 		"SELECT actNo,actType,actName,actDate,actLocation,actDirection,MaxParticipant,MinParticipant,actState,actHoldState,actRegisterStartDate,actRegisterDeadLine,actPicture,TotalStar,TotalEvaluator FROM ACTIVITY where actNo = ?";
+	private static final String GET_PICTURE="SELECT actPicture FROM ACTIVITY WHERE actName=?";
 	private static final String DELETE = 
 		"DELETE FROM ACTIVITY where actNo = ?";
 	private static final String UPDATE_STMT = 
 		"UPDATE ACTIVITY set  actType = ?, actName = ?, actDate = ?, actLocation = ?, actDirection = ? ,MaxParticipant= ? ,MinParticipant= ? ,actState= ? ,actHoldState= ? ,actRegisterStartDate= ? ,actRegisterDeadLine= ? ,actPicture= ? ,TotalStar= ? ,TotalEvaluator= ? where actNo = ?";
+	private static final String picture = "INSERT INTO ACTIVITY(actNo, actPicture) VALUES (?, ?)";
 
 	@Override
 	public void insert(ActivityVO activityVO) {
@@ -347,6 +350,7 @@ public class ActivityJDBCDAO implements ActivityDAO_interface {
 		activityVO1.setActRegisterStartDate(Date.valueOf("2021-08-25 00:00:00"));;
 		activityVO1.setActRegisterDeadLine(Date.valueOf("2021-08-27 00:00:00"));;
 		activityVO1.setActPicture(null);
+		byte[] pic = getPictureByteArray("items/FC_Barcelona.png");
 		activityVO1.setTotalStar(new Integer(10));
 		activityVO1.setTotalEvaluator(new Integer(16));
 		
@@ -415,5 +419,72 @@ public class ActivityJDBCDAO implements ActivityDAO_interface {
 		
 			System.out.println();
 		}
+	}
+
+	private static byte[] getPictureByteArray(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static InputStream getPictureStream(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] getPhoto(String actName) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		byte[] actPicture=null;
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt=con.prepareStatement(GET_PICTURE);
+			pstmt.setString(1, actName);
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				actPicture=rs.getBytes("actPicture");
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(con!=null) {
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return actPicture;
+	}
+
+	@Override
+	public void updatePhoto(String actName, byte[] actPicture) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<ActivityVO> searchByTypeAll(Integer actType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ActivityVO> searchByTypeA(Integer actType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ActivityVO> findAllByKeyword(String keyword) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

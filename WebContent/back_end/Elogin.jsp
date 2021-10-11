@@ -1,16 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=BIG5"
-    pageEncoding="BIG5"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="BIG5">
+<meta charset="UTF-8">
 <title>Elogin</title>
 <style>
 *{
 	margin:0;
 	padding:0;
-	font-family:'¼Ð·¢Åé¦r«¬'
+	font-family:'æ¨™æ¥·é«”å­—åž‹'
 }
 body{
 	display:flex;
@@ -93,9 +93,9 @@ body{
 <body>
 <div class="container">
  <h2>Beloved Employee Login</h2>
- <%-- ¿ù»~ªí¦C --%>
+ <%-- éŒ¯èª¤è¡¨åˆ— --%>
 <c:if test="${not empty errorMsgs}">
-	<font style="color:red">½Ð­×¥¿¥H¤U¿ù»~:</font>
+	<font style="color:red">è«‹ä¿®æ­£ä»¥ä¸‹éŒ¯èª¤:</font>
 	<ul>
 		<c:forEach var="message" items="${errorMsgs}">
 			<li style="color:red">${message}</li>

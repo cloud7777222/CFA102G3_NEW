@@ -2,6 +2,7 @@ package com.prod.model;
 
 import java.util.List;
 
+import com.orderlist.model.OrderlistVO;
 import com.prod.model.ProdVO;
 
 public interface ProdDAO_interface {
@@ -17,5 +18,5 @@ public interface ProdDAO_interface {
      public ProdVO findByPrimaryKey(Integer prodno);
      public List<ProdVO> getAll();
      public List<ProdVO> getAllForFront();
-
+     public void insert2(ProdVO prodVO,java.sql.Connection con);
 }

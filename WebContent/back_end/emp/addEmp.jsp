@@ -9,6 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <title>加入員工</title>
+<%@ include file="/back_end/header.jsp"%>
 <style>
 
 .note
@@ -44,6 +45,7 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <body>
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
@@ -95,5 +97,6 @@
             
             </form>
         </div>
+     <%@ include file="/back_end/footer.jsp"%>    
 </body>
 </html>

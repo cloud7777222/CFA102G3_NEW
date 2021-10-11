@@ -67,6 +67,7 @@ public class MemTimeServlet extends HttpServlet {
 				List<DateappoorderVO> orderListA = dateappoorderSvcA.getAll();
 				System.out.println("allOrder:" + orderListA.size());
 				List<DateappoorderVO> newListA = orderListA.stream()
+						.filter(i -> i.getDateOrderState().toString().equals("1"))
 						.filter(i -> i.getMemberNoA().toString().equals(memA) || i.getMemberNoB().toString().equals(memA)) // 會員的訂單
 						.filter(i -> i.getDateAppoDate().getTime() > new java.util.Date().getTime()) // 約會時間大於現在
 						.collect(Collectors.toList());

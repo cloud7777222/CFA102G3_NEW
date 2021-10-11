@@ -2,6 +2,8 @@ package com.posttype.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import com.post.model.PostVO;
 
 
 public class PostTypeService {
@@ -48,4 +50,7 @@ public class PostTypeService {
 	}
 
 
+	public Set<PostVO> getPostsByPostTypeNo(Integer postTypeNo) {
+		return dao.getPostsByPostTypeNo(postTypeNo);
+	}
 }

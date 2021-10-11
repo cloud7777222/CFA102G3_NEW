@@ -14,25 +14,25 @@ import javax.sql.DataSource;
 
 public class ExpertArticleDAO implements ExpertArticleDAO_interface {
 
-	// ¤@­ÓÀ³¥Îµ{¦¡¤¤,°w¹ï¤@­Ó¸ê®Æ®w ,¦@¥Î¤@­ÓDataSource§Y¥i
+	// ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½Îµ{ï¿½ï¿½ï¿½ï¿½,ï¿½wï¿½ï¿½@ï¿½Ó¸ï¿½Æ®w ,ï¿½@ï¿½Î¤@ï¿½ï¿½DataSourceï¿½Yï¿½i
 	private static DataSource ds = null;
 	static {
 		try {
 			Context ctx = new javax.naming.InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/belovedb");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// ·s¼W­×¬dsql«ü¥O
+	// ï¿½sï¿½Wï¿½×¬dsqlï¿½ï¿½ï¿½O
 	public static final String INSERT_SQL = "insert into expertarticle (expertNo, articleContent, articlePhoto, articleTime, articleState, numOfLike) values (?, ?, ?, ?, ?, ?)";
 	public static final String UpdateBy_expertNo_SQL = "update expertarticle set articleContent = ?, articlePhoto = ?, articleState = ? where articleNo = ?";
 	public static final String DeletBy_expertNo_SQL = "delete from expertarticle where articleNo = ?";
 	public static final String FindBy_expertNo_SQL = "select * from expertarticle where articleNo = ?";
 	public static final String getAll_SQL = "select * from expertarticle";
 
-	// ¹ê§@·s¼W: ±M®a·s¼W¤@µ§±MÄæ¤å³¹
+	// ï¿½ï¿½@ï¿½sï¿½W: ï¿½Mï¿½aï¿½sï¿½Wï¿½@ï¿½ï¿½ï¿½Mï¿½ï¿½å³¹
 	@Override
 	public void insert(ExpertArticleVO expertArticleVO) {
 		Connection con = null;
@@ -74,7 +74,7 @@ public class ExpertArticleDAO implements ExpertArticleDAO_interface {
 		}
 	}
 
-	// §ó·s±MÄæ¤º®e¤Î¹Ï¤ù
+	// ï¿½ï¿½sï¿½Mï¿½æ¤ºï¿½eï¿½Î¹Ï¤ï¿½
 	@Override
 	public void update(ExpertArticleVO expertArticleVO) {
 		Connection con = null;
@@ -114,7 +114,7 @@ public class ExpertArticleDAO implements ExpertArticleDAO_interface {
 		}
 	}
 
-	// §R°£¤@«h¶K¤å, ®Ú¾ÚPK : articleNo
+	// ï¿½Rï¿½ï¿½ï¿½@ï¿½hï¿½Kï¿½ï¿½, ï¿½Ú¾ï¿½PK : articleNo
 	@Override
 	public void delete(Integer articleNo) {
 		Connection con = null;
@@ -149,7 +149,7 @@ public class ExpertArticleDAO implements ExpertArticleDAO_interface {
 	}
 	
 	
-	// ·j´M¤@µ§±MÄæ¤å³¹, ®Ú¾ÚPK : articleNo
+	// ï¿½jï¿½Mï¿½@ï¿½ï¿½ï¿½Mï¿½ï¿½å³¹, ï¿½Ú¾ï¿½PK : articleNo
 	@Override
 	public ExpertArticleVO findByPrimaryKey(Integer articleNo) {
 
@@ -207,7 +207,7 @@ public class ExpertArticleDAO implements ExpertArticleDAO_interface {
 
 	
 	
-	// Åã¥Ü©Ò¦³±MÄæ¤å³¹
+	// ï¿½ï¿½Ü©Ò¦ï¿½ï¿½Mï¿½ï¿½å³¹
 	@Override
 	public List<ExpertArticleVO> getAll() {
 

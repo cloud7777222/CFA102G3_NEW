@@ -21,7 +21,7 @@ public class ActivityorderDAO implements ActivityorderDAO_interface {
 	}
 	
 	private static final String INSERT_STMT = 
-			"INSERT INTO ACTIVITYORDER (actNo,MemberNo,actOrderPoint,actTotalParticipant,actRegisterOrderDate) VALUES (?,?, ?, ?, ?)";
+			"INSERT INTO ACTIVITYORDER (actNo,MemberNo,actorderpoint,actTotalParticipant,actRegisterOrderDate) VALUES (?,?,300,5,NOW())";
 		private static final String GET_ALL_STMT = 
 			"SELECT actNo,MemberNo,actOrderPoint,actTotalParticipant,actRegisterOrderDate FROM ACTIVITYORDER order by actNo";
 		private static final String GET_ONE_STMT = 
@@ -42,9 +42,7 @@ public class ActivityorderDAO implements ActivityorderDAO_interface {
 				pstmt = con.prepareStatement(INSERT_STMT);
 				pstmt.setInt(1, activityorderVO.getActNo());
 				pstmt.setInt(2, activityorderVO.getMemberNo());
-				pstmt.setInt(3, activityorderVO.getActOrderPoint());
-				pstmt.setInt(4, activityorderVO.getActTotalParticipant());
-				pstmt.setDate(5, activityorderVO.getActRegisterOrderDate());
+				pstmt.executeUpdate();
 				// Handle any SQL errors
 			} catch (SQLException se) {
 				throw new RuntimeException("A database error occured. "
@@ -149,7 +147,7 @@ public class ActivityorderDAO implements ActivityorderDAO_interface {
 		}
 
 		@Override
-		public ActivityorderVO findByPrimaryKey(Integer actNo) {
+		public ActivityorderVO findByPrimaryKey(Integer actNo , Integer mrmberno) {
 			ActivityorderVO activityorderVO = null;
 			Connection con = null;
 			PreparedStatement pstmt = null;
@@ -258,5 +256,22 @@ public class ActivityorderDAO implements ActivityorderDAO_interface {
 			}
 			return list;
 		}
+
+
+
+
+		@Override
+		public void insertWithactivityorder(ActivityorderVO activityorderVO, List<ActivityorderVO> list) {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+
+
+
+
+
+		
 	
 }

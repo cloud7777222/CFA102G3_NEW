@@ -87,7 +87,7 @@
 									經建二路11號-3 <br>
 									Beloved科技<br>
 									<a href="#">
-									Beloved@gmail.com
+									cfa102g3@gmail.com
 									</a>
 								</p>
 							</div>

@@ -1,6 +1,9 @@
 package com.postmessage.model;
 
 import java.util.List;
+import java.util.Set;
+
+import com.post.model.PostVO;
 
 
 public interface PostMessageDAO_interface {
@@ -9,5 +12,6 @@ public interface PostMessageDAO_interface {
 	public void delete(Integer mesNo);
 	public PostMessageVO findByPrimaryKey(Integer mesNo);
 	public List<PostMessageVO> getAll();
-
+	
+	
 }

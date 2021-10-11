@@ -1,20 +1,30 @@
 package com.post.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
+
+import org.json.JSONArray;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.post.model.PostService;
 import com.post.model.PostVO;
+import com.postmessage.model.PostMessageVO;
+import com.posttype.model.PostTypeService;
+import com.member.model.MemberVO;
 
 public class PostServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -27,252 +37,376 @@ public class PostServlet extends HttpServlet {
 
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
-
-		// [ ¨Ó¦Ûselect_page.jspªº"¾Ü¤@postNO ¬İ¶K¤å"ªº½Ğ¨D ]
-		if ("getOne_For_Display".equals(action)) {
-
-			List<String> errorMsgs = new LinkedList<String>(); // »`¶°¿ù»~µ¹jsp§e²{
+		
+		
+		
+		//[ æ“‡ä¸€æŸ¥å¤š(æŸ¥è©¢æ–‡ç« çœ‹å…¶æ‰€æœ‰ç•™è¨€) ]
+	    // ä¾†è‡ªå‰ç«¯çš„è«‹æ±‚                                
+		if ("listMessagesBy_PostNo_frontEnd".equals(action)) {
+		
+			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ - ¿é¤J®æ¦¡ªº¿ù»~³B²z **********************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+				Integer postNo = new Integer(req.getParameter("postNo"));
+
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
+				PostService postSvc = new PostService();
+				Set<PostMessageVO> set = postSvc.getMessagesByPostNo(postNo);
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ************/		
+			//set.forEach(System.out::println);	//æŸ¥å‡ºçš„æ˜¯å€			
+				res.setCharacterEncoding("UTF-8");
+				res.setContentType("application/json;charset=UTF-8");
+				PrintWriter pw = res.getWriter();
+				String jsonStr = "";
+				jsonStr = new JSONArray(set).toString();
+				System.out.println("List to JSON: " + jsonStr);
+				pw.print(jsonStr);
+				
+				//gson å°‡javaç‰©ä»¶è½‰json
+//				String data = " ";
+//				JsonObject gsonObj = new JsonObject();
+//				JsonArray array = new JsonArray();
+//				
+//				for (PostMessageVO message: set) {
+//					JsonObject item = new JsonObject();
+//					System.out.println(message.getMesNo()+": "+message.getMemberNo() + "-" + message.getMesContent());
+//					item.addProperty("mesNo", message.getMesNo());
+//					item.addProperty("memberNo", message.getMemberNo());
+//					item.addProperty("postNo", message.getPostNo());
+//					item.addProperty("mesContent", message.getMesContent());
+//					//item.addProperty("mesTime", message.getMesTime());
+//					item.addProperty("mesState", message.getMesState());
+//					array.add(item);					
+//				}
+//				gsonObj.add("data", array);			
+//				Gson gson = new Gson();
+//				String setJSON = gson.toJson(gsonObj);
+//				pw.print(setJSON);
+//				System.out.println(setJSON);
+							  
+				//res.getWriter().print("hi! postNo= "+ postNo); //for testing if jsp could call this servlet successfully
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† ***********************************/
+			} catch (Exception e) {
+				throw new ServletException(e);
+			}
+		}
+		
+
+		
+		//[ æ“‡ä¸€æŸ¥å¤š(æŸ¥è©¢æ–‡ç« çœ‹å…¶æ‰€æœ‰ç•™è¨€) ]
+	    // ä¾†è‡ªå¾Œç«¯select_page.jspçš„è«‹æ±‚                                
+		if ("listMessagesBy_PostNo".equals(action)) {
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+				Integer postNo = new Integer(req.getParameter("postNo"));
+
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
+				PostService postSvc = new PostService();
+				Set<PostMessageVO> set = postSvc.getMessagesByPostNo(postNo);
+				Integer postTypeNo = postSvc.getOnePost(postNo).getPostTypeNo();
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ************/
+				req.setAttribute("listMessagesBy_PostNo", set);    // è³‡æ–™åº«å–å‡ºçš„listç‰©ä»¶,å­˜å…¥request
+				//[æ³¨æ„] æ­¤ç‚ºcom.posttype.modelä¾†çš„æ–°å¢è«‹æ±‚(å‰ç«¯)
+				PostTypeService postTypeSvc = new PostTypeService();
+				req.setAttribute("listPostsBy_PostTypeNo", postTypeSvc.getPostsByPostTypeNo(postTypeNo)); // è³‡æ–™åº«å–å‡ºçš„listç‰©ä»¶,å­˜å…¥request
+						
+				String url = null;
+				if ("listMessagesBy_PostNo".equals(action)) {
+					url = "/back_end/post/listMessagesBy_PostNo.jsp";        // æˆåŠŸè½‰äº¤ /back_end/post/listMessagesBy_PostNo.jsp
+				}else if("listMessagesBy_PostNo_frontEnd".equals(action)){
+					url = "/postType/PostTypeServlet"+"?postTypeNo="+ postTypeNo + "&action=listPostsBy_PostTypeNo_C";
+				}								
+				RequestDispatcher successView = req.getRequestDispatcher(url);
+				successView.forward(req, res);
+
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† ***********************************/
+			} catch (Exception e) {
+				throw new ServletException(e);
+			}
+		}
+
+		
+
+		// [ ä¾†è‡ªselect_page.jspçš„"æ“‡ä¸€postNO çœ‹è²¼æ–‡"çš„è«‹æ±‚ ]
+		if ("getOne_For_Display".equals(action)) {
+
+			List<String> errorMsgs = new LinkedList<String>(); // è’é›†éŒ¯èª¤çµ¦jspå‘ˆç¾
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ - è¼¸å…¥æ ¼å¼çš„éŒ¯èª¤è™•ç† **********************/
 				String str = req.getParameter("postNo");
 				if (str == null || (str.trim()).length() == 0) {
-					errorMsgs.add("½Ğ¿é¤J¤å³¹½s¸¹");
+					errorMsgs.add("è«‹è¼¸å…¥æ–‡ç« ç·¨è™Ÿ");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
 				Integer postNo = null;
 				try {
-					postNo = new Integer(str); // µ¹³W©w¤å³¹½s¸¹¥u¦³¼Æ¦r
+					postNo = new Integer(str); // çµ¦è¦å®šæ–‡ç« ç·¨è™Ÿåªæœ‰æ•¸å­—
 				} catch (Exception e) {
-					errorMsgs.add("¤å³¹½s¸¹®æ¦¡¤£¥¿½T");
+					errorMsgs.add("æ–‡ç« ç·¨è™Ÿæ ¼å¼ä¸æ­£ç¢º");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ *****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ *****************************************/
 				PostService postSvc = new PostService();
 				PostVO postVO = postSvc.getOnePost(postNo);
 				if (postVO == null) {
-					errorMsgs.add("¬dµL¸ê®Æ");
+					errorMsgs.add("æŸ¥ç„¡è³‡æ–™");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) *************/
-				req.setAttribute("postVO", postVO); // ¸ê®Æ®w¨ú¥XªºpostVOª«¥ó,¦s¤Jreq
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) *************/
+				req.setAttribute("postVO", postVO); // è³‡æ–™åº«å–å‡ºçš„postVOç‰©ä»¶,å­˜å…¥req
 				String url = "/back_end/post/listOnePost.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ¦¨¥\®Éµe­±forwardÂà¥æµ¹ listOnePost.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url); // æˆåŠŸæ™‚ç•«é¢forwardè½‰äº¤çµ¦ listOnePost.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("µLªk¨ú±o¸ê®Æ:" + e.getMessage());
+				errorMsgs.add("ç„¡æ³•å–å¾—è³‡æ–™:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/select_page.jsp");
 				failureView.forward(req, res);
 			}
 		}
+		
+		
+				
+				
+				// [ ä¾†è‡ªå‰ç«¯çš„"æ–°å¢"è«‹æ±‚ ]
+				if ("insert".equals(action)) {
+					List<String> errorMsgs = new LinkedList<String>();
+					req.setAttribute("errorMsgs", errorMsgs);
+					String requestURL = req.getParameter("requestURL"); // é€å‡ºæ–°å¢çš„ä¾†æºç¶²é è·¯å¾‘
 
-		// [ ¨Ó¦ÛaddPost.jspªº"·s¼W"½Ğ¨D ]
-		if ("insert".equals(action)) {
-			List<String> errorMsgs = new LinkedList<String>();
-			req.setAttribute("errorMsgs", errorMsgs);
+					/*********************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ - è¼¸å…¥æ ¼å¼çš„éŒ¯èª¤è™•ç† *************************/
+					/* æ–‡ç« é¡åˆ¥ç·¨è™Ÿ */
+					String ptNo = req.getParameter("postTypeNo");
+					if (ptNo == null || (ptNo.trim()).length() == 0) {
+						errorMsgs.add("è«‹è¼¸å…¥æ–‡ç« é¡åˆ¥ç·¨è™Ÿ");
+					}
+					Integer postTypeNo = null;
+					try {
+						postTypeNo = new Integer(req.getParameter("postTypeNo").trim()); // å¦‚ä½•è‡ªå‹•å–å¾—ç™»å…¥è€…å¸³è™Ÿè‡ªå‹•å¸¶å…¥é€™è£¡? session
+						// æœ‰setAttributeå—?
+					} catch (Exception e) {
+						errorMsgs.add("æ–‡ç« é¡åˆ¥ç·¨è™Ÿæ ¼å¼éŒ¯èª¤! è«‹è¼¸å…¥æ•¸å­—: 1)æ—…éŠ; 2)åƒåƒå–å–; 3)å…©æ€§é—œä¿‚; 4)å…¶ä»– ");
+					}
+					/* æœƒå“¡ç·¨è™Ÿ */				
+					HttpSession session = req.getSession();
+					Integer memberNo = null;
+					try {
+						memberNo = ((MemberVO) session.getAttribute("memberVO")).getMemberNo();
+					}catch (Exception e) {
+						errorMsgs.add("è«‹å…ˆç™»å…¥!");
+					}
+														
+//					String str = req.getParameter("memberNo");
+//					if (str == null || (str.trim()).length() == 0) {
+//						errorMsgs.add("è«‹è¼¸å…¥æœƒå“¡ç·¨è™Ÿ");
+//					}
+//					Integer memberNo = null;
+//					try {
+//						memberNo = new Integer(req.getParameter("memberNo").trim()); // å¦‚ä½•è‡ªå‹•å–å¾—ç™»å…¥è€…å¸³è™Ÿè‡ªå‹•å¸¶å…¥é€™è£¡? session
+//						// æœ‰setAttributeå—?
+//					} catch (Exception e) {
+//						errorMsgs.add("æœƒå“¡ç·¨è™Ÿæ ¼å¼éŒ¯èª¤! è«‹è¼¸å…¥æ•¸å­—!");
+//					}
+					/* æ–‡ç« å…§å®¹ */
+					String postContent = null;
+					try {					
+						postContent = req.getParameter("postContent");
+						if (postContent == null || (postContent.trim()).length() == 0) {
+							errorMsgs.add("è«‹è¼¸å…¥æ–‡ç« å…§å®¹");
+						}
+						/* æ–‡ç« ç™¼è¡¨æ™‚é–“ */
+						java.sql.Date postTime = null;
+						postTime = new java.sql.Date(System.currentTimeMillis()); // å–å¾—ç•¶ä¸‹poæ–‡ç³»çµ±æ™‚é–“
+						/* æ–‡ç« ç‹€æ…‹ */
+						Integer postState = 1; // é è¨­
+						/* æ–‡ç« ç•™è¨€æ•¸ */
+						Integer mesCount = 0; // é è¨­
+						/* æŒ‰è®šæ•¸ */
+						Integer numOfLike = 0; // é è¨­
+						/* ==================å»ºæ§‹===================== */
+						PostVO postVO = new PostVO();
+						postVO.setPostTypeNo(postTypeNo);
+						postVO.setMemberNo(memberNo);
+						postVO.setPostContent(postContent);
+						postVO.setPostTime(postTime);
+						postVO.setPostState(postState);
+						postVO.setMesCount(mesCount);
+						postVO.setNumOfLike(numOfLike);
 
-			/*********************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ - ¿é¤J®æ¦¡ªº¿ù»~³B²z *************************/
-			/* ¤å³¹Ãş§O½s¸¹ */
-			String ptn = req.getParameter("postTypeNo");
-			if (ptn == null || (ptn.trim()).length() == 0) {
-				errorMsgs.add("½Ğ¿é¤J¤å³¹Ãş§O½s¸¹");
-			}
-			Integer postTypeNo = null;
-			try {
-				postTypeNo = new Integer(req.getParameter("postTypeNo").trim());
-			} catch (Exception e) {
-				errorMsgs.add("¤å³¹Ãş§O½s¸¹®æ¦¡¿ù»~, ½Ğ¶ñ¼Æ¦r! ( 1:®È¹C; 2:¦Y³Ü; 3:¨â©ÊÃö«Y )");
-			}
+						if (!errorMsgs.isEmpty()) {
+							req.setAttribute("postVO", postVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„postVOç‰©ä»¶,ä¹Ÿå­˜å…¥req, è®“ä½¿ç”¨è€…ä¸å¿…é‡å¡«ä¸€äº›è³‡è¨Š
+							RequestDispatcher failureView = req.getRequestDispatcher("/front_end/post/post_add.jsp");
+							failureView.forward(req, res);
+							return;
+						}
+						/*************************** 2.é–‹å§‹æ–°å¢è³‡æ–™ ***************************************/
+						PostService postSvc = new PostService();
+						postVO = postSvc.addPost(postTypeNo, memberNo, postContent, postTime, postState, mesCount, numOfLike);
+						/*************************** 3.æ–°å¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
+						//[æ³¨æ„] æ­¤ç‚ºcom.posttype.modelä¾†çš„æ–°å¢è«‹æ±‚(å‰ç«¯)
+						PostTypeService postTypeSvc = new PostTypeService();
+						req.setAttribute("listPostsBy_PostTypeNo", postTypeSvc.getPostsByPostTypeNo(postTypeNo)); // è³‡æ–™åº«å–å‡ºçš„listç‰©ä»¶,å­˜å…¥request
+						req.setAttribute("postVO", postVO);
+						String url = "/postType/PostTypeServlet"+"?postTypeNo="+ postTypeNo + "&action=listPostsBy_PostTypeNo_C";
+						System.out.println("url=" + url);
+						res.sendRedirect(req.getContextPath()+url); //ä½¿ç”¨é‡å°ä¸æœƒå¸¶å€¼å›å», æ‰€ä»¥åˆ·æ–°ä¸æœƒå†æ¬¡é€å‡ºpoæ–‡	
+//						RequestDispatcher successView = req.getRequestDispatcher(url); // æ–°å¢æˆåŠŸå¾Œè½‰äº¤è‡³postContent_differentTypeNo.jsp
+//						successView.forward(req, res);
 
-			/* ·|­û½s¸¹ */
-			String str = req.getParameter("memberNo");
-			if (str == null || (str.trim()).length() == 0) {
-				errorMsgs.add("½Ğ¿é¤J·|­û½s¸¹");
-			}
-			Integer memberNo = null;
-			try {
-				memberNo = new Integer(req.getParameter("memberNo").trim()); // ¦p¦ó¦Û°Ê¨ú±oµn¤JªÌ±b¸¹¦Û°Ê±a¤J³o¸Ì? session
-				// ¦³setAttribute¶Ü?
-			} catch (Exception e) {
-				errorMsgs.add("·|­û½s¸¹®æ¦¡¿ù»~");
-			}
-			try {
-				/* ¤å³¹¤º®e */
-				String postContent = req.getParameter("postContent");
-				if (postContent == null || (postContent.trim()).length() == 0) {
-					errorMsgs.add("½Ğ¿é¤J¤å³¹¤º®e");
+						/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
+					} catch (Exception e) {
+						errorMsgs.add("æ–‡ç« æ–°å¢å¤±æ•—:" + e.getMessage());
+						RequestDispatcher failureView = req.getRequestDispatcher("/front_end/post/post_add.jsp");
+						failureView.forward(req, res);
+						return;// ç¨‹å¼ä¸­æ–·
+					}
 				}
-				/* ¤å³¹µoªí®É¶¡ */
-				java.sql.Date postTime = null;
-				postTime = new java.sql.Date(System.currentTimeMillis()); // ¨ú±o·í¤Upo¤å¨t²Î®É¶¡
-				/* ¤å³¹ª¬ºA */
-				Integer postState = 1; // ¹w³]
-				/* ¤å³¹¯d¨¥¼Æ */
-				Integer mesCount = 0; // ¹w³]
-				/* «öÆg¼Æ */
-				Integer numOfLike = 0; // ¹w³]
+				
+		
 
-				/* ==================«Øºc===================== */
-				PostVO postVO = new PostVO();
-				postVO.setPostTypeNo(postTypeNo);
-				postVO.setMemberNo(memberNo);
-				postVO.setPostContent(postContent);
-				postVO.setPostTime(postTime);
-				postVO.setPostState(postState);
-				postVO.setMesCount(mesCount);
-				postVO.setNumOfLike(numOfLike);
-
-				if (!errorMsgs.isEmpty()) {
-					req.setAttribute("postVO", postVO); // §t¦³¿é¤J®æ¦¡¿ù»~ªºpostVOª«¥ó,¤]¦s¤Jreq, Åı¨Ï¥ÎªÌ¤£¥²­«¶ñ¤@¨Ç¸ê°T
-					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/addPost.jsp");
-					failureView.forward(req, res);
-					return;
-				}
-
-				/*************************** 2.¶}©l·s¼W¸ê®Æ ***************************************/
-				PostService postSvc = new PostService();
-				postVO = postSvc.addPost(postTypeNo, memberNo, postContent, postTime, postState, mesCount, numOfLike);
-
-				/*************************** 3.·s¼W§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
-				req.setAttribute("postVO", postVO);
-				String url = "/back_end/post/listAllPost.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ·s¼W¦¨¥\«áÂà¥æ¦ÜlistAllMemPerPage.jsp
-				successView.forward(req, res);
-
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
-			} catch (Exception e) {
-				errorMsgs.add("¤å³¹·s¼W¥¢±Ñ:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/addPost.jsp");
-				failureView.forward(req, res);
-				return;// µ{¦¡¤¤Â_
-			}
-		}
-
-		// [ ¨Ó¦ÛlistAllPost.jsp ªº"§R°£"½Ğ¨D]
+		// [ ä¾†è‡ªlistAllPost.jsp çš„"åˆªé™¤"è«‹æ±‚]
 		if ("delete".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
-			String requestURL = req.getParameter("requestURL"); // °e¥X§R°£ªº¨Ó·½ºô­¶¸ô®|
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºåˆªé™¤çš„ä¾†æºç¶²é è·¯å¾‘
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ***************************************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ***************************************/
 				Integer postNo = new Integer(req.getParameter("postNo"));
 
-				/*************************** 2.¶}©l§R°£¸ê®Æ ***************************************/
+				/*************************** 2.é–‹å§‹åˆªé™¤è³‡æ–™ ***************************************/
 				PostService postSvc = new PostService();
 				postSvc.deletePost(postNo);
 
-				/*************************** 3.§R°£§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
+				/*************************** 3.åˆªé™¤å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
 				String url = requestURL;
-				RequestDispatcher successView = req.getRequestDispatcher(url);// §R°£¦¨¥\«á,Âà¥æ¦^listAllPost.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url);// åˆªé™¤æˆåŠŸå¾Œ,è½‰äº¤å›listAllPost.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
-				errorMsgs.add("§R°£¸ê®Æ¥¢±Ñ:" + e.getMessage());
+				errorMsgs.add("åˆªé™¤è³‡æ–™å¤±æ•—:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/listAllPost.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦ÛlistAllPost.jsp "³æµ§¤å³¹ÀËµø"ªº½Ğ¨D ]
-		if ("getOne_For_Update".equals(action)) {
+		// [ ä¾†è‡ªlistAllPost.jsp "å–®ç­†æ–‡ç« æª¢è¦–"çš„è«‹æ±‚ ]
+		if ("getOne_For_Update".equals(action) || "getOne_For_Update_frontEnd".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ****************************************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
 				Integer postNo = new Integer(req.getParameter("postNo").trim());
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ ****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
 				PostService postSvc = new PostService();
 				PostVO postVO = postSvc.getOnePost(postNo);
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ************/
-				req.setAttribute("postVO", postVO); // ¸ê®Æ®w¨ú¥XªºpostVOª«¥ó,¦s¤Jreq
-				String url = "/back_end/post/update_Post_input.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url);// ¦¨¥\Âà¥æ update_Post_input.jsp
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ************/
+				req.setAttribute("postVO", postVO); // è³‡æ–™åº«å–å‡ºçš„postVOç‰©ä»¶,å­˜å…¥req
+				String url = null;
+				if("getOne_For_Update".equals(action)) {
+					url = "/back_end/post/update_Post_input.jsp";
+				} else if ("getOne_For_Update_frontEnd".equals(action)) {
+					url = "/front_end/post/post_update.jsp";
+				}				
+				RequestDispatcher successView = req.getRequestDispatcher(url);// æˆåŠŸè½‰äº¤ update_Post_input.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
-				errorMsgs.add("µLªk¨ú±o­n­×§ïªº¸ê®Æ:" + e.getMessage());
+				errorMsgs.add("ç„¡æ³•å–å¾—è¦ä¿®æ”¹çš„è³‡æ–™:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/listAllPost.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦Ûupdate_Post_input.jspªº"­×¥¿"½Ğ¨D ]
+		// [ ä¾†è‡ªupdate_Post_input.jspçš„"ä¿®æ­£"è«‹æ±‚ ]
 		if ("update".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
-			String requestURL = req.getParameter("requestURL"); // °e¥X­×§ïªº¨Ó·½ºô­¶
-			String whichPage = req.getParameter("whichPage"); // °e¥X­×§ïªº¨Ó·½ºô­¶ªº²Ä´X­¶
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é 
+			String whichPage = req.getParameter("whichPage"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é 
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ****************************************/
-				/* ¤å³¹½s¸¹ */
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+				/* æ–‡ç« ç·¨è™Ÿ */
 				Integer postNo = new Integer(req.getParameter("postNo").trim());
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ ****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
 				PostService postSvc = new PostService();
 
-				/**************************** 3.Åª¨úclientºİ°e¹L¨Óªº¸ê®Æ ******************************/
+				/**************************** 3.è®€å–clientç«¯é€éä¾†çš„è³‡æ–™ ******************************/
 
-				/* ¤å³¹Ãş§O½s¸¹ */
-				String ptn = req.getParameter("postTypeNo"); // ¤å³¹Ãş§O­Y¨S­×§ï´N·ÓÂÂ
-				Integer postTypeNo = new Integer(ptn);
-				if (ptn == null) {
-					postTypeNo = postSvc.getOnePost(postNo).getPostTypeNo();
+				/* æ–‡ç« é¡åˆ¥ç·¨è™Ÿ */
+				String ptNo = req.getParameter("postTypeNo");
+				if (ptNo == null || (ptNo.trim()).length() == 0) {
+					errorMsgs.add("è«‹è¼¸å…¥æ–‡ç« é¡åˆ¥ç·¨è™Ÿ");
 				}
-				/* ·|­û½s¸¹ */
-				Integer memberNo = postSvc.getOnePost(postNo).getMemberNo(); // ·|­û½s¸¹¤£¯à§ï, ©Ò¥Hªu¥ÎÂÂ¸ê®Æ
+				Integer postTypeNo = null;
+				try {
+					postTypeNo = new Integer(req.getParameter("postTypeNo").trim()); // å¦‚ä½•è‡ªå‹•å–å¾—ç™»å…¥è€…å¸³è™Ÿè‡ªå‹•å¸¶å…¥é€™è£¡? session
+					// æœ‰setAttributeå—?
+				} catch (Exception e) {
+					postTypeNo = postSvc.getOnePost(postNo).getPostTypeNo();
+					errorMsgs.add("æ–‡ç« é¡åˆ¥ç·¨è™Ÿæ ¼å¼éŒ¯èª¤! è«‹è¼¸å…¥æ•¸å­—: 1)æ—…éŠ; 2)åƒåƒå–å–; 3)å…©æ€§é—œä¿‚; 4)å…¶ä»– ");
+					
+				}
+				/* æœƒå“¡ç·¨è™Ÿ */
+				Integer memberNo = postSvc.getOnePost(postNo).getMemberNo(); // æœƒå“¡ç·¨è™Ÿä¸èƒ½æ”¹, æ‰€ä»¥æ²¿ç”¨èˆŠè³‡æ–™
 
-				/* ¤å³¹¤º®e */
+				/* æ–‡ç« å…§å®¹ */
 				String postContent = req.getParameter("postContent");
 				if (postContent == null) {
-					postContent = postSvc.getOnePost(postNo).getPostContent(); // ¤å³¹¤º®e­Y¨S­×§ï´N·ÓÂÂ
+					postContent = postSvc.getOnePost(postNo).getPostContent(); // æ–‡ç« å…§å®¹è‹¥æ²’ä¿®æ”¹å°±ç…§èˆŠ
 				}
-				/* ¤å³¹µoªí®É¶¡ */
+				/* æ–‡ç« ç™¼è¡¨æ™‚é–“ */
 				java.sql.Date postTime = postSvc.getOnePost(postNo).getPostTime();
 				
-				/* ¤å³¹ª¬ºA */
-				String str = req.getParameter("postState"); // ¤å³¹ª¬ºA­Y¨S­×§ï´N·ÓÂÂ
+				/* æ–‡ç« ç‹€æ…‹ */
+				String str = req.getParameter("postState"); // æ–‡ç« ç‹€æ…‹è‹¥æ²’ä¿®æ”¹å°±ç…§èˆŠ
 				Integer postState = new Integer(str);
 				if (str == null) {
 					postState = postSvc.getOnePost(postNo).getPostState();
 				}
-				/* ¯d¨¥¼Æ */
+				/* ç•™è¨€æ•¸ */
 				Integer mesCount = postSvc.getOnePost(postNo).getMesCount();
-				/* «öÆg¼Æ */
+				/* æŒ‰è®šæ•¸ */
 				Integer numOfLike = postSvc.getOnePost(postNo).getNumOfLike();
 
-				/* ==================«Øºc===================== */
+				/* ==================å»ºæ§‹===================== */
 				PostVO postVO = new PostVO();
 				postVO.setPostNo(postNo);
 				postVO.setPostTypeNo(postTypeNo);
@@ -284,65 +418,121 @@ public class PostServlet extends HttpServlet {
 				postVO.setNumOfLike(numOfLike);
 
 				if (!errorMsgs.isEmpty()) {
-					req.setAttribute("postVO", postVO); // §t¦³¿é¤J®æ¦¡¿ù»~ªºpostVOª«¥ó,¤]¦s¤Jreq
+					req.setAttribute("postVO", postVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„postVOç‰©ä»¶,ä¹Ÿå­˜å…¥req
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/update_Post_input.jsp");
 					failureView.forward(req, res);
 					return;
 				}
 
-				/*************************** 4.¶}©l·s¼W¸ê®Æ ***************************************/
+				/*************************** 4.é–‹å§‹ä¿®æ”¹è³‡æ–™ ***************************************/
 				PostService postSVC = new PostService();
 				postVO = postSVC.updatePost(postNo, postTypeNo, memberNo, postContent, postTime, postState, mesCount,
 						numOfLike);
 
-				/*************************** 5.·s¼W§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
-				req.setAttribute("postVO", postVO); // ¸ê®Æ®wupdate¦¨¥\«á,¥¿½TªºªºpostVOª«¥ó,¦s¤Jreq
-				String url = requestURL + "?whichPage=" + whichPage + "&postNo=" + postNo; // °e¥X­×§ïªº¨Ó·½ºô­¶ªº²Ä´X­¶(¥u¥Î©ó:listAllMemPerPage.jsp)©M­×§ïªº¬O­ş¤@µ§
+				/*************************** 5.ä¿®æ”¹å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
+				//[æ³¨æ„] æ­¤ç‚ºcom.posttype.modelä¾†çš„ä¿®æ”¹æ›´æ–°è«‹æ±‚(æ“‡ä¸€æŸ¥å¤š)
+				PostTypeService postTypeSvc = new PostTypeService();
+				if(requestURL.equals("/back_end/postType/listPostsBy_PostTypeNo.jsp") || requestURL.equals("/back_end/postType/listAllPostType.jsp") || requestURL.equals("/front_end/post/postContent_differentTypeNo.jsp"))
+					req.setAttribute("listPostsBy_PostTypeNo", postTypeSvc.getPostsByPostTypeNo(postTypeNo)); // è³‡æ–™åº«å–å‡ºçš„listç‰©ä»¶,å­˜å…¥request
+				//æ­¤ç‚ºcom.post.modelä¾†çš„ä¿®æ”¹æ›´æ–°è«‹æ±‚
+				req.setAttribute("postVO", postVO); // è³‡æ–™åº«updateæˆåŠŸå¾Œ,æ­£ç¢ºçš„çš„postVOç‰©ä»¶,å­˜å…¥req
+				String url = requestURL + "?whichPage=" + whichPage + "&postNo=" + postNo; // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é (åªç”¨æ–¼:listAllPost.jsp)å’Œä¿®æ”¹çš„æ˜¯å“ªä¸€ç­†
 				System.out.println("url=" + url);
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ·s¼W¦¨¥\«áÂà¥æ¦ÜlistOneMemPerPage.jsp Åã¥Ü
+				RequestDispatcher successView = req.getRequestDispatcher(url); // æ–°å¢æˆåŠŸå¾Œè½‰äº¤è‡³ä¾†æºç¶²é é¡¯ç¤º
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("¸ê®Æ­×§ï¥¢±Ñ:" + e.getMessage());
+				errorMsgs.add("è³‡æ–™ä¿®æ”¹å¤±æ•—:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/update_Post_input.jsp");
 				failureView.forward(req, res);
 			}
 		}
+		
+		
+		
+		// [ ä¾†è‡ªfront_endçš„Ajax"æŒ‰è®š"è«‹æ±‚ ]
+		if ("updateForLike".equals(action)) {
+		
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+				/* æ–‡ç« ç·¨è™Ÿ */
+				Integer postNo = new Integer(req.getParameter("postNo"));
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
+				PostService postSvc = new PostService();
+				/**************************** 3.è®€å–clientç«¯é€éä¾†çš„è³‡æ–™ ******************************/
+				/* æ–‡ç« é¡åˆ¥ç·¨è™Ÿ */
+				Integer postTypeNo = postSvc.getOnePost(postNo).getPostTypeNo();
+				/* æœƒå“¡ç·¨è™Ÿ */
+				Integer memberNo = postSvc.getOnePost(postNo).getMemberNo(); // æœƒå“¡ç·¨è™Ÿä¸èƒ½æ”¹, æ‰€ä»¥æ²¿ç”¨èˆŠè³‡æ–™
+				/* æ–‡ç« å…§å®¹ */
+				String postContent = postSvc.getOnePost(postNo).getPostContent();			
+				/* æ–‡ç« ç™¼è¡¨æ™‚é–“ */
+				java.sql.Date postTime = postSvc.getOnePost(postNo).getPostTime();			
+				/* æ–‡ç« ç‹€æ…‹ */				
+				Integer postState = postSvc.getOnePost(postNo).getPostState();				
+				/* ç•™è¨€æ•¸ */
+				Integer mesCount = postSvc.getOnePost(postNo).getMesCount();
+				/* æŒ‰è®šæ•¸ */
+				Integer numOfLike = postSvc.getOnePost(postNo).getNumOfLike()+1;
+				/* ==================å»ºæ§‹===================== */
+				PostVO postVO = new PostVO();
+				postVO.setPostNo(postNo);
+				postVO.setPostTypeNo(postTypeNo);
+				postVO.setMemberNo(memberNo);
+				postVO.setPostContent(postContent);
+				postVO.setPostTime(postTime);
+				postVO.setPostState(postState);
+				postVO.setMesCount(mesCount);
+				postVO.setNumOfLike(numOfLike);
+				/*************************** 4.é–‹å§‹ä¿®æ”¹è³‡æ–™ ***************************************/
+				PostService postSVC = new PostService();
+				postVO = postSVC.updatePost(postNo, postTypeNo, memberNo, postContent, postTime, postState, mesCount,
+						numOfLike);
+				/*************************** 5.æ›´æ–°å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success result) ***********/
+				req.setAttribute("postVO", postVO); // è³‡æ–™åº«updateæˆåŠŸå¾Œ,æ­£ç¢ºçš„çš„postVOç‰©ä»¶,å­˜å…¥req
+				res.setCharacterEncoding("UTF-8");
+				res.setContentType("text/plain");
+				PrintWriter pw = res.getWriter();
+				System.out.println(numOfLike);
+				pw.print(numOfLike);
+						
+		}
+		
+		
 
-		// [ ¨Ó¦Ûselect_page.jspªº"½Æ¦X¬d¸ß"½Ğ¨D ]
+		// [ ä¾†è‡ªselect_page.jspçš„"è¤‡åˆæŸ¥è©¢"è«‹æ±‚ ]
 		if ("listEmps_ByCompositeQuery".equals(action)) {
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			try {
 
-				/*************************** 1.±N¿é¤J¸ê®ÆÂà¬°Map **********************************/
-				// ±Ä¥ÎMap<String,String[]> getParameterMap()ªº¤èªk
-				// ª`·N:an immutable java.util.Map ! ¦Ó¥B¤£¯à¦s¶isession scope!
+				/*************************** 1.å°‡è¼¸å…¥è³‡æ–™è½‰ç‚ºMap **********************************/
+				// æ¡ç”¨Map<String,String[]> getParameterMap()çš„æ–¹æ³•
+				// æ³¨æ„:an immutable java.util.Map ! è€Œä¸”ä¸èƒ½å­˜é€²session scope!
 				// Map<String, String[]> map = req.getParameterMap();
 				HttpSession session = req.getSession();
 				Map<String, String[]> map = (Map<String, String[]>) session.getAttribute("map");
 
-				// ¥H¤Uªº if °Ï¶ô¥u¹ï²Ä¤@¦¸°õ¦æ®É¦³®Ä
+				// ä»¥ä¸‹çš„ if å€å¡Šåªå°ç¬¬ä¸€æ¬¡åŸ·è¡Œæ™‚æœ‰æ•ˆ
 				if (req.getParameter("whichPage") == null) {
 					Map<String, String[]> map1 = new HashMap<String, String[]>(req.getParameterMap());
-					// map¬Oimmutable! ©Ò¥H³o¸Ìnew ¤@­ÓHashMap ¬~±¼³o­Ó¯S©Ê!
-					// ¤£µM¤U­±ªºsession.setAttribute("map",map1)·|¥¢®Ä, ÅÜ¦¨¬d¥ş³¡!
+					// mapæ˜¯immutable! æ‰€ä»¥é€™è£¡new ä¸€å€‹HashMap æ´—æ‰é€™å€‹ç‰¹æ€§!
+					// ä¸ç„¶ä¸‹é¢çš„session.setAttribute("map",map1)æœƒå¤±æ•ˆ, è®ŠæˆæŸ¥å…¨éƒ¨!
 					session.setAttribute("map", map1);
 					map = map1;
 				}
 
-				/*************************** 2.¶}©l½Æ¦X¬d¸ß ***************************************/
+				/*************************** 2.é–‹å§‹è¤‡åˆæŸ¥è©¢ ***************************************/
 				PostService postSvc = new PostService();
 				List<PostVO> list = postSvc.getAll(map);
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ************/
-				req.setAttribute("listEmps_ByCompositeQuery", list); // ¸ê®Æ®w¨ú¥Xªºlistª«¥ó,¦s¤Jrequest
-				RequestDispatcher successView = req.getRequestDispatcher("/emp/listEmps_ByCompositeQuery.jsp"); // ¦¨¥\Âà¥ælistEmps_ByCompositeQuery.jsp
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ************/
+				req.setAttribute("listEmps_ByCompositeQuery", list); // è³‡æ–™åº«å–å‡ºçš„listç‰©ä»¶,å­˜å…¥request
+				RequestDispatcher successView = req.getRequestDispatcher("/emp/listEmps_ByCompositeQuery.jsp"); // æˆåŠŸè½‰äº¤listEmps_ByCompositeQuery.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/select_page.jsp");

@@ -14,7 +14,7 @@ pageContext.setAttribute("list",list);
 <html>
 <head>
 <title>所有活動資料 - listAllActivity.jsp</title>
-
+<%@ include file="/back_end/header.jsp"%>
 <style>
   table#table-1 {
 	background-color: #CCCCFF;
@@ -49,13 +49,14 @@ pageContext.setAttribute("list",list);
 </style>
 
 </head>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <body bgcolor='white'>
 
 <h4>此頁練習採用 EL 的寫法取值:</h4>
 <table id="table-1">
 	<tr><td>
 		 <h3>所有活動資料 - listAllActivity.jsp</h3>
-		 <h4><a href="<%=request.getContextPath()%>/back_end/activity/select_page.jsp"><img src="<%=request.getContextPath()%>/back_end/activity/images/original.gif" width="100" height="32" border="0">回首頁</a></h4>
+		 <h4><img src="<%=request.getContextPath()%>/back_end/activity/images/original.gif" width="100" height="32" border="0"></h4>
 	</td></tr>
 </table>
 
@@ -77,12 +78,13 @@ pageContext.setAttribute("list",list);
 		<th>活動日期</th>
 		<th>活動地點</th>
 		<th>活動說明</th>
-		
+		<th>報名人數上限</th>
+		<th>報名人數下限</th>
 		<th>活動上下架狀態</th>
 		<th>活動舉辦狀態</th>
 		<th>活動報名開始日期</th>
 		<th>活動報名截止日期</th>
-		<th>活動圖片</th>
+		
 	
 		<th>修改</th>
 		<th>刪除</th>
@@ -97,12 +99,13 @@ pageContext.setAttribute("list",list);
 			<td>${activityVO.actDate}</td>
 			<td>${activityVO.actLocation}</td>
 			<td>${activityVO.actDirection}</td>
-			
+			<td>${activityVO.maxParticipant}</td>	
+			<td>${activityVO.minParticipant}</td>	
 			<td>${activityVO.actState}</td>
 			<td>${activityVO.actHoldState}</td>
 			<td>${activityVO.actRegisterStartDate}</td>
 			<td>${activityVO.actRegisterDeadLine}</td>
-			<td>${activityVO.actPicture}</td>
+			
 			
 			<td>
 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/activity/activity.do" style="margin-bottom: 0px;">
@@ -120,6 +123,6 @@ pageContext.setAttribute("list",list);
 	</c:forEach>
 </table>
 <%@ include file="/back_end/activity/page2.file" %>
-
+<%@ include file="/back_end/footer.jsp"%>
 </body>
 </html>

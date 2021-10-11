@@ -47,7 +47,8 @@ public class ProdDAO implements ProdDAO_interface {
 				"SELECT prodno,prodsortNo,prodName,price,indroce,prodPic1,prodPic2,prodPic3,prodstate FROM PRODUCT where prodsortno = ?";
 		private static final String GET_PROD_PRICE =
 				"SELECT prodno,prodsortNo,prodName,price,prodPic1,prodPic2,prodPic3 FROM PRODUCT where prodstate = 1 and price between ? and ?";
-		
+		private static final String INSERT_PROD = 
+				"INSERT INTO PRODUCT(prodsortno,prodName,price,indroce,prodPic1,prodPic2,prodPic3,prodState,posttime) VALUES (?,?, ?, ?, ?, ?, ?, ?,NOW())";
 		@Override
 		public void insert(ProdVO prodVO) {
 			Connection con = null;
@@ -577,6 +578,53 @@ public class ProdDAO implements ProdDAO_interface {
 			}
 		}
 		return list;
+	}
+
+
+
+	@Override
+	public void insert2(ProdVO prodVO, Connection con) {
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = con.prepareStatement(INSERT_PROD);
+			
+		
+			pstmt.setInt(1,prodVO.getProdsortno());
+			pstmt.setString(2, prodVO.getProdname());
+			pstmt.setInt(3, prodVO.getPrice());
+			pstmt.setString(4, prodVO.getIndroce());
+			pstmt.setString(5, prodVO.getProdpic1());
+			pstmt.setString(6, prodVO.getProdpic2());
+			pstmt.setString(7, prodVO.getProdpic3());
+			pstmt.setInt(8, prodVO.getProdstate());
+			
+			pstmt.executeUpdate();
+		}catch (SQLException se) {
+			if (con != null) {
+				try {
+					// 3●設定於當有exception發生時之catch區塊內
+					System.err.print("Transaction is being ");
+					System.err.println("rolled back-由-emp");
+					con.rollback();
+				} catch (SQLException excep) {
+					throw new RuntimeException("rollback error occured. "
+							+ excep.getMessage());
+				}
+			}
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+		}
+		
 	}
 }
 

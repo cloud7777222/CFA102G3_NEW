@@ -23,16 +23,21 @@ package com.activity.model;
 		}
 
 		private static final String INSERT_STMT = 
-			"INSERT INTO ACTIVITY (actNo,actType,actName,actDate,actLocation,actDirection,actState,actHoldState,actRegisterStartDate,actRegisterDeadLine) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?)";
+			"INSERT INTO ACTIVITY (actNo,actType,actName,actDate,actLocation,actDirection,maxParticipant,minParticipant,actState,actHoldState,actRegisterStartDate,actRegisterDeadLine,totalStar,totalEvaluator) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
 		private static final String GET_ALL_STMT = 
-			"SELECT actNo,actType,actName,actDate,actLocation,actDirection,actState,actHoldState,actRegisterStartDate,actRegisterDeadLine,actPicture,totalStar,totalEvaluator FROM ACTIVITY order by actNo";
+			"SELECT actNo,actType,actName,actDate,actLocation,actDirection,maxParticipant,minParticipant,actState,actHoldState,actRegisterStartDate,actRegisterDeadLine,actPicture,totalStar,totalEvaluator FROM ACTIVITY order by actNo";
 		private static final String GET_ONE_STMT = 
-			"SELECT actNo,actType,actName,actDate,actLocation,actDirection,actState,actHoldState,actRegisterStartDate,actRegisterDeadLine,actPicture,totalStar,totalEvaluator FROM ACTIVITY where actNo = ?";
+			"SELECT actNo,actType,actName,actDate,actLocation,actDirection,maxParticipant,minParticipant,actState,actHoldState,actRegisterStartDate,actRegisterDeadLine,actPicture,totalStar,totalEvaluator FROM ACTIVITY where actNo = ?";
+		private static final String GET_PICTURE="SELECT actPicture FROM ACTIVITY WHERE actName=?";
+		private static final String GET_ACTIVITY_TYPEA =
+				"SELECT actNo,actType,actTypeName,actDate,actLocation FROM ACTIVITY where actType = ?";
+		private static final String GET_ACTIVITY_TYPE =
+				"SELECT actNo,actType,actTypeName,actDate,actLocation,actDirection FROM ACTIVITY where actType = ?";
 		private static final String DELETE = 
 			"DELETE FROM ACTIVITY where actNo = ?";
 		private static final String UPDATE_STMT = 
-			"UPDATE ACTIVITY set  actType = ?, actName = ?, actDate = ?, actLocation = ?, actDirection = ? ,actState= ? ,actHoldState= ? ,actRegisterStartDate= ? ,actRegisterDeadLine= ? ,actPicture= ? ,totalStar= ? ,totalEvaluator= ? where actNo = ?";
-
+			"UPDATE ACTIVITY set  actType = ?, actName = ?, actDate = ?, actLocation = ?, actDirection = ? ,maxParticipant= ?,minParticipant= ?,actState= ? ,actHoldState= ? ,actRegisterStartDate= ? ,actRegisterDeadLine= ? ,actPicture= ? ,totalStar= ? ,totalEvaluator= ? where actNo = ?";
+		private static final String UPDATE_PHOTO="UPDATE ACTIVITY set actPicture=? where actName=?";
 		@Override
 		public void insert(ActivityVO activityVO) {
 
@@ -49,11 +54,15 @@ package com.activity.model;
 				pstmt.setDate(4, activityVO.getActDate());
 				pstmt.setString(5, activityVO.getActLocation());
 				pstmt.setString(6, activityVO.getActDirection());
-				pstmt.setInt(7, activityVO.getActState());
-				pstmt.setInt(8, activityVO.getActHoldState());
-				pstmt.setDate(9, activityVO.getActRegisterStartDate());
-				pstmt.setDate(10, activityVO.getActRegisterDeadLine());
-				
+				pstmt.setInt(7, activityVO.getMaxParticipant());
+				pstmt.setInt(8, activityVO.getMinParticipant());
+				pstmt.setInt(9, activityVO.getActState());
+				pstmt.setInt(10, activityVO.getActHoldState());
+				pstmt.setDate(11, activityVO.getActRegisterStartDate());
+				pstmt.setDate(12, activityVO.getActRegisterDeadLine());
+					
+				pstmt.setInt(13, activityVO.getTotalStar());
+				pstmt.setInt(14, activityVO.getTotalEvaluator());
 				pstmt.executeUpdate();
 
 		
@@ -98,13 +107,15 @@ package com.activity.model;
 				pstmt.setDate(4, activityVO.getActDate());
 				pstmt.setString(5, activityVO.getActLocation());
 				pstmt.setString(6, activityVO.getActDirection());
-				pstmt.setInt(7, activityVO.getActState());
-				pstmt.setInt(8, activityVO.getActHoldState());
-				pstmt.setDate(9, activityVO.getActRegisterStartDate());
-				pstmt.setDate(10, activityVO.getActRegisterDeadLine());
-				pstmt.setBytes(11, activityVO.getActPicture());
-				pstmt.setInt(12, activityVO.getTotalStar());
-				pstmt.setInt(13, activityVO.getTotalEvaluator());
+				pstmt.setInt(7, activityVO.getMaxParticipant());
+				pstmt.setInt(8, activityVO.getMinParticipant());
+				pstmt.setInt(9, activityVO.getActState());
+				pstmt.setInt(10, activityVO.getActHoldState());
+				pstmt.setDate(11, activityVO.getActRegisterStartDate());
+				pstmt.setDate(12, activityVO.getActRegisterDeadLine());
+				pstmt.setBytes(13, activityVO.getActPicture());
+				pstmt.setInt(14, activityVO.getTotalStar());
+				pstmt.setInt(15, activityVO.getTotalEvaluator());
 				
 				pstmt.executeUpdate();
 
@@ -195,6 +206,8 @@ package com.activity.model;
 					activityVO.setActDate(rs.getDate("actDate"));
 					activityVO.setActLocation(rs.getString("actLocation"));
 					activityVO.setActDirection(rs.getString("actDirection"));
+					activityVO.setMaxParticipant(rs.getInt("maxParticipant"));
+					activityVO.setMinParticipant(rs.getInt("minParticipant"));
 					activityVO.setActState(rs.getInt("actState"));
 					activityVO.setActHoldState(rs.getInt("actHoldState"));
 					activityVO.setActRegisterStartDate(rs.getDate("actRegisterStartDate"));
@@ -252,7 +265,6 @@ package com.activity.model;
 				rs = pstmt.executeQuery();
 
 				while (rs.next()) {
-					// empVO �]�٬� Domain objects
 					
 					activityVO = new ActivityVO();
 					activityVO.setActNo(rs.getInt("actNo"));
@@ -261,6 +273,8 @@ package com.activity.model;
 					activityVO.setActDate(rs.getDate("actDate"));
 					activityVO.setActLocation(rs.getString("actLocation"));
 					activityVO.setActDirection(rs.getString("actDirection"));
+					activityVO.setMaxParticipant(rs.getInt("maxParticipant"));
+					activityVO.setMinParticipant(rs.getInt("minParticipant"));
 					activityVO.setActState(rs.getInt("actState"));
 					activityVO.setActHoldState(rs.getInt("actHoldState"));
 					activityVO.setActRegisterStartDate(rs.getDate("actRegisterStartDate"));
@@ -300,6 +314,191 @@ package com.activity.model;
 			}
 			return list;
 		}
+
+		@Override
+		public byte[] getPhoto(String actName) {
+			Connection con=null;
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			byte[] actPicture=null;
+			try {
+				con=ds.getConnection();
+				pstmt=con.prepareStatement(GET_PICTURE);
+				pstmt.setString(1, actName);
+				rs=pstmt.executeQuery();
+				
+				while(rs.next()) {
+					actPicture=rs.getBytes("actPicture");
+				}
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+			finally {
+				if(con!=null) {
+					try {
+						con.close();
+					}
+					catch(SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			return actPicture;
+		}
+
+		@Override
+		public void updatePhoto(String actName, byte[] actPicture) {
+			Connection con=null;
+			PreparedStatement pstmt=null;
+			
+			try {
+				con=ds.getConnection();
+				pstmt=con.prepareStatement(UPDATE_PHOTO);
+				
+				pstmt.setBytes(1, actPicture);
+				pstmt.setString(2, actName);
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally {
+				if(con!=null) {
+					try {
+						con.close();
+					}
+					catch(SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+		}
+
+		@Override
+		public List<ActivityVO> searchByTypeAll(Integer actType) {
+			List<ActivityVO> list = new ArrayList<ActivityVO>();
+			ActivityVO activityVO = null;
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			try {
+
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_ACTIVITY_TYPE);
+				
+				pstmt.setInt(1, actType);
+				
+				
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					activityVO.setActNo(rs.getInt("actNo"));
+					activityVO.setActType(rs.getInt("actType"));
+					activityVO.setActName(rs.getString("actName"));
+					activityVO.setActDate(rs.getDate("actDate"));
+					activityVO.setActLocation(rs.getString("actLocation"));
+					activityVO.setActDirection(rs.getString("(actDirection"));
+					
+					list.add(activityVO); 
+				}
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return list;
+		}
+
+		@Override
+		public List<ActivityVO> searchByTypeA(Integer actType) {
+			List<ActivityVO> list = new ArrayList<ActivityVO>();
+			ActivityVO activityVO = null;
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			try {
+
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_ACTIVITY_TYPEA);
+				
+				pstmt.setInt(1, actType);
+				
+				
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					activityVO = new ActivityVO();
+					activityVO.setActNo(rs.getInt("actNo"));
+					activityVO.setActType(rs.getInt("actType"));
+					activityVO.setActName(rs.getString("actName"));
+					activityVO.setActDate(rs.getDate("actDate"));
+					activityVO.setActLocation(rs.getString("actLocation"));
+				
+			
+					list.add(activityVO); 
+				}
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return list;
+		}
+
+		@Override
+		public List<ActivityVO> findAllByKeyword(String keyword) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
 		
 		}
 

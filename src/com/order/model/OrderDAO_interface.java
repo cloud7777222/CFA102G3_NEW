@@ -11,16 +11,20 @@ public interface OrderDAO_interface {
 	
 	public void insert(OrderVO orderVO);
 	public void delete(Integer orderno);
-	public void update(OrderVO orderVO);
-    public void cancel(Integer orderno);
-   
+	public void updateOrder(String orderer,String address,String tel,Integer deliverymeth,Integer orderno);
+    public void cancel(Integer orderno,Integer orderstate);
+    public void updatePrice(Integer total,Integer orderno);
+    public void cancelreason(Integer orderno,String cancelreason);
    
     public OrderVO findByPrimaryKey(Integer orderno);
+    public OrderVO findOrderByMemberno(Integer orderno,Integer memberno);
     
     public List<OrderVO> getAll();
-    
+    public List<OrderVO> getOrderState(Integer orderstate);
+    public List<OrderVO> getOrderStateV(Integer orderstate,Integer memberno);
     public List<OrderVO> getByMno(Integer memberno);
-    public Set<OrderlistVO> getListbyono(Integer orderno);
+    public List<OrderlistVO> getListbyono(Integer orderno);
+    
     
     public void insertWithOrderlist(OrderVO orderVO,List<OrderlistVO> list);
    

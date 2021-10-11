@@ -2,6 +2,7 @@ package com.member.model;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface MemberDAO_interface {
@@ -15,6 +16,7 @@ public interface MemberDAO_interface {
 	public MemberVO getOne(String memberAccount);
 	public MemberVO getOne(Integer memberNoA);
 	public List<MemberVO> getAll();
+	public List<MemberVO> compositeQuery(Map<String, String[]> map);
 	public Set<MemberVO> getAllExceptMeBySet(Integer memberNoA);
 	public boolean checkAccount(String memberAccount);
 	public boolean checkEmail(String memberEmail);

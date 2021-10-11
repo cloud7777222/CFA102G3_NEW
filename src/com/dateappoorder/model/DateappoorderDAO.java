@@ -28,7 +28,7 @@ public class DateappoorderDAO implements DateappoorderDAO_interface {
        A. �ثe�u�O��B����Hibernate���򥻥\��
        B. �ثe�|�ݤ��XHibernate���¤O�Ҧb
     */
-	private static final String GET_ALL_STMT = "from DateappoorderVO order by dateOrderNo";
+	private static final String GET_ALL_STMT = "from DateappoorderVO order by dateOrderNo desc";
 
 	@Override
 	public void insert(DateappoorderVO dateappoorderVO) {

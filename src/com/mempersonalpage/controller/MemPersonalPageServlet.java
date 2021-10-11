@@ -3,7 +3,7 @@ package com.mempersonalpage.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -13,27 +13,33 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import com.mempersonalpage.model.MemPersonalPageService;
 import com.mempersonalpage.model.MemPersonalPageVO;
+import com.member.model.MemberVO;
+
+
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024 * 1024)
 public class MemPersonalPageServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	String uploadDirectory = "/images_uploaded"; // ¤W¶ÇÀÉ®×ªº¥Øªº¦a¥Ø¿ı;
+	String uploadDirectory = "/images_uploaded"; // ä¸Šå‚³æª”æ¡ˆçš„ç›®çš„åœ°ç›®éŒ„;
 	
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
+		
 		req.setCharacterEncoding("UTF-8");
 		res.setContentType("image/jpeg");
-		Integer postNo = new Integer(req.getParameter("postNo")); // §ì<img src=" ?pk=yyy"> pkªº°Ñ¼Æ­È
+		Integer postNo = new Integer(req.getParameter("postNo")); // æŠ“<img src=" ?pk=yyy"> pkçš„åƒæ•¸å€¼
 		MemPersonalPageService mppSvc = new MemPersonalPageService();
-		ServletOutputStream sout = res.getOutputStream(); // ¿é¥X¸ê®Æ¬y
+		ServletOutputStream sout = res.getOutputStream(); // è¼¸å‡ºè³‡æ–™æµ
 		byte[] buf = mppSvc.getOneMemPerPage(postNo).getPostPhoto();
-		sout.write(buf); // ¿é¥X¤G¦ì¤¸¸ê®Æ
+		sout.write(buf); // è¼¸å‡ºäºŒä½å…ƒè³‡æ–™
 		sout.close();
+		
+		
 
 	}
 
@@ -42,133 +48,147 @@ public class MemPersonalPageServlet extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
 
-		// [ ¨Ó¦Ûselect_page.jspªº"¾Ü¤@postNO ¬İ¶K¤å"ªº½Ğ¨D ]
-		if ("getOne_For_Display".equals(action)) {
+		// [ ä¾†è‡ªselect_page.jspçš„"æ“‡ä¸€postNO çœ‹è²¼æ–‡"çš„è«‹æ±‚ ]
+		if ("getOne_For_Display".equals(action) || "getOne_For_Display_frondEnd".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>(); // Store this set in the request scope, in case we need
 																// to send the ErrorPage view.
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ - ¿é¤J®æ¦¡ªº¿ù»~³B²z **********************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ - è¼¸å…¥æ ¼å¼çš„éŒ¯èª¤è™•ç† **********************/
 				String str = req.getParameter("postNo");
 				if (str == null || (str.trim()).length() == 0) {
-					errorMsgs.add("½Ğ¿é¤J¶K¤å½s¸¹");
+					errorMsgs.add("è«‹è¼¸å…¥è²¼æ–‡ç·¨è™Ÿ");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
 							.getRequestDispatcher("/back_end/memPersonalPage/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
 				Integer postNo = null;
 				try {
-					postNo = new Integer(str); // µ¹³W©w¶K¤å½s¸¹¥u¦³¼Æ¦r
+					postNo = new Integer(str); // çµ¦è¦å®šè²¼æ–‡ç·¨è™Ÿåªæœ‰æ•¸å­—
 				} catch (Exception e) {
-					errorMsgs.add("¶K¤å½s¸¹®æ¦¡¤£¥¿½T");
+					errorMsgs.add("è²¼æ–‡ç·¨è™Ÿæ ¼å¼ä¸æ­£ç¢º");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
 							.getRequestDispatcher("/back_end/memPersonalPage/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ *****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ *****************************************/
 				MemPersonalPageService mppSvc = new MemPersonalPageService();
 				MemPersonalPageVO mppVO = mppSvc.getOneMemPerPage(postNo);
 				if (mppVO == null) {
-					errorMsgs.add("¬dµL¸ê®Æ");
+					errorMsgs.add("æŸ¥ç„¡è³‡æ–™");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
 							.getRequestDispatcher("/back_end/memPersonalPage/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) *************/
-				req.setAttribute("mppVO", mppVO); // ¸ê®Æ®w¨ú¥XªºmppVOª«¥ó,¦s¤Jreq
-				String url = "/back_end/memPersonalPage/listOneMemPerPage.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ¦¨¥\®Éµe­±forwardÂà¥æµ¹ listOneMemPerPage.jsp
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) *************/
+				req.setAttribute("mppVO", mppVO); // è³‡æ–™åº«å–å‡ºçš„mppVOç‰©ä»¶,å­˜å…¥req
+				String url = null;
+				if ("getOne_For_Display".equals(action)){
+					url = "/back_end/memPersonalPage/listOneMemPerPage.jsp";
+				} else if ("getOne_For_Display_frondEnd".equals(action)) {
+					url = "/front_end/memPersonalPage/listOneMemPerPage.jsp";
+				}				
+				RequestDispatcher successView = req.getRequestDispatcher(url); // æˆåŠŸæ™‚ç•«é¢forwardè½‰äº¤çµ¦ listOneMemPerPage.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("µLªk¨ú±o¸ê®Æ:" + e.getMessage());
+				errorMsgs.add("ç„¡æ³•å–å¾—è³‡æ–™:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/memPersonalPage/select_page.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦ÛaddMemPerPage.jspªº"·s¼W"½Ğ¨D ]
+		// [ ä¾†è‡ªaddMemPerPage.jspçš„"æ–°å¢"è«‹æ±‚ ]
 		if ("insert".equals(action)) {
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
+			
+			/*********************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ - è¼¸å…¥æ ¼å¼çš„éŒ¯èª¤è™•ç† *************************/
 
-			/*********************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ - ¿é¤J®æ¦¡ªº¿ù»~³B²z *************************/
-
-			/* ·|­û½s¸¹ */
-			String str = req.getParameter("memberNo");
-			if (str == null || (str.trim()).length() == 0) {
-				errorMsgs.add("½Ğ¿é¤J·|­û½s¸¹");
-			}
+			/* æœƒå“¡ç·¨è™Ÿ */				
+			HttpSession session = req.getSession();
 			Integer memberNo = null;
 			try {
-				memberNo = new Integer(req.getParameter("memberNo").trim()); // ¦p¦ó¦Û°Ê¨ú±oµn¤JªÌ±b¸¹¦Û°Ê±a¤J³o¸Ì? session
-				// ¦³setAttribute¶Ü?
-			} catch (Exception e) {
-				errorMsgs.add("·|­û½s¸¹®æ¦¡¿ù»~");
+				memberNo = ((MemberVO) session.getAttribute("memberVO")).getMemberNo();
+			}catch (Exception e) {
+				errorMsgs.add("è«‹å…ˆç™»å…¥!");
 			}
+			
+			
+//			String str = req.getParameter("memberNo");
+//			if (str == null || (str.trim()).length() == 0) {
+//				errorMsgs.add("è«‹è¼¸å…¥æœƒå“¡ç·¨è™Ÿ");
+//			}
+//			Integer memberNo = null;
+//			try {
+//				memberNo = new Integer(req.getParameter("memberNo").trim()); // å¦‚ä½•è‡ªå‹•å–å¾—ç™»å…¥è€…å¸³è™Ÿè‡ªå‹•å¸¶å…¥é€™è£¡? session
+//				// æœ‰setAttributeå—?
+//			} catch (Exception e) {
+//				errorMsgs.add("æœƒå“¡ç·¨è™Ÿæ ¼å¼éŒ¯èª¤");
+//			}
 
 			try {
-				/* ¶K¤å¹Ï¤ù */
+				/* è²¼æ–‡åœ–ç‰‡ */
 				res.setContentType("text/html; charset=UTF-8");
 				Part part = req.getPart("postPhoto");
 				String filename = getFileNameFromPart(part);
 
-//				 //¦s¶i±M®×ªüÄÆ¸ê®Æ§¨ (getServletContext() ±M®×¥»¨­; getRealPath(uploadDirectory) ªüÄÆ¸ô®|)
+//				 //å­˜é€²å°ˆæ¡ˆé˜¿é£„è³‡æ–™å¤¾ (getServletContext() å°ˆæ¡ˆæœ¬èº«; getRealPath(uploadDirectory) é˜¿é£„è·¯å¾‘)
 //				PrintWriter out = res.getWriter();
 //				String realPath = getServletContext().getRealPath(uploadDirectory); 
 //				File fsaveDirectory = new File(realPath);
 //				if (!fsaveDirectory.exists())
-//					fsaveDirectory.mkdirs(); // ©ó ContextPath ¤§¤U,¦Û°Ê«Ø¥ß¥Ø¦a¥Ø¿ı				
+//					fsaveDirectory.mkdirs(); // æ–¼ ContextPath ä¹‹ä¸‹,è‡ªå‹•å»ºç«‹ç›®åœ°ç›®éŒ„				
 //				File f = new File(fsaveDirectory, filename);
 //				out.println("filename: " + filename);
-//				part.write(f.toString());// §Q¥ÎFileª«¥ó,¼g¤J¥Ø¦a¥Ø¿ı,¤W¶Ç¦¨¥\
+//				part.write(f.toString());// åˆ©ç”¨Fileç‰©ä»¶,å¯«å…¥ç›®åœ°ç›®éŒ„,ä¸Šå‚³æˆåŠŸ
 //				 out.println("<br><img src=\"" + req.getContextPath() + uploadDirectory + "/"
-//				 + filename + "\">");// °ÊºA¸ô®|ÃB¥~´ú¸Õ¨q¹Ï
+//				 + filename + "\">");// å‹•æ…‹è·¯å¾‘é¡å¤–æ¸¬è©¦ç§€åœ–
 
-				// ±Nimage°e¶iDBÀx¦s
+				// å°‡imageé€é€²DBå„²å­˜
 				InputStream in = part.getInputStream();
-				byte[] postPhoto = new byte[in.available()]; // §Q¥ÎsetBytes ­n°e¶iDB
+				byte[] postPhoto = new byte[in.available()]; // åˆ©ç”¨setBytes è¦é€é€²DB
 				in.read(postPhoto);
 				in.close();
 				req.setAttribute("postPhoto", postPhoto);
 				if (filename == null || (filename.trim()).length() == 0) {
-					errorMsgs.add("½Ğ¿ï¾Ü¤W¶Ç¹Ï¤ù");
+					errorMsgs.add("è«‹é¸æ“‡ä¸Šå‚³åœ–ç‰‡");
 				}
 
-				/* ¶K¤å¤º®e */
+				/* è²¼æ–‡å…§å®¹ */
 				String postContent = req.getParameter("postContent");
 				if (postContent == null || (postContent.trim()).length() == 0) {
-					errorMsgs.add("½Ğ¿é¤J¶K¤å¤º®e");
+					errorMsgs.add("è«‹è¼¸å…¥è²¼æ–‡å…§å®¹");
 				}
-				/* ¶K¤å®É¶¡ */
+				/* è²¼æ–‡æ™‚é–“ */
 				java.sql.Date postTime = null;
-				postTime = new java.sql.Date(System.currentTimeMillis()); // ¨ú±o·í¤Upo¤å¨t²Î®É¶¡
+				postTime = new java.sql.Date(System.currentTimeMillis()); // å–å¾—ç•¶ä¸‹poæ–‡ç³»çµ±æ™‚é–“
 
-				/* «öÆg¼Æ */
+				/* æŒ‰è®šæ•¸ */
 				Integer numOfLike = 0;
 
-				/* ¶K¤åª¬ºA */
+				/* è²¼æ–‡ç‹€æ…‹ */
 				Integer postState = 1;
 
-				/* ==================«Øºc===================== */
+				/* ==================å»ºæ§‹===================== */
 				MemPersonalPageVO mppVO = new MemPersonalPageVO();
 				mppVO.setMemberNo(memberNo);
 				mppVO.setPostPhoto(postPhoto);
@@ -178,146 +198,152 @@ public class MemPersonalPageServlet extends HttpServlet {
 				mppVO.setPostState(postState);
 
 				if (!errorMsgs.isEmpty()) {
-					req.setAttribute("mppVO", mppVO); // §t¦³¿é¤J®æ¦¡¿ù»~ªºeppVOª«¥ó,¤]¦s¤Jreq, Åı¨Ï¥ÎªÌ¤£¥²­«¶ñ¤@¨Ç¸ê°T
+					req.setAttribute("mppVO", mppVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„eppVOç‰©ä»¶,ä¹Ÿå­˜å…¥req, è®“ä½¿ç”¨è€…ä¸å¿…é‡å¡«ä¸€äº›è³‡è¨Š
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/back_end/memPersonalPage/addMemPerPage.jsp");
+							.getRequestDispatcher("/front_end/memPersonalPage/memPersonalPage_add.jsp");
 					failureView.forward(req, res);
 					return;
 				}
 
-				/*************************** 2.¶}©l·s¼W¸ê®Æ ***************************************/
+				/*************************** 2.é–‹å§‹æ–°å¢è³‡æ–™ ***************************************/
 				MemPersonalPageService mppSvc = new MemPersonalPageService();
 				mppVO = mppSvc.addMemPerPage(memberNo, postPhoto, postContent, postTime, numOfLike, postState);
 
-				/*************************** 3.·s¼W§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
+				/*************************** 3.æ–°å¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
 				req.setAttribute("mppVO", mppVO);
-				String url = "/back_end/memPersonalPage/listAllMemPerPage.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ·s¼W¦¨¥\«áÂà¥æ¦ÜlistAllMemPerPage.jsp
-				successView.forward(req, res);
+				String url = "/front_end/memPersonalPage/memPersonalPage_main.jsp?memberNo="+memberNo;
+				res.sendRedirect(req.getContextPath()+url); //ä½¿ç”¨é‡å°ä¸æœƒå¸¶å€¼å›å», æ‰€ä»¥åˆ·æ–°ä¸æœƒå†æ¬¡é€å‡ºpoæ–‡			
+//				RequestDispatcher successView = req.getRequestDispatcher(url); // æ–°å¢æˆåŠŸå¾Œè½‰äº¤è‡³listAllMemPerPage.jsp
+//				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("¶K¤å·s¼W¥¢±Ñ:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/memPersonalPage/addMemPerPage.jsp");
+				errorMsgs.add("è²¼æ–‡æ–°å¢å¤±æ•—:" + e.getMessage());
+				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/memPersonalPage/memPersonalPage_add.jsp");
 				failureView.forward(req, res);
-				return;// µ{¦¡¤¤Â_
+				return;// ç¨‹å¼ä¸­æ–·
 			}
 		}
 
-		// [ ¨Ó¦ÛlistAllMemPerPage.jsp ªº"§R°£"½Ğ¨D]
+		// [ ä¾†è‡ªlistAllMemPerPage.jsp çš„"åˆªé™¤"è«‹æ±‚]
 		if ("delete".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
-			String requestURL = req.getParameter("requestURL"); // °e¥X§R°£ªº¨Ó·½ºô­¶¸ô®|
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºåˆªé™¤çš„ä¾†æºç¶²é è·¯å¾‘
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ***************************************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ***************************************/
 				Integer postNo = new Integer(req.getParameter("postNo"));
 
-				/*************************** 2.¶}©l§R°£¸ê®Æ ***************************************/
+				/*************************** 2.é–‹å§‹åˆªé™¤è³‡æ–™ ***************************************/
 				MemPersonalPageService mppSvc = new MemPersonalPageService();
 				mppSvc.deleteMemPerPage(postNo);
 
-				/*************************** 3.§R°£§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
+				/*************************** 3.åˆªé™¤å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
 				String url = "/back_end/memPersonalPage/listAllMemPerPage.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url);// §R°£¦¨¥\«á,Âà¥æ¦^listAllMemPerPage.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url);// åˆªé™¤æˆåŠŸå¾Œ,è½‰äº¤å›listAllMemPerPage.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
-				errorMsgs.add("§R°£¸ê®Æ¥¢±Ñ:" + e.getMessage());
+				errorMsgs.add("åˆªé™¤è³‡æ–™å¤±æ•—:" + e.getMessage());
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/back_end/memPersonalPage/listAllMemPerPage.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦ÛlistAllMemPerPage.jsp "³æµ§¶K¤åÀËµø"ªº½Ğ¨D ]
-		if ("getOne_For_Update".equals(action)) {
+		// [ ä¾†è‡ªlistAllMemPerPage.jsp "å–®ç­†è²¼æ–‡æª¢è¦–"çš„è«‹æ±‚ ]
+		if ("getOne_For_Update".equals(action) || "getOne_For_Update_frontEnd".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 			
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ****************************************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
 				Integer postNo = new Integer(req.getParameter("postNo").trim());
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ ****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
 				MemPersonalPageService mppSvc = new MemPersonalPageService();
 				MemPersonalPageVO mppVO = mppSvc.getOneMemPerPage(postNo);
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ************/
-				req.setAttribute("mppVO", mppVO); // ¸ê®Æ®w¨ú¥XªºmppVOª«¥ó,¦s¤Jreq
-				String url = "/back_end/memPersonalPage/update_MemPerPage_input.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url);// ¦¨¥\Âà¥æ update_MemPerPage_input.jsp
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ************/
+				req.setAttribute("mppVO", mppVO); // è³‡æ–™åº«å–å‡ºçš„mppVOç‰©ä»¶,å­˜å…¥req
+				String url = null;
+				if ("getOne_For_Update".equals(action)) {
+					url = "/back_end/memPersonalPage/update_MemPerPage_input.jsp";
+				} else if ("getOne_For_Update_frontEnd".equals(action)) {
+					url = "/front_end/memPersonalPage/memPersonalPage_update.jsp";
+				}												
+				RequestDispatcher successView = req.getRequestDispatcher(url);// æˆåŠŸè½‰äº¤ update_MemPerPage_input.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
-				errorMsgs.add("µLªk¨ú±o­n­×§ïªº¸ê®Æ:" + e.getMessage());
+				errorMsgs.add("ç„¡æ³•å–å¾—è¦ä¿®æ”¹çš„è³‡æ–™:" + e.getMessage());
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/back_end/memPersonalPage/listAllMemPerPage.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦Ûupdate_MemPerPage_input.jspªº"­×¥¿"½Ğ¨D ]
+		// [ ä¾†è‡ªupdate_MemPerPage_input.jspçš„"ä¿®æ­£"è«‹æ±‚ ]
 		if ("update".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 			
-			String requestURL = req.getParameter("requestURL"); // °e¥X­×§ïªº¨Ó·½ºô­¶
-			String whichPage = req.getParameter("whichPage"); // °e¥X­×§ïªº¨Ó·½ºô­¶ªº²Ä´X­¶
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é 
+			String whichPage = req.getParameter("whichPage"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é 
 
-			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ****************************************/
-				/* ¶K¤å½s¸¹ */
+//			try {
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+				/* è²¼æ–‡ç·¨è™Ÿ */
 				Integer postNo = new Integer(req.getParameter("postNo").trim());
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ ****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
 				MemPersonalPageService mppSvc = new MemPersonalPageService();
 
-				/**************************** 3.Åª¨úclientºİ°e¹L¨Óªº¸ê®Æ ******************************/
+				/**************************** 3.è®€å–clientç«¯é€éä¾†çš„è³‡æ–™ ******************************/
 
-				/* ·|­û½s¸¹ */
-				Integer memberNo = mppSvc.getOneMemPerPage(postNo).getMemberNo(); // ·|­û½s¸¹¤£¯à§ï, ©Ò¥Hªu¥ÎÂÂ¸ê®Æ
+				/* æœƒå“¡ç·¨è™Ÿ */
+				Integer memberNo = mppSvc.getOneMemPerPage(postNo).getMemberNo(); // æœƒå“¡ç·¨è™Ÿä¸èƒ½æ”¹, æ‰€ä»¥æ²¿ç”¨èˆŠè³‡æ–™
 
-				/* ¶K¤å¹Ï¤ù */
+				/* è²¼æ–‡åœ–ç‰‡ */
 				Part part = req.getPart("postPhoto");
-				InputStream in = part.getInputStream(); // §Q¥Îpartª«¥óÂà¸ê®Æ¬y¦s¦¨byte[]
+				InputStream in = part.getInputStream(); // åˆ©ç”¨partç‰©ä»¶è½‰è³‡æ–™æµå­˜æˆbyte[]
 				byte[] postPhoto = null;
-				if (in.available() > 0) { // ¦³§ó·s¹Ï¤ù,¦Ó¥B¦³Åª¨ú¨ì®É(>0)
+				if (in.available() > 0) { // æœ‰æ›´æ–°åœ–ç‰‡,è€Œä¸”æœ‰è®€å–åˆ°æ™‚(>0)
 					postPhoto = new byte[in.available()];
 					in.read(postPhoto);
 					in.close();
 				} else {
-					postPhoto = mppSvc.getOneMemPerPage(postNo).getPostPhoto(); // ¨S§ó·s¹Ï¤ù´N¥Î­ì¥»ªº¹Ï¤ù
+					postPhoto = mppSvc.getOneMemPerPage(postNo).getPostPhoto(); // æ²’æ›´æ–°åœ–ç‰‡å°±ç”¨åŸæœ¬çš„åœ–ç‰‡
 				}
 				req.setAttribute("postPhoto", postPhoto);
 
-				/* ¶K¤å¤º®e */
+				/* è²¼æ–‡å…§å®¹ */
 				String postContent = req.getParameter("postContent");
 				if (postContent == null) {
-					errorMsgs.add("½Ğ¿é¤J¶K¤å¤º®e");
+					errorMsgs.add("è«‹è¼¸å…¥è²¼æ–‡å…§å®¹");
 				}
 
-				/* ¶K¤å®É¶¡ */
+				/* è²¼æ–‡æ™‚é–“ */
 				java.sql.Date postTime = mppSvc.getOneMemPerPage(postNo).getPostTime();
 			
-				/* «öÆg¼Æ */
-				Integer numOfLike = mppSvc.getOneMemPerPage(postNo).getNumOfLike();
-
-				/* ¶K¤åª¬ºA */
+				/* æŒ‰è®šæ•¸ */
+				Integer numOfLike =  mppSvc.getOneMemPerPage(postNo).getNumOfLike();
+				
+				/* è²¼æ–‡ç‹€æ…‹ */
 				String str = req.getParameter("postState");
 				Integer postState = new Integer(str);
 				if (str.equals(null)) {
 					postState = mppSvc.getOneMemPerPage(postNo).getPostState();
 				}
 
-				/* ==================«Øºc===================== */
+				/* ==================å»ºæ§‹===================== */
 				MemPersonalPageVO mppVO = new MemPersonalPageVO();
 				mppVO.setPostNo(postNo);
 				mppVO.setMemberNo(memberNo);
@@ -328,36 +354,189 @@ public class MemPersonalPageServlet extends HttpServlet {
 				mppVO.setPostState(postState);
 
 				if (!errorMsgs.isEmpty()) {
-					req.setAttribute("mppVO", mppVO); // §t¦³¿é¤J®æ¦¡¿ù»~ªºempVOª«¥ó,¤]¦s¤Jreq
+					req.setAttribute("mppVO", mppVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„empVOç‰©ä»¶,ä¹Ÿå­˜å…¥req
 					RequestDispatcher failureView = req
 							.getRequestDispatcher("/back_end/memPersonalPage/update_MemPerPage_input.jsp");
 					failureView.forward(req, res);
 					return;
 				}
 
-				/*************************** 4.¶}©l·s¼W¸ê®Æ ***************************************/
+				/*************************** 4.é–‹å§‹æ–°å¢è³‡æ–™ ***************************************/
 				MemPersonalPageService mppSVC = new MemPersonalPageService();
 				mppVO = mppSVC.updateMemPerPage(postNo, memberNo, postPhoto, postContent, postTime, numOfLike,
 						postState);
 
-				/*************************** 5.·s¼W§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
-				req.setAttribute("mppVO", mppVO); // ¸ê®Æ®wupdate¦¨¥\«á,¥¿½TªºªºmppVOª«¥ó,¦s¤Jreq
-				String url = requestURL + "?whichPage=" + whichPage + "&postNo=" + postNo; // °e¥X­×§ïªº¨Ó·½ºô­¶ªº²Ä´X­¶(¥u¥Î©ó:listAllMemPerPage.jsp)©M­×§ïªº¬O­ş¤@µ§
+				/*************************** 5.æ–°å¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
+				req.setAttribute("mppVO", mppVO); // è³‡æ–™åº«updateæˆåŠŸå¾Œ,æ­£ç¢ºçš„çš„mppVOç‰©ä»¶,å­˜å…¥req
+				String url = requestURL + "?whichPage=" + whichPage + "&postNo=" + postNo+ "&memberNo=" + memberNo; // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é (åªç”¨æ–¼:listAllMemPerPage.jsp)å’Œä¿®æ”¹çš„æ˜¯å“ªä¸€ç­†
 				System.out.println("url=" + url);
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ·s¼W¦¨¥\«áÂà¥æ¦ÜlistOneMemPerPage.jsp Åã¥Ü
+				RequestDispatcher successView = req.getRequestDispatcher(url); // æ–°å¢æˆåŠŸå¾Œè½‰äº¤è‡³listOneMemPerPage.jsp é¡¯ç¤º
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
-			} catch (Exception e) {
-				errorMsgs.add("¸ê®Æ­×§ï¥¢±Ñ:" + e.getMessage());
-				RequestDispatcher failureView = req
-						.getRequestDispatcher("/back_end/memPersonalPage/update_MemPerPage_input.jsp");
-				failureView.forward(req, res);
-			}
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
+//			} catch (Exception e) {
+//				errorMsgs.add("è³‡æ–™ä¿®æ”¹å¤±æ•—:" + e.getMessage());
+//				RequestDispatcher failureView = req
+//						.getRequestDispatcher("/back_end/memPersonalPage/update_MemPerPage_input.jsp");
+//				failureView.forward(req, res);
+//			}
 		}
+		
+		
+		
+		
+//		// [ ä¾†è‡ªupdate_MemPerPage_input.jspçš„"ä¿®æ­£"è«‹æ±‚ ]
+//				if ("updateLike".equals(action)) {
+//
+//					List<String> errorMsgs = new LinkedList<String>();
+//					req.setAttribute("errorMsgs", errorMsgs);
+//					
+//					String requestURL = req.getParameter("requestURL"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é 
+//					String whichPage = req.getParameter("whichPage"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é 
+//
+////					try {
+//						/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+//						/* è²¼æ–‡ç·¨è™Ÿ */
+//						Integer postNo = new Integer(req.getParameter("postNo").trim());
+//
+//						/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
+//						MemPersonalPageService mppSvc = new MemPersonalPageService();
+//
+//						/**************************** 3.è®€å–clientç«¯é€éä¾†çš„è³‡æ–™ ******************************/
+//
+//						/* æœƒå“¡ç·¨è™Ÿ */
+//						Integer memberNo = mppSvc.getOneMemPerPage(postNo).getMemberNo(); // æœƒå“¡ç·¨è™Ÿä¸èƒ½æ”¹, æ‰€ä»¥æ²¿ç”¨èˆŠè³‡æ–™
+//
+//						/* è²¼æ–‡åœ–ç‰‡ */
+//						byte[] postPhoto = mppSvc.getOneMemPerPage(postNo).getPostPhoto(); // ç”¨åŸæœ¬çš„åœ–ç‰‡
+//						
+//						/* è²¼æ–‡å…§å®¹ */
+//						String postContent = mppSvc.getOneMemPerPage(postNo).getPostContent();
+//
+//						/* è²¼æ–‡æ™‚é–“ */
+//						java.sql.Date postTime = mppSvc.getOneMemPerPage(postNo).getPostTime();
+//					
+//						/* æ›´æ–°æŒ‰è®šæ•¸ */
+//						Integer numOfLike = new Integer(req.getParameter("numOfLike").trim());
+//						
+//						/* è²¼æ–‡ç‹€æ…‹ */
+//						Integer postState = mppSvc.getOneMemPerPage(postNo).getPostState();
+//
+//						/* ==================å»ºæ§‹===================== */
+//						MemPersonalPageVO mppVO = new MemPersonalPageVO();
+//						mppVO.setPostNo(postNo);
+//						mppVO.setMemberNo(memberNo);
+//						mppVO.setPostPhoto(postPhoto);
+//						mppVO.setPostContent(postContent);
+//						mppVO.setPostTime(postTime);
+//						mppVO.setNumOfLike(numOfLike);
+//						mppVO.setPostState(postState);
+//
+//						if (!errorMsgs.isEmpty()) {
+//							req.setAttribute("mppVO", mppVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„empVOç‰©ä»¶,ä¹Ÿå­˜å…¥req
+//							RequestDispatcher failureView = req
+//									.getRequestDispatcher("/back_end/memPersonalPage/update_MemPerPage_input.jsp");
+//							failureView.forward(req, res);
+//							return;
+//						}
+//
+//						/*************************** 4.é–‹å§‹æ–°å¢è³‡æ–™ ***************************************/
+//						MemPersonalPageService mppSVC = new MemPersonalPageService();
+//						mppVO = mppSVC.updateMemPerPage(postNo, memberNo, postPhoto, postContent, postTime, numOfLike,
+//								postState);
+//
+//						/*************************** 5.æ–°å¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
+//						req.setAttribute("mppVO", mppVO); // è³‡æ–™åº«updateæˆåŠŸå¾Œ,æ­£ç¢ºçš„çš„mppVOç‰©ä»¶,å­˜å…¥req
+//						String url = requestURL + "?whichPage=" + whichPage + "&postNo=" + postNo; // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é (åªç”¨æ–¼:listAllMemPerPage.jsp)å’Œä¿®æ”¹çš„æ˜¯å“ªä¸€ç­†
+//						System.out.println("url=" + url);
+//						RequestDispatcher successView = req.getRequestDispatcher(url); // æ–°å¢æˆåŠŸå¾Œè½‰äº¤è‡³listOneMemPerPage.jsp é¡¯ç¤º
+//						successView.forward(req, res);
+//
+//						/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
+////					} catch (Exception e) {
+////						errorMsgs.add("è³‡æ–™ä¿®æ”¹å¤±æ•—:" + e.getMessage());
+////						RequestDispatcher failureView = req
+////								.getRequestDispatcher("/back_end/memPersonalPage/update_MemPerPage_input.jsp");
+////						failureView.forward(req, res);
+////					}
+//				}
+		
+		
+		
+		
+		// [ ä¾†è‡ªupdate_MemPerPage_input.jspçš„"ä¿®æ­£"è«‹æ±‚ ]
+		if ("updateLike".equals(action)) {
+
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é 
+			String whichPage = req.getParameter("whichPage"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é 
+
+//			try {
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+				/* è²¼æ–‡ç·¨è™Ÿ */
+				Integer postNo = new Integer(req.getParameter("postNo").trim());
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
+				MemPersonalPageService mppSvc = new MemPersonalPageService();
+				/**************************** 3.è®€å–clientç«¯é€éä¾†çš„è³‡æ–™ ******************************/
+				/* æœƒå“¡ç·¨è™Ÿ */
+				Integer memberNo = mppSvc.getOneMemPerPage(postNo).getMemberNo(); // æœƒå“¡ç·¨è™Ÿä¸èƒ½æ”¹, æ‰€ä»¥æ²¿ç”¨èˆŠè³‡æ–™
+				/* è²¼æ–‡åœ–ç‰‡ */
+				byte[] postPhoto = mppSvc.getOneMemPerPage(postNo).getPostPhoto(); // ç”¨åŸæœ¬çš„åœ–ç‰‡				
+				/* è²¼æ–‡å…§å®¹ */
+				String postContent = mppSvc.getOneMemPerPage(postNo).getPostContent();
+				/* è²¼æ–‡æ™‚é–“ */
+				java.sql.Date postTime = mppSvc.getOneMemPerPage(postNo).getPostTime();			
+				/* æ›´æ–°æŒ‰è®šæ•¸ */
+				Integer numOfLike = mppSvc.getOneMemPerPage(postNo).getNumOfLike()+1;	
+				/* è²¼æ–‡ç‹€æ…‹ */
+				Integer postState = mppSvc.getOneMemPerPage(postNo).getPostState();
+				/* ==================å»ºæ§‹===================== */
+				MemPersonalPageVO mppVO = new MemPersonalPageVO();
+				mppVO.setPostNo(postNo);
+				mppVO.setMemberNo(memberNo);
+				mppVO.setPostPhoto(postPhoto);
+				mppVO.setPostContent(postContent);
+				mppVO.setPostTime(postTime);
+				mppVO.setNumOfLike(numOfLike);
+				mppVO.setPostState(postState);
+
+				if (!errorMsgs.isEmpty()) {
+					req.setAttribute("mppVO", mppVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„empVOç‰©ä»¶,ä¹Ÿå­˜å…¥req
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/back_end/memPersonalPage/update_MemPerPage_input.jsp");
+					failureView.forward(req, res);
+					return;
+				}
+				/*************************** 4.é–‹å§‹æ–°å¢è³‡æ–™ ***************************************/
+				MemPersonalPageService mppSVC = new MemPersonalPageService();
+				mppVO = mppSVC.updateMemPerPage(postNo, memberNo, postPhoto, postContent, postTime, numOfLike,
+						postState);
+				/*************************** 5.æ–°å¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
+				req.setAttribute("mppVO", mppVO); // è³‡æ–™åº«updateæˆåŠŸå¾Œ,æ­£ç¢ºçš„çš„mppVOç‰©ä»¶,å­˜å…¥req
+				res.setCharacterEncoding("UTF-8");
+				res.setContentType("text/plain");
+				PrintWriter pw = res.getWriter();
+				System.out.println(numOfLike);
+				pw.print(numOfLike);
+
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
+//			} catch (Exception e) {
+//				errorMsgs.add("è³‡æ–™ä¿®æ”¹å¤±æ•—:" + e.getMessage());
+//				RequestDispatcher failureView = req
+//						.getRequestDispatcher("/back_end/memPersonalPage/update_MemPerPage_input.jsp");
+//				failureView.forward(req, res);
+//			}
+		}
+
+		
+		
+		
+		
 	}
 
-	// ¨ú¥X¤W¶ÇªºÀÉ®×¦WºÙ (¦]¬°API¥¼´£¨Ñmethod,©Ò¥H¥²¶·¦Û¦æ¼¶¼g)
+	// å–å‡ºä¸Šå‚³çš„æª”æ¡ˆåç¨± (å› ç‚ºAPIæœªæä¾›method,æ‰€ä»¥å¿…é ˆè‡ªè¡Œæ’°å¯«)
 	public String getFileNameFromPart(Part part) {
 		String header = part.getHeader("content-disposition");
 		String filename = new File(header.substring(header.lastIndexOf("=") + 2, header.length() - 1)).getName();

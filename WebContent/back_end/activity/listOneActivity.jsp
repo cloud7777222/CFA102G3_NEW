@@ -67,7 +67,6 @@
 		<th>活動舉辦狀態</th>
 		<th>活動報名開始日期</th>
 		<th>活動報名截止日期</th>
-		<th>活動圖片</th>
 		<th>總星星數</th>
 		<th>評價總人數</th>
 	</tr>
@@ -84,7 +83,6 @@
 			<td><%=activityVO.getActHoldState()%></td>
 			<td><%=activityVO.getActRegisterStartDate()%></td>
 			<td><%=activityVO.getActRegisterDeadLine()%></td>
-			<td><%=activityVO.getActPicture()%></td>
 			<td><%=activityVO.getTotalStar()%></td>
 			<td><%=activityVO.getTotalEvaluator()%></td>
 	

@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>商品更新</title>
+<%@ include file="/back_end/header.jsp"%>
 <script
   src="https://code.jquery.com/jquery-1.12.4.js"
   ></script>
@@ -18,10 +19,11 @@ height:150px;
 </style>
 </head>
 <body>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <table id="table-1">
 	<tr><td>
 		 <h3>商品資料修改</h3>
-		 <h4><a href="<%=request.getContextPath()%>/back_end/index.jsp">回首頁</a></h4>
+		
 	</td></tr>
 </table>
 
@@ -90,7 +92,7 @@ height:150px;
 <input type="hidden" name="prodno" value="${prodVO.prodno}">
 <input type="hidden" name="requestURL"	value="<%=request.getParameter("requestURL")%>">
 <input type="submit" value="送出修改"></FORM>
-
+    <%@ include file="/back_end/footer.jsp"%>   
 <script>
 $('#file1').on('change', function(e){      
 	  const file = this.files[0];

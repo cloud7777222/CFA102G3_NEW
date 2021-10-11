@@ -4,16 +4,21 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.dateappoorder.model.*"%>
 <%@ page import="com.member.model.*"%>
+<%@ page import="java.util.stream.*"%>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
 
 <%
 	DateappoorderService dateappoorderSvc = new DateappoorderService();
-// 	Integer userNo =((MemberVO) session.getAttribute("memberVO")).getMemberNo();
+	Integer userNo =((MemberVO) session.getAttribute("memberVO")).getMemberNo();
 // dateappoorderSvc.getOneDateappoorder(dateOrderNo)
 // 	boolean isNull = request.getAttribute("keyword") == null;
-	List<DateappoorderVO> list = dateappoorderSvc.getAll();
+	List<DateappoorderVO> list = dateappoorderSvc.getAll().stream()
+			.filter(i -> i.getMemberNoA().toString().equals(userNo.toString()) || i.getMemberNoB().toString().equals(userNo.toString())) // 會員的訂單
+			.collect(Collectors.toList());
 	pageContext.setAttribute("list", list);
 	request.setAttribute("date",new Date());
+	
+	
 %>
 <jsp:useBean id="memberSvc" scope="page" class="com.member.model.MemberService" />
 

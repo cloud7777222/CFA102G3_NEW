@@ -1,6 +1,6 @@
 package com.emp.model;
 
-public class EmpVO {
+public class EmpVO implements java.io.Serializable{
 	
 	private Integer empno;
 	private String empaccount;

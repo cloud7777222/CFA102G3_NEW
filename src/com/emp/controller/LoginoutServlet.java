@@ -27,7 +27,7 @@ public class LoginoutServlet extends HttpServlet {
 		
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
-		
+		HttpSession session = req.getSession();
 		
 		
 		if("login".equals(action)) {
@@ -59,9 +59,8 @@ public class LoginoutServlet extends HttpServlet {
 					RequestDispatcher forwarPage = req.getRequestDispatcher("/back_end/Elogin.jsp");
 					forwarPage.forward(req, res);
 				} else {
-					HttpSession session = req.getSession();
 					session.setAttribute("empVO", empVO);
-					res.sendRedirect(req.getContextPath()+"/back_end/index.jsp");
+					res.sendRedirect(req.getContextPath()+"/back_end/index/index.jsp");
 				}
 			}catch(Exception e) {
 				errorMsgs.add(e.getMessage());
@@ -69,6 +68,14 @@ public class LoginoutServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		
-	}//else if
+	    }
+		if("logout".equals(action)) {
+			if(req.getSession().getAttribute("empVO")!=null) {
+				req.getSession().removeAttribute("empVO");
+				res.sendRedirect(req.getContextPath()+"/back_end/Elogin.jsp");
+			}else {
+				res.sendRedirect(req.getContextPath()+"/back_end/Elogin.jsp");
+			}
+		}
 	}
 }

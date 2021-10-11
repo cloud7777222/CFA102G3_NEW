@@ -54,7 +54,7 @@
 		<servlet-name>ChatServlet</servlet-name>
 		<url-pattern>/chat/chat</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>LoginoutServlet</servlet-name>
 		<servlet-class>com.emp.controller.LoginoutServlet</servlet-class>
@@ -144,7 +144,7 @@
 		<servlet-name>ActivityServlet</servlet-name>
 		<url-pattern>/activity/activity.do</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>ExpertServlet</servlet-name>
 		<servlet-class>com.expert.controller.ExpertServlet</servlet-class>
@@ -153,7 +153,7 @@
 		<servlet-name>ExpertServlet</servlet-name>
 		<url-pattern>/expert.do</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Dateappoorder</servlet-name>
 		<servlet-class>com.dateappoorder.controller.DateappoorderServlet</servlet-class>
@@ -162,7 +162,7 @@
 		<servlet-name>Dateappoorder</servlet-name>
 		<url-pattern>/dateappoorder/dateappoorder.do</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>MemTime</servlet-name>
 		<servlet-class>com.memTime.controller.MemTimeServlet</servlet-class>
@@ -171,16 +171,70 @@
 		<servlet-name>MemTime</servlet-name>
 		<url-pattern>/memTime/memTime.do</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- load-on-startup ScheduleServlet的註冊名稱與mapping -->
-    <servlet>
-		    <servlet-name>ScheduleServlet</servlet-name>
-		    <servlet-class>timerTask.ScheduleServlet</servlet-class>
-		    <load-on-startup>10</load-on-startup>
+	<servlet>
+		<servlet-name>ScheduleServlet</servlet-name>
+		<servlet-class>timerTask.ScheduleServlet</servlet-class>
+		<load-on-startup>10</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		    <servlet-name>ScheduleServlet</servlet-name>
-		    <url-pattern>/ScheduleServlet</url-pattern>
+		<servlet-name>ScheduleServlet</servlet-name>
+		<url-pattern>/ScheduleServlet</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DBGifReader</servlet-name>
+		<servlet-class>com.activity.controller.DBGifReader</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DBGifReader</servlet-name>
+		<url-pattern>/DBGifReader</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MailService</servlet-name>
+		<servlet-class>email.MailService</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MailService</servlet-name>
+		<url-pattern>/email/MailService</url-pattern>
+	</servlet-mapping>
+
+<!-- 	<filter> -->
+<!-- 		<filter-name>EloginFilter</filter-name> -->
+<!-- 		<filter-class>com.filters.EloginFilter</filter-class> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>EloginFilter</filter-name> -->
+<!-- 		<url-pattern>/back_end/emp/*</url-pattern> -->
+<!-- 		<url-pattern>/back_end/order/*</url-pattern> -->
+<!-- 		<url-pattern>/back_end/prod/*</url-pattern> -->
+<!-- 		<url-pattern>/back_end/prodsort/*</url-pattern> -->
+<!-- 		<url-pattern>/back_end/customerservice/*</url-pattern> -->
+<!-- 		<dispatcher>REQUEST</dispatcher> -->
+<!-- 		<dispatcher>FORWARD</dispatcher> -->
+<!-- 		<dispatcher>INCLUDE</dispatcher> -->
+<!-- 		<dispatcher>ERROR</dispatcher> -->
+
+<!-- 	</filter-mapping> -->
+
+<!-- 	<filter> -->
+<!-- 		<filter-name>loginFilter</filter-name> -->
+<!-- 		<filter-class>com.member.controller.LoginFilter</filter-class> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>loginFilter</filter-name> -->
+<!-- 		<url-pattern>/front_end/member/MemberProfileByMe.jsp</url-pattern> -->
+<!-- 		<url-pattern>/front_end/member/updateMember.jsp</url-pattern> -->
+<!-- 		<url-pattern>/front_end/member/updatePasswordMember.jsp</url-pattern> -->
+<!-- 		<url-pattern>/front_end/friend/browseMember.jsp</url-pattern> -->
+<!-- 		<url-pattern>/front_end/chat/chatRoom.jsp</url-pattern> -->
+<!-- 		<dispatcher>REQUEST</dispatcher> -->
+<!-- 		<dispatcher>FORWARD</dispatcher> -->
+<!-- 		<dispatcher>INCLUDE</dispatcher> -->
+<!-- 		<dispatcher>ERROR</dispatcher> -->
+<!-- 		<dispatcher>ASYNC</dispatcher> -->
+<!-- 	</filter-mapping> -->
 
 </web-app>

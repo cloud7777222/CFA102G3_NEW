@@ -9,7 +9,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <title>活動資料新增 - addActivity.jsp</title>
-
+<%@ include file="/back_end/header.jsp"%>
 <style>
   table#table-1 {
 	background-color: #CCCCFF;
@@ -29,7 +29,7 @@
 
 <style>
   table {
-	width: 450px;
+	width: 650px;
 	background-color: white;
 	margin-top: 1px;
 	margin-bottom: 1px;
@@ -43,12 +43,13 @@
 </style>
 
 </head>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <body bgcolor='white'>
 
 <table id="table-1">
 	<tr><td>
 		 <h3>活動資料新增 - addActivity.jsp</h3></td><td>
-		 <h4><a href="<%=request.getContextPath()%>/back_end/activity/select_page.jsp"><img src="images/original.gif" width="100" height="100" border="0">回首頁</a></h4>
+		 <h4><img src="images/original.gif" width="100" height="100" border="0"></h4>
 	</td></tr>
 </table>
 
@@ -64,7 +65,7 @@
 	</ul>
 </c:if>
 
-<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/activity/activity.do" name="form1">
+<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/activity/activity.do" name="form1"  enctype="multipart/form-data">
 <table>
 	<tr>
 		<td>活動編號:</td>
@@ -97,6 +98,17 @@
 			 value="${activityVO.actDirection}" /></td>
 	</tr>
 	<tr>
+		<td>報名人數上限:</td>
+		<td><input type="TEXT" name="maxParticipant" size="45"
+			 value="${activityVO.maxParticipant}" /></td>
+	</tr>
+	<tr>
+		<td>報名人數下限:</td>
+		<td><input type="TEXT" name="minParticipant" size="45"
+			 value="${activityVO.minParticipant}" /></td>
+	</tr>
+	
+	<tr>
 		<td>活動地點:</td>
 		<td><input type="TEXT" name="actLocation" size="45"
 			 value="${activityVO.actLocation}" /></td>
@@ -123,13 +135,27 @@
 		<td><input type="TEXT" name="actRegisterDeadLine" size="45"
 			 value="${activityVO.actRegisterDeadLine}" /></td>
 	</tr>
-
+ 
+				
+			
+				
+	<tr>
+		<td>評價星數:</td>
+		<td><input type="TEXT" name="totalStar" size="45"
+			 value="${activityVO.totalStar}" /></td>
+	</tr>
+	<tr>
+		<td>評價總人數:</td>
+		<td><input type="TEXT" name="totalEvaluator" size="45"
+			 value="${activityVO.totalEvaluator}" /></td>
+	</tr>
 	
 
 </table>
 <br>
 <input type="hidden" name="action" value="insert">
 <input type="submit" value="送出新增"></FORM>
+<%@ include file="/back_end/footer.jsp"%>
 </body>
 
 
@@ -169,5 +195,63 @@
         });
    
 
+        $('#file1').on('change', function(e){      
+        	  const file = this.files[0];
+        	      
+        	  const fr = new FileReader();
+        	  fr.onload = function (e) {
+        	    $('#p1').attr('src', e.target.result);
+        	  };
+        	      
+        	  
+        	  fr.readAsDataURL(file);
+        	});
 </script>
+<script>
+                    // 題目： 請製作可以同時上傳多張圖片到前端預覽的功能
+                    // 學習重點：
+                    // 1. File API – Read as Data URL
+            
+                    function init() {
+            
+                        // 1. 抓取DOM元素
+                        let actPicture = document.getElementById("actPicture");
+                        let preview = document.getElementById('Preview');
+            
+                        // 2. 對myFile物件註冊change事件 - 改變選擇的檔案時觸發
+                        actPicture.addEventListener('change', function(e) {
+                            // 取得檔案物件的兩種方式
+                            // 1. 直接從myFile物件上取得檔案物件 (因為非同步，一樣，多個classname註冊時會有問題)
+                            // 2. 從event物件中取得他的soure target，也就是myFile物件，再取得檔案物件 
+                            // 檔案的基本資訊，包括：檔案的名稱、大小與文件型態
+                            let files = e.target.files;
+                            // 判斷files物件是否存在
+                            if (files !== null) {
+                                let file = files[0];
+                                    // 取出files物件的第i個
+                                    // 判斷file.type的型別是否包含'image'
+                                    if (file.type.indexOf('image') > -1) {
+                                        
+                                        // new a FileReader
+                                        let reader = new FileReader();
+                                        // 在FileReader物件上註冊load事件 - 載入檔案的意思
+                                        reader.addEventListener('load', function(e) {
+                                            // 取得結果 提示：從e.target.result取得讀取到結果
+                                            let result = e.target.result;
+                                            // console.log(result) 確認讀取到結果
+                                            // 賦予src屬性
+                                            preview.src=result;
+                                        });
+                                        // 使用FileReader物件上的 readAsDataURL(file) 的方法，傳入要讀取的檔案，並開始進行讀取
+                                        reader.readAsDataURL(file); // trigger!!!!
+                                    } else {
+                                        // 彈出警告視窗 alert('請上傳圖片！');
+                                        alert('請上傳圖片！');
+                                    }
+                            }
+                        });
+                    }
+            
+                    window.onload = init;
+                </script>
 </html>

@@ -29,7 +29,7 @@
 			.collect(Collectors.toList());
 	pageContext.setAttribute("list", list);
 	AdVO adVO = (AdVO) request.getAttribute("adVO");
-// 	request.setAttribute("date",new Date());
+	pageContext.setAttribute("date",new Date());
 %>
 <jsp:useBean id="adSvc" scope="page" class="com.ad.model.AdService" />
 
@@ -38,7 +38,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>廣告頁面</title>
+<title>首頁</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <meta content="Free Website Template" name="keywords">
 <meta content="Free Website Template" name="description">
@@ -106,12 +106,13 @@ height: 100%;
 
 
                         <div class="carousel-btn">
-                            <a class="btn btn-custom" href="">join Now</a>
+                            <a class="btn btn-custom" href="<%=request.getContextPath()%>/front_end/member/addMember.jsp">join Now</a>
                        
                         </div>
                     </div>
                 </div>
                 <c:forEach var="adVO_list" items="${list}" >
+                <c:if test="${adVO_list.postTime<date}">
 	                <div class="carousel-item">
 	                    <div class="carousel-img">
 	                        <img src="${adVO_list.adPic1 }" alt="Image">
@@ -130,6 +131,7 @@ height: 100%;
 	                        </div>
 	                    </div>
 	                </div>
+	                </c:if>
                 </c:forEach>
             </div>
         </div>
@@ -333,58 +335,58 @@ height: 100%;
     
 
 
-    <!-- Event Start -->
-    <div class="event">
-        <div class="container">
-            <div class="section-header text-center">
-                <p>Upcoming Events</p>
-                <h2>令人興奮的活動</h2>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="event-item">
-                        <img src="img/event-1.jpg" alt="Image">
-                        <div class="event-content">
-                            <div class="event-meta">
-                                <p><i class="fa fa-calendar-alt"></i>01-Jan-45</p>
-                                <p><i class="far fa-clock"></i>8:00 - 10:00</p>
-                                <p><i class="fa fa-map-marker-alt"></i>New York</p>
-                            </div>
-                            <div class="event-text">
-                                <h3>Lorem ipsum dolor sit</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet elit. Neca pretim miura bitur facili ornare velit non
-                                    vulpte liqum metus tortor
-                                </p>
-                                <a class="btn btn-custom" href="">Join Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="event-item">
-                        <img src="img/event-2.jpg" alt="Image">
-                        <div class="event-content">
-                            <div class="event-meta">
-                                <p><i class="fa fa-calendar-alt"></i>01-Jan-45</p>
-                                <p><i class="far fa-clock"></i>8:00 - 10:00</p>
-                                <p><i class="fa fa-map-marker-alt"></i>New York</p>
-                            </div>
-                            <div class="event-text">
-                                <h3>Lorem ipsum dolor sit</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet elit. Neca pretim miura bitur facili ornare velit non
-                                    vulpte liqum metus tortor
-                                </p>
-                                <a class="btn btn-custom" href="">Join Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Event End -->
+<!--     Event Start -->
+<!--     <div class="event"> -->
+<!--         <div class="container"> -->
+<!--             <div class="section-header text-center"> -->
+<!--                 <p>Upcoming Events</p> -->
+<!--                 <h2>令人興奮的活動</h2> -->
+<!--             </div> -->
+<!--             <div class="row"> -->
+<!--                 <div class="col-lg-6"> -->
+<!--                     <div class="event-item"> -->
+<!--                         <img src="img/event-1.jpg" alt="Image"> -->
+<!--                         <div class="event-content"> -->
+<!--                             <div class="event-meta"> -->
+<!--                                 <p><i class="fa fa-calendar-alt"></i>01-Jan-45</p> -->
+<!--                                 <p><i class="far fa-clock"></i>8:00 - 10:00</p> -->
+<!--                                 <p><i class="fa fa-map-marker-alt"></i>New York</p> -->
+<!--                             </div> -->
+<!--                             <div class="event-text"> -->
+<!--                                 <h3>Lorem ipsum dolor sit</h3> -->
+<!--                                 <p> -->
+<!--                                     Lorem ipsum dolor sit amet elit. Neca pretim miura bitur facili ornare velit non -->
+<!--                                     vulpte liqum metus tortor -->
+<!--                                 </p> -->
+<!--                                 <a class="btn btn-custom" href="">Join Now</a> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                 </div> -->
+<!--                 <div class="col-lg-6"> -->
+<!--                     <div class="event-item"> -->
+<!--                         <img src="img/event-2.jpg" alt="Image"> -->
+<!--                         <div class="event-content"> -->
+<!--                             <div class="event-meta"> -->
+<!--                                 <p><i class="fa fa-calendar-alt"></i>01-Jan-45</p> -->
+<!--                                 <p><i class="far fa-clock"></i>8:00 - 10:00</p> -->
+<!--                                 <p><i class="fa fa-map-marker-alt"></i>New York</p> -->
+<!--                             </div> -->
+<!--                             <div class="event-text"> -->
+<!--                                 <h3>Lorem ipsum dolor sit</h3> -->
+<!--                                 <p> -->
+<!--                                     Lorem ipsum dolor sit amet elit. Neca pretim miura bitur facili ornare velit non -->
+<!--                                     vulpte liqum metus tortor -->
+<!--                                 </p> -->
+<!--                                 <a class="btn btn-custom" href="">Join Now</a> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                 </div> -->
+<!--             </div> -->
+<!--         </div> -->
+<!--     </div> -->
+<!--     Event End -->
 
 
     
@@ -404,29 +406,29 @@ height: 100%;
             </div>
             <div class="contact-form">
                 <div id="success"></div>
-                <form name="sentMessage" id="contactForm" novalidate="novalidate">
+                <form name="sentMessage" METHOD="post" ACTION="<%=request.getContextPath()%>/email/MailService">
                     <div class="control-group">
-                        <input type="text" class="form-control" id="name" placeholder="Your Name" required="required"
+                        <input type="text" class="form-control" name="name" placeholder="Your Name" required="required"
                             data-validation-required-message="Please enter your name" />
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="control-group">
-                        <input type="email" class="form-control" id="email" placeholder="Your Email" required="required"
+                        <input type="email" class="form-control" name="email" placeholder="Your Email" required="required"
                             data-validation-required-message="Please enter your email" />
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="control-group">
-                        <input type="text" class="form-control" id="subject" placeholder="Subject" required="required"
+                        <input type="text" class="form-control" name="subject" placeholder="Subject" required="required"
                             data-validation-required-message="Please enter a subject" />
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="control-group">
-                        <textarea class="form-control" id="message" placeholder="Message" required="required"
+                        <textarea class="form-control" name="message" placeholder="Message" required="required"
                             data-validation-required-message="Please enter your message"></textarea>
                         <p class="help-block text-danger"></p>
                     </div>
                     <div>
-                        <button class="btn btn-custom" type="submit" id="sendMessageButton">Send Message</button>
+                        <button class="btn btn-custom" type="submit">Send Message</button>
                     </div>
                 </form>
             </div>

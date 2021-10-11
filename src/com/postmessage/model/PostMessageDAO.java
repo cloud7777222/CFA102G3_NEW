@@ -6,10 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
 
 
 public class PostMessageDAO implements PostMessageDAO_interface{
@@ -20,7 +24,7 @@ public class PostMessageDAO implements PostMessageDAO_interface{
 			Context ctx;
 			try {
 				ctx = new javax.naming.InitialContext();
-				ds = (DataSource) ctx.lookup("java:comp/env/jdbc/belovedb");
+				ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
 			} catch (NamingException e) {
 				e.printStackTrace();
 			}
@@ -32,7 +36,8 @@ public class PostMessageDAO implements PostMessageDAO_interface{
 		public static final String DeletBy_mesNo_SQL = "delete from postmessage where mesNo = ?";
 		public static final String FindBy_mesNo_SQL = "select * from postmessage where mesNo = ?";
 		public static final String getAll_SQL = "select * from postmessage";
-
+		
+		
 	
 		//新增一則論壇文章留言
 	@Override
@@ -266,4 +271,6 @@ public class PostMessageDAO implements PostMessageDAO_interface{
 		return list;
 	}
 
+	
+	
 }

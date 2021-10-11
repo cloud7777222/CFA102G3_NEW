@@ -21,14 +21,15 @@ public class ChatDAO implements ChatDAO_interface{
 	public void insert(ChatVO chatVO) {
 		String keyA=new StringBuilder(chatVO.getMemberAccountA()).append(":").append(chatVO.getMemberAccountB()).toString();
 		String keyB=new StringBuilder(chatVO.getMemberAccountB()).append(":").append(chatVO.getMemberAccountA()).toString();
-		
 		String jsonStrA="";
 		String jsonStrB="";
 		Jedis jedis = pool.getResource();//拿連線
-		jsonStrA = new JSONObject(chatVO).toString();
-		jedis.rpush(keyA, jsonStrA);
 		jsonStrB = new JSONObject(chatVO).toString();
 		jedis.rpush(keyB, jsonStrB);
+		
+		chatVO.setChatSeen("已讀");//自己已讀
+		jsonStrA = new JSONObject(chatVO).toString();
+		jedis.rpush(keyA, jsonStrA);
 		jedis.close();
 	}
 
@@ -65,6 +66,8 @@ public class ChatDAO implements ChatDAO_interface{
 		Jedis jedis = pool.getResource();
 		List<String> list=jedis.lrange(key, 0, -1);
 		Gson gson=new Gson();
+		
+		
 		for(String obj:list) {
 			ChatVO chatVO=gson.fromJson(obj, ChatVO.class);
 			if(!chatVO.getChatSeen().equals("已讀")) {
@@ -98,8 +101,35 @@ public class ChatDAO implements ChatDAO_interface{
 		jedis.close();	
 	}
 
-
-
-
+	@Override
+	public String get_last_message(String memberAccountA, String memberAccountB) {
+		String key=new StringBuilder(memberAccountA).append(":").append(memberAccountB).toString();
+		Jedis jedis = pool.getResource();
+		Gson gson=new Gson();
+		ChatVO chatVO=new ChatVO();
+		chatVO.setMemberAccountA(memberAccountA);
+		chatVO.setMemberAccountB(memberAccountB);
+		chatVO.setType("");
+		chatVO.setChatTime("");
+		chatVO.setChatSeen("");
+		chatVO.setWhichOne("");
+		chatVO.setUnreadMessage("");
+		chatVO.setLastMessage("暫無聊天紀錄");
+		chatVO.setMessage("");
+		String lastChat=null;
+		if(jedis.lindex(key, -1)!=null) {
+			String lastMessage=jedis.lindex(key, -1);
+			ChatVO lastChatVO=gson.fromJson(lastMessage, ChatVO.class);
+			chatVO.setLastMessage(lastChatVO.getMessage());
+			lastChat=gson.toJson(chatVO);
+		}
+		else {
+			lastChat=gson.toJson(chatVO);
+		}
+		
+		
+		jedis.close();
+		return lastChat;
+	}
 
 }

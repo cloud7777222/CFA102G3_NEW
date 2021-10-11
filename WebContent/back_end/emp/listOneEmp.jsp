@@ -17,7 +17,7 @@
 <%@include file="/includes/head.jsp"%>
 </head>
 <body>
-<a href ="<%=request.getContextPath()%>/back_end/index.jsp"> 回首頁</a><br>
+
 <table class="table table-hover">
 
   <thead>

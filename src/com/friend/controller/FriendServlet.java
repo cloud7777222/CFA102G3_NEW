@@ -495,6 +495,33 @@ public class FriendServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
+		
+		if("back".equals(action)) {//updateMember的請求
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			
+			try {
+			/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
+				MemberService memberService=new MemberService();
+				String memberAccount=req.getParameter("memberAccountA");
+			/***************************2.檢查location及會員資料是否完整*****************************************/
+			MemberVO memberVO=new MemberVO();
+			memberVO=memberService.getOneMember(memberAccount);
+			
+			
+			/***************************3.登入完成,準備轉交(Send the Success view)*************/
+			req.getSession().setAttribute("memberVO", memberVO);
+			String url="/front_end/friend/browseMember.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneMember.jsp
+			successView.forward(req, res);
+			}
+			catch(Exception e) {
+				errorMsgs.add("失敗:"+e.getMessage());
+				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/member/logInMember.jsp");
+				failureView.forward(req, res);
+			}
+			}
+		
 	}//我是do get
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {

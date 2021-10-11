@@ -15,8 +15,15 @@ public class OrderVO implements java.io.Serializable{
 	 private String creditcardnum;
 	 private Integer paymentmeth;
 	 private Integer deliverymeth;
+	 private String cancelreason;
 	 
 	 
+	public String getCancelreason() {
+		return cancelreason;
+	}
+	public void setCancelreason(String cancelreason) {
+		this.cancelreason = cancelreason;
+	}
 	public Integer getOrderno() {
 		return orderno;
 	}

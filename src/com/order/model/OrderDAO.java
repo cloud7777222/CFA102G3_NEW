@@ -41,12 +41,21 @@ public class OrderDAO implements OrderDAO_interface{
 	private static final String CANCEL =
 			"update `order` set orderstate = ? where orderno = ? ";
 	private static final String UPDATE =
-			"update `order` set total =?,orderer=?,address=?,tel=?,paymentmeth=?,deliverymeth=? ";
+			"update `order` set orderer=?,address=?,tel=?,deliverymeth=? where (orderno = ?)";
 	private static final String GET_ONE_MNO =
 			"select * from `order`  where memberno=? order by orderno desc";
 	private static final String GET_LIST_BY_ONO =
 			"select * from orderlist where orderno=? order by orderno";
-	
+	private static final String UPDATE_ORDER_PRICE =
+			"update `order` set total = ? where (orderno = ?)";
+	private static final String GET_ORDER_STATE =
+			"select * from `order` where orderstate = ? order by orderno desc";
+	private static final String GET_ORDER_STATE_V =
+			"select * from `order` where orderstate = ? and memberno = ? order by orderno desc";
+	private static final String UPDATE_CANCEL_REASON =
+			"update `order` set cancelreason = ? where  orderno = ? ";
+	private static final String GET_ORDER_BY_MEMBERNO =
+			"select * from `order` where orderno = ? and memberno = ? ";
 	@Override
 	public void insert(OrderVO orderVO) {
 		Connection con = null;
@@ -145,7 +154,7 @@ public class OrderDAO implements OrderDAO_interface{
 	}
 
 	@Override
-	public void update(OrderVO orderVO) {
+	public void updateOrder(String orderer,String address,String tel,Integer deliverymeth,Integer orderno) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
@@ -153,12 +162,12 @@ public class OrderDAO implements OrderDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 			
-			pstmt.setInt(1, orderVO.getTotal());
-			pstmt.setString(2, orderVO.getOrderer());
-			pstmt.setString(3, orderVO.getAddress());
-			pstmt.setString(4, orderVO.getTel());
-			pstmt.setInt(5, orderVO.getPaymentmeth());
-			pstmt.setInt(6, orderVO.getDeliverymeth());
+		
+			pstmt.setString(1, orderer);
+			pstmt.setString(2, address);
+			pstmt.setString(3, tel);
+			pstmt.setInt(4, deliverymeth);
+			pstmt.setInt(5,orderno);
 
 			pstmt.executeUpdate();
 		} catch (SQLException se) {
@@ -185,7 +194,7 @@ public class OrderDAO implements OrderDAO_interface{
 	}
 
 	@Override
-	public void cancel(Integer orderno) {
+	public void cancel(Integer orderno,Integer orderstate) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
@@ -193,7 +202,7 @@ public class OrderDAO implements OrderDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(CANCEL);
 			
-			pstmt.setInt(1, 2);
+			pstmt.setInt(1, orderstate);
 			pstmt.setInt(2, orderno);
 			
 			pstmt.executeUpdate();
@@ -404,8 +413,8 @@ public class OrderDAO implements OrderDAO_interface{
 	}
 
 	@Override
-	public Set<OrderlistVO> getListbyono(Integer orderno) {
-		Set<OrderlistVO> set = new LinkedHashSet<OrderlistVO>();
+	public List<OrderlistVO> getListbyono(Integer orderno) {
+		List<OrderlistVO> set = new ArrayList<OrderlistVO>();
 		OrderlistVO OrderlistVO = null;
 		
 		Connection con = null;
@@ -535,11 +544,263 @@ public class OrderDAO implements OrderDAO_interface{
 		}
 	}
 
-	
+	@Override
+	public void updatePrice(Integer total, Integer orderno) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
 
-	
-	
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_ORDER_PRICE);
+			
+			pstmt.setInt(1, total);
+			pstmt.setInt(2, orderno);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured."
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
+	}
 
+	@Override
+	public List<OrderVO> getOrderState(Integer orderstate) {
+		
+		List<OrderVO> list = new ArrayList<OrderVO>();
+		OrderVO  orderVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ORDER_STATE);
+			pstmt.setInt(1, orderstate);
+			
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				
+				orderVO = new OrderVO();
+				orderVO.setOrderno(rs.getInt("orderno"));
+				orderVO.setMemberno(rs.getInt("memberno"));
+				orderVO.setOrderstate(rs.getInt("orderstate"));
+				orderVO.setTotal(rs.getInt("total"));
+				orderVO.setOrderer(rs.getString("orderer"));
+				orderVO.setAddress(rs.getString("address"));
+				orderVO.setTel(rs.getString("tel"));
+				orderVO.setOrderdate(rs.getDate("orderdate"));
+				orderVO.setCreditcardnum(rs.getString("creditcardnum"));
+				orderVO.setPaymentmeth(rs.getInt("paymentmeth"));
+				orderVO.setDeliverymeth(rs.getInt("deliverymeth"));
+				orderVO.setCancelreason(rs.getString("cancelreason"));
+				list.add(orderVO);
+			}
+	
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<OrderVO> getOrderStateV(Integer orderstate, Integer memberno) {
+		List<OrderVO> list = new ArrayList<OrderVO>();
+		OrderVO  orderVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ORDER_STATE_V);
+			pstmt.setInt(1, orderstate);
+			pstmt.setInt(2, memberno);
+			
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				
+				orderVO = new OrderVO();
+				orderVO.setOrderno(rs.getInt("orderno"));
+				orderVO.setMemberno(rs.getInt("memberno"));
+				orderVO.setOrderstate(rs.getInt("orderstate"));
+				orderVO.setTotal(rs.getInt("total"));
+				orderVO.setOrderer(rs.getString("orderer"));
+				orderVO.setAddress(rs.getString("address"));
+				orderVO.setTel(rs.getString("tel"));
+				orderVO.setOrderdate(rs.getDate("orderdate"));
+				orderVO.setCreditcardnum(rs.getString("creditcardnum"));
+				orderVO.setPaymentmeth(rs.getInt("paymentmeth"));
+				orderVO.setDeliverymeth(rs.getInt("deliverymeth"));
+				list.add(orderVO);
+			}
+	
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public void cancelreason(Integer orderno,String cancelreason) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_CANCEL_REASON);
+			
+		
+			pstmt.setString(1,cancelreason);
+			pstmt.setInt(2, orderno);
+		
+			pstmt.executeUpdate();
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured."
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
+	}
+
+	@Override
+	public OrderVO findOrderByMemberno(Integer orderno, Integer memberno) {
+		
+		OrderVO  orderVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ORDER_BY_MEMBERNO);
+			pstmt.setInt(1, orderno);
+			pstmt.setInt(2, memberno);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				orderVO = new OrderVO();
+				orderVO.setOrderno(rs.getInt("orderno"));
+				orderVO.setMemberno(rs.getInt("memberno"));
+				orderVO.setOrderstate(rs.getInt("orderstate"));
+				orderVO.setTotal(rs.getInt("total"));
+				orderVO.setOrderer(rs.getString("orderer"));
+				orderVO.setAddress(rs.getString("address"));
+				orderVO.setTel(rs.getString("tel"));
+				orderVO.setOrderdate(rs.getDate("orderdate"));
+				orderVO.setCreditcardnum(rs.getString("creditcardnum"));
+				orderVO.setPaymentmeth(rs.getInt("paymentmeth"));
+				orderVO.setDeliverymeth(rs.getInt("deliverymeth"));
+			}
+	
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return orderVO;
+	 }
+  
 
 }
 	

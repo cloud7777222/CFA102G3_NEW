@@ -3,21 +3,31 @@ package com.prod.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
+import java.util.stream.Collectors;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.prod.model.ProdService;
 import com.prod.model.ProdVO;
-import com.prodsort.model.ProdsortService;
+
+
+
+
 @WebServlet("/prod/prod.do")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024 * 1024)
 public class ProdServlet extends HttpServlet {
@@ -447,9 +457,89 @@ public class ProdServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
+		if("ListByPriceRange".equals(action)) {
+			
+			
+			Integer minprice = new Integer(req.getParameter("minprice"));
+			Integer maxprice = new Integer(req.getParameter("maxprice"));
+			
+			ProdService prodSvc = new ProdService();
+			List<ProdVO> List = prodSvc.getProdByPriceRange(minprice, maxprice);
+			
+			req.setAttribute("listBySort",List);
+			
+			String url = "/front_end/prod/Shop.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url); 
+			successView.forward(req, res);
+		}
+		if("SortByPrice".equals(action)) {
+			String requestURL = req.getParameter("requestURL");
+			Integer sortbyprice = new Integer(req.getParameter("pricesort"));
+			HttpSession session = req.getSession();
+			@SuppressWarnings("unchecked")
+			List<ProdVO> list = (List<ProdVO>)session.getAttribute("listBySort");
+			
+			List<ProdVO> newlist = new ArrayList<>();
+			if(sortbyprice == 1) {
+				newlist = list.stream()
+						  	  .sorted(Comparator.comparing(ProdVO::getPrice))
+						      .collect(Collectors.toList());
+			
+				req.setAttribute("listBySort",newlist);
+				String url = requestURL;
+				RequestDispatcher successView = req.getRequestDispatcher(url);
+				successView.forward(req, res);
+			}else if(sortbyprice == 0) {
+				String url ="/front_end/prod/Shop.jsp";
+				res.sendRedirect(req.getContextPath()+url);
+			}else if(sortbyprice == 2) {
+				newlist = list.stream()
+						      .sorted(Comparator.comparing(ProdVO::getPrice).reversed())
+						      .collect(Collectors.toList());
+				req.setAttribute("listBySort",newlist);
+				
+				String url = requestURL;
+				RequestDispatcher successView = req.getRequestDispatcher(url);
+				successView.forward(req, res);
+			}
+		}
+		HttpSession session = req.getSession();
+		@SuppressWarnings("unchecked")
+		LinkedList<ProdVO> list = (LinkedList<ProdVO>)session.getAttribute("history");
 		
-		
+		if("gethistory".equals(action)) {
+			Integer prodno = new Integer(req.getParameter("prodno"));
+			ProdService prodSvc = new ProdService();
+			ProdVO prodVO = prodSvc.getProdDetail(prodno);
+			System.out.println(prodno);
+			if(list == null) {
+				list = new LinkedList<ProdVO>();
+				list.add(prodVO);
+			}else if(list.contains(prodVO)) {
+				list.remove(prodVO);
+				list.addFirst(prodVO);
+			}else if(list.size() == 5) {
+				list.removeLast();
+				list.addFirst(prodVO);
+			}else {
+				list.add(prodVO);
+			}
+			for(ProdVO prodVO1:list) {
+				System.out.println(prodVO1.getProdname());
+			}
+			session.setAttribute("history", list);
+		}
+		if("clearhistory".equals(action)) {
+			if(list != null) {
+				list.clear();
+			}
+			String url = "/front_end/prod/Cart.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url); 
+			successView.forward(req, res);
+		}
 }
+
+
 public String getFileNameFromPart(Part part){
 		String header = part.getHeader("content-disposition");
 		String filename = new File(header.substring(header.lastIndexOf("=")+2,header.length()-1)).getName();

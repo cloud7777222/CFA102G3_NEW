@@ -118,35 +118,17 @@ CONSTRAINT CK_MEMBER_MEMBERPOINT CHECK (memberPoINT>=0)
 )COMMENT '會員';
 
 INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'cloud0204','cloud0204',null,'cloud',1,now(),'台灣黑熊',1,'1234567890','cloud7777222@yahoo.com.tw','我是帥哥',default,default);
+VALUES(NULL,'dog123','dog123',null,'dog',1,now(),'學生',1,'1234567890','dog123@gmail.com','我是帥哥',default,default);
+
+
 INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abee','abe',null,'ABE',1,now(),'學生',1,'1234567890','abee@gmail.com','我是帥哥',default,default);
+VALUES(NULL,'cat123','cat123',null,'cat',1,now(),'學生',1,'1234567890','cat123@gmail.com','我是帥哥',default,default);
+
 INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abeee','abe',null,'ABE',1,now(),'學生',1,'1234567890','abeee@gmail.com','我是帥哥',default,default);
+VALUES(NULL,'owl123','owl123',null,'owl',1,now(),'學生',1,'1234567890','owl123@gmail.com','我是帥哥',default,default);
+
 INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abeeee','abe',null,'ABE',1,now(),'學生',1,'1234567890','abeeee@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abeeeee','abe',null,'ABE',1,now(),'學生',1,'1234567890','abeeeee@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abe1','abe',null,'ABE',1,now(),'學生',1,'1234567890','a4be@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abe4e@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abeee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abe4ee@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abeeee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abe4eee@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abeeeee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abee4eee@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'ab2e1','abe',null,'ABE',1,now(),'學生',1,'1234567890','a42be@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abe2e1','abe',null,'ABE',1,now(),'學生',1,'1234567890','ab2e4e@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abe2ee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','ab2e4ee@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abe2eee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','ab2e4eee@gmail.com','我是帥哥',default,default);
-INSERT INTO MEMBER(memberNo,memberAccount,memberPassword,memberPhoto,memberName,memberGender,memberBirthday,memberJob,memberCountry,memberPhone,memberEmail,memberIntroduce,memberPoint,memberBlackList)
-VALUES(NULL,'abe2eeee1','abe',null,'ABE',1,now(),'學生',1,'1234567890','abe2e4eee@gmail.com','我是帥哥',default,default);
+VALUES(NULL,'deer123','deer123',null,'deer',1,now(),'學生',1,'1234567890','deer123@gmail.com','我是帥哥',default,default);
 
 #======================================分隔線==================================================
 CREATE TABLE `FRIEND`(
@@ -163,8 +145,6 @@ ON UPDATE CASCADE
 ON DELETE CASCADE
 )COMMENT '好友';
 
-INSERT INTO FRIEND(memberNoA,memberNoB,friendRequest,friendStatus)
-VALUES(1,2,1,1);
 
 #======================================分隔線==================================================
 CREATE TABLE CHAT(
@@ -186,8 +166,6 @@ ON UPDATE CASCADE
 ON DELETE CASCADE
 )COMMENT'聊天紀錄';
 
-INSERT INTO CHAT(chatNo,memberNoA,memberNoB,chatTime,chatSender,chatSeen,chatText,chatPhoto,chatSticker)
-VALUES(NULL,1,2,DEFAULT,1,DEFAULT,NULL,NULL,NULL);
 
 #======================================分隔線==================================================
 CREATE TABLE EXPERTGENRE(
@@ -561,7 +539,8 @@ tel char(10) not null comment"收件電話",
 orderDate datetime comment"訂單成立時間",
 creditcardNum char(16) comment"信用卡號",
 paymentmeth tinyint(1) comment"付款方式",
-deliverymeth tinyint(1) comment"交貨方式"
+deliverymeth tinyint(1) comment"交貨方式",
+cancelreason varchar(255) comment"退貨原因"
 )comment = "訂單";
 
 insert into `ORDER`(memberNo,orderstate,total,orderer,address,tel,orderDate,creditcardNum,paymentmeth,deliverymeth)

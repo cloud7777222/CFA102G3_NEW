@@ -6,9 +6,11 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<title>Insert title here</title>
+<title>會員查詢</title>
+<%@ include file="/back_end/header.jsp"%>
 </head>
 <body>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <c:if test="${not empty errorMsgs}">
 	<font style="color:red">請修正以下錯誤:</font>
 	<ul>
@@ -17,11 +19,31 @@
 		</c:forEach>
 	</ul>
 </c:if>
-	<a href='listAllMember.jsp'>查詢全部會員</a>
-	<form action="<%=request.getContextPath()%>/member/member" method="post">
-				<input type="text" id="MemberAccount" name="memberAccount" placeholder="帳號" minlength="6" maxlength="10"><br>
-                <input type="hidden" name="action" value="getOne_For_Display">
-                <input type="submit" value="送出"></FORM>
-    </form>
+    
+ 
+    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/member/member" name="form1">
+       <b><font color=blue>萬用複合查詢:</font></b> <br>
+       
+       <b>會員編號</b>
+       <input type="text" name="memberNo"><br>
+           
+       <b>會員帳號</b>
+       <input type="text" name="memberAccount"><br>
+       
+       <b>會員姓名</b>
+       <input type="text" name="memberName"><br>	
+       
+       <b>會員信箱</b>
+       <input type="text" name="memberEmail"><br>
+       
+       <b>會員電話</b>
+       <input type="text" name="memberPhone"><br>
+    
+        <input type="submit" value="送出">
+        <input type="hidden" name="action" value="listMember_ByCompositeQuery">
+     </FORM>
+  <%@ include file="/back_end/footer.jsp"%>
 </body>
 </html>
+
+

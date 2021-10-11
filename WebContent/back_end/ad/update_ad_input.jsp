@@ -92,7 +92,7 @@ input, textarea, button {
 	<div id="wrapper">
 
 		<!-- Sidebar -->
-		<jsp:include page="../sidebar.jsp" flush="true" />
+		
 		<!-- End of Sidebar -->
 
 		<!-- Content Wrapper -->
@@ -102,7 +102,7 @@ input, textarea, button {
 			<div id="content">
 
 				<!-- Topbar -->
-				<jsp:include page="/back_end/topbar.jsp" flush="true" />
+			
 				<!-- End of Topbar -->
 
 				<!-- Begin Page Content -->

@@ -11,6 +11,7 @@ public class ChatVO {
 	private String chatSeen;
 	private String whichOne;
 	private String unreadMessage;
+	private String lastMessage;
 	private String message;
 	
 	public String getMemberAccountA() {
@@ -55,6 +56,12 @@ public class ChatVO {
 	public void setUnreadMessage(String unreadMessage) {
 		this.unreadMessage = unreadMessage;
 	}
+	public String getLastMessage() {
+		return lastMessage;
+	}
+	public void setLastMessage(String lastMessage) {
+		this.lastMessage = lastMessage;
+	}
 	public String getMessage() {
 		return message;
 	}
@@ -66,6 +73,7 @@ public class ChatVO {
 	public String toString() {
 		return "ChatVO [memberAccountA=" + memberAccountA + ", memberAccountB=" + memberAccountB + ", type=" + type
 				+ ", chatTime=" + chatTime + ", chatSeen=" + chatSeen + ", whichOne=" + whichOne + ", unreadMessage="
-				+ unreadMessage + ", message=" + message + "]";
+				+ unreadMessage + ", lastMessage=" + lastMessage + ", message=" + message + "]";
 	}
+	
 }

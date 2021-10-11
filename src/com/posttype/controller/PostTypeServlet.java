@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.post.model.PostVO;
 import com.posttype.model.PostTypeService;
 import com.posttype.model.PostTypeVO;
 
@@ -25,252 +28,288 @@ public class PostTypeServlet extends HttpServlet {
 
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
+		
+		
+		//[ æ“‡ä¸€æŸ¥å¤š(è©³ç´°ç‰ˆ) ]
+	    // ä¾†è‡ªselect_page.jspçš„è«‹æ±‚                                  // ä¾†è‡ª postType/listAllPostType.jspçš„è«‹æ±‚                  // ä¾†è‡ª front_end/post/post_main.jspçš„è«‹æ±‚
+		if ("listPostsBy_PostTypeNo_A".equals(action) || "listPostsBy_PostTypeNo_B".equals(action) || "listPostsBy_PostTypeNo_C".equals(action)) {
 
-		// [ ¨Ó¦Ûselect_page.jspªº"¾Ü¤@postTypeNO ¬İ¤å³¹Ãş§O"ªº½Ğ¨D ]
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+
+//			try {
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+				Integer postTypeNo = new Integer(req.getParameter("postTypeNo"));
+
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
+				PostTypeService postTypeSvc = new PostTypeService();
+				Set<PostVO> set = postTypeSvc.getPostsByPostTypeNo(postTypeNo);
+
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ************/
+				req.setAttribute("listPostsBy_PostTypeNo", set);    // è³‡æ–™åº«å–å‡ºçš„listç‰©ä»¶,å­˜å…¥request
+
+				String url = null;
+				if ("listPostsBy_PostTypeNo_A".equals(action))
+					url = "/back_end/postType/listPostsBy_PostTypeNo.jsp";        // æˆåŠŸè½‰äº¤ back_end/postType/listPostsBy_PostTypeNo.jsp
+				else if ("listPostsBy_PostTypeNo_B".equals(action))
+					url = "/back_end/postType/listAllPostType.jsp";              // æˆåŠŸè½‰äº¤ back_end/postType/listAllPostType.jsp
+				else if ("listPostsBy_PostTypeNo_C".equals(action))
+					url = "/front_end/post/postContent_differentTypeNo.jsp";	 // æˆåŠŸè½‰äº¤ front_end/postType/postContent_differentTypeNo.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url);
+				successView.forward(req, res);
+
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† ***********************************/
+//			} catch (Exception e) {
+//				throw new ServletException(e);
+//			}
+		}
+		
+		
+
+		// [ ä¾†è‡ªselect_page.jspçš„"æ“‡ä¸€postTypeNO çœ‹æ–‡ç« é¡åˆ¥"çš„è«‹æ±‚ (ç°¡æ˜“ç‰ˆ)]
 		if ("getOne_For_Display".equals(action)) {
 
-			List<String> errorMsgs = new LinkedList<String>(); // »`¶°¿ù»~µ¹jsp§e²{
+			List<String> errorMsgs = new LinkedList<String>(); // è’é›†éŒ¯èª¤çµ¦jspå‘ˆç¾
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ - ¿é¤J®æ¦¡ªº¿ù»~³B²z **********************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ - è¼¸å…¥æ ¼å¼çš„éŒ¯èª¤è™•ç† **********************/
 				String str = req.getParameter("postTypeNo");
 				if (str == null || (str.trim()).length() == 0) {
-					errorMsgs.add("½Ğ¿é¤J¤å³¹½s¸¹");
+					errorMsgs.add("è«‹è¼¸å…¥æ–‡ç« ç·¨è™Ÿ");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
 				Integer postTypeNo = null;
 				try {
-					postTypeNo = new Integer(str); // µ¹³W©w¤å³¹½s¸¹¥u¦³¼Æ¦r
+					postTypeNo = new Integer(str); // çµ¦è¦å®šæ–‡ç« ç·¨è™Ÿåªæœ‰æ•¸å­—
 				} catch (Exception e) {
-					errorMsgs.add("¤å³¹½s¸¹®æ¦¡¤£¥¿½T");
+					errorMsgs.add("æ–‡ç« ç·¨è™Ÿæ ¼å¼ä¸æ­£ç¢º");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ *****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ *****************************************/
 				PostTypeService postTypeSvc = new PostTypeService();
 				PostTypeVO postTypeVO = postTypeSvc.getOnePostType(postTypeNo);
 				if (postTypeNo == null) {
-					errorMsgs.add("¬dµL¸ê®Æ");
+					errorMsgs.add("æŸ¥ç„¡è³‡æ–™");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) *************/
-				req.setAttribute("postTypeVO", postTypeVO); // ¸ê®Æ®w¨ú¥XªºpostVOª«¥ó,¦s¤Jreq
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) *************/
+				req.setAttribute("postTypeVO", postTypeVO); // è³‡æ–™åº«å–å‡ºçš„postVOç‰©ä»¶,å­˜å…¥req
 				String url = "/back_end/postType/listOnePostType.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ¦¨¥\®Éµe­±forwardÂà¥æµ¹ listOnePost.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url); // æˆåŠŸæ™‚ç•«é¢forwardè½‰äº¤çµ¦ listOnePost.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("µLªk¨ú±o¸ê®Æ:" + e.getMessage());
+				errorMsgs.add("ç„¡æ³•å–å¾—è³‡æ–™:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/select_page.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦ÛaddPostType.jspªº"·s¼W"½Ğ¨D ]
+		// [ ä¾†è‡ªaddPostType.jspçš„"æ–°å¢"è«‹æ±‚ ]
 		if ("insert".equals(action)) {
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 			
 			try {
-				/*********************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ - ¿é¤J®æ¦¡ªº¿ù»~³B²z *************************/
-				/* ¤å³¹Ãş§O½s¸¹ */
+				/*********************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ - è¼¸å…¥æ ¼å¼çš„éŒ¯èª¤è™•ç† *************************/
+				/* æ–‡ç« é¡åˆ¥ */
 				String postType = req.getParameter("postType");
 				if (postType == null || (postType.trim()).length() == 0) {
-					errorMsgs.add("½Ğ¿é¤J¤å³¹Ãş§O");
+					errorMsgs.add("è«‹è¼¸å…¥æ–‡ç« é¡åˆ¥");
 				}
-				/* ==================«Øºc===================== */
+				/* ==================å»ºæ§‹===================== */
 				PostTypeVO postTypeVO = new PostTypeVO();
 				postTypeVO.setPostType(postType);
 
 				if (!errorMsgs.isEmpty()) {
-					req.setAttribute("postTypeVO", postTypeVO); // §t¦³¿é¤J®æ¦¡¿ù»~ªºpostTypeVOª«¥ó,¤]¦s¤Jreq, Åı¨Ï¥ÎªÌ¤£¥²­«¶ñ¤@¨Ç¸ê°T
+					req.setAttribute("postTypeVO", postTypeVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„postTypeVOç‰©ä»¶,ä¹Ÿå­˜å…¥req, è®“ä½¿ç”¨è€…ä¸å¿…é‡å¡«ä¸€äº›è³‡è¨Š
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/addPostType.jsp");
 					failureView.forward(req, res);
 					return;
 				}
-				/*************************** 2.¶}©l·s¼W¸ê®Æ ***************************************/
+				/*************************** 2.é–‹å§‹æ–°å¢è³‡æ–™ ***************************************/
 				PostTypeService postTypeSvc = new PostTypeService();
 				postTypeVO = postTypeSvc.addPostType(postType);
 
-				/*************************** 3.·s¼W§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
+				/*************************** 3.æ–°å¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
 				req.setAttribute("postTypeVO", postTypeVO);
 				String url = "/back_end/postType/listAllPostType.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ·s¼W¦¨¥\«áÂà¥æ¦ÜlistAllPostType.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url); // æ–°å¢æˆåŠŸå¾Œè½‰äº¤è‡³listAllPostType.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("¤å³¹Ãş§O·s¼W¥¢±Ñ:" + e.getMessage());
+				errorMsgs.add("æ–‡ç« é¡åˆ¥æ–°å¢å¤±æ•—:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/addPostType.jsp");
 				failureView.forward(req, res);
-				return;// µ{¦¡¤¤Â_
+				return;// ç¨‹å¼ä¸­æ–·
 			}
 		}
 
-		// [ ¨Ó¦ÛlistAllPostType.jsp ªº"§R°£"½Ğ¨D]
+		// [ ä¾†è‡ªlistAllPostType.jsp çš„"åˆªé™¤"è«‹æ±‚]
 		if ("delete".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
-			String requestURL = req.getParameter("requestURL"); // °e¥X§R°£ªº¨Ó·½ºô­¶¸ô®|
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºåˆªé™¤çš„ä¾†æºç¶²é è·¯å¾‘
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ***************************************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ***************************************/
 				Integer postTypeNo = new Integer(req.getParameter("postTypeNo"));
 
-				/*************************** 2.¶}©l§R°£¸ê®Æ ***************************************/
+				/*************************** 2.é–‹å§‹åˆªé™¤è³‡æ–™ ***************************************/
 				PostTypeService postTypeSvc = new PostTypeService();
 				postTypeSvc.deletePostType(postTypeNo);
 
-				/*************************** 3.§R°£§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
+				/*************************** 3.åˆªé™¤å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
 				String url = requestURL;
-				RequestDispatcher successView = req.getRequestDispatcher(url);// §R°£¦¨¥\«á,Âà¥æ¦^listAllPostType.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url);// åˆªé™¤æˆåŠŸå¾Œ,è½‰äº¤å›listAllPostType.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
-				errorMsgs.add("§R°£¸ê®Æ¥¢±Ñ:" + e.getMessage());
+				errorMsgs.add("åˆªé™¤è³‡æ–™å¤±æ•—:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/listAllPostType.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦ÛlistAllPostType.jsp "³æµ§¤å³¹ÀËµø"ªº½Ğ¨D ]
-		if ("getOne_For_Update".equals(action)) {
+		// [ ä¾†è‡ªlistAllPostType.jsp "å–®ç­†æ–‡ç« æª¢è¦–"çš„è«‹æ±‚ ]
+		if ("getOne_For_Update".equals(action) || "getOne_For_Update_front".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ****************************************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
 				Integer postTypeNo = new Integer(req.getParameter("postTypeNo"));
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ ****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
 				PostTypeService postTypeSvc = new PostTypeService();
 				PostTypeVO postTypeVO = postTypeSvc.getOnePostType(postTypeNo);
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ************/
-				req.setAttribute("postTypeVO", postTypeVO); // ¸ê®Æ®w¨ú¥XªºpostTypeVOª«¥ó,¦s¤Jreq
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ************/
+				req.setAttribute("postTypeVO", postTypeVO); // è³‡æ–™åº«å–å‡ºçš„postTypeVOç‰©ä»¶,å­˜å…¥req
 				String url = "/back_end/postType/update_PostType_input.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url);// ¦¨¥\Âà¥æ update_PostType_input.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url);// æˆåŠŸè½‰äº¤ update_PostType_input.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
-				errorMsgs.add("µLªk¨ú±o­n­×§ïªº¸ê®Æ:" + e.getMessage());
+				errorMsgs.add("ç„¡æ³•å–å¾—è¦ä¿®æ”¹çš„è³‡æ–™:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/listAllPostType.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦Ûupdate_PostType_input.jspªº"­×¥¿"½Ğ¨D ]
+		// [ ä¾†è‡ªupdate_PostType_input.jspçš„"ä¿®æ­£"è«‹æ±‚ ]
 		if ("update".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
-			String requestURL = req.getParameter("requestURL"); // °e¥X­×§ïªº¨Ó·½ºô­¶
-			String whichPage = req.getParameter("whichPage"); // °e¥X­×§ïªº¨Ó·½ºô­¶ªº²Ä´X­¶
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é 
+			String whichPage = req.getParameter("whichPage"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é 
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ****************************************/
-				/* ¤å³¹½s¸¹ */
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+				/* æ–‡ç« ç·¨è™Ÿ */
 				Integer postTypeNo = new Integer(req.getParameter("postTypeNo"));
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ ****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
 				PostTypeService postTypeSvc = new PostTypeService();
 
-				/**************************** 3.Åª¨úclientºİ°e¹L¨Óªº¸ê®Æ ******************************/
+				/**************************** 3.è®€å–clientç«¯é€éä¾†çš„è³‡æ–™ ******************************/
 
-				/* ¤å³¹Ãş§O */
-				String postType = req.getParameter("postType"); // ¤å³¹Ãş§O­Y¨S­×§ï´N·ÓÂÂ
-				if (postType == null) {
+				/* æ–‡ç« é¡åˆ¥ */
+				String postType = req.getParameter("postType"); // æ–‡ç« é¡åˆ¥è‹¥æ²’ä¿®æ”¹å°±ç…§èˆŠ
+				if (postType == null || (postType.trim()).length() == 0) {
 					postType = postTypeSvc.getOnePostType(postTypeNo).getPostType();
-				}
-				
-				/* ==================«Øºc===================== */
+				}				
+				/* ==================å»ºæ§‹===================== */
 				PostTypeVO postTypeVO = new PostTypeVO();
 				postTypeVO.setPostTypeNo(postTypeNo);
 				postTypeVO.setPostType(postType);
 
 				if (!errorMsgs.isEmpty()) {
-					req.setAttribute("postTypeVO", postTypeVO); // §t¦³¿é¤J®æ¦¡¿ù»~ªºpostTypeVOª«¥ó,¤]¦s¤Jreq
+					req.setAttribute("postTypeVO", postTypeVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„postTypeVOç‰©ä»¶,ä¹Ÿå­˜å…¥req
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/update_PostType_input.jsp");
 					failureView.forward(req, res);
 					return;
 				}
 
-				/*************************** 4.¶}©l·s¼W¸ê®Æ ***************************************/
+				/*************************** 4.é–‹å§‹æ–°å¢è³‡æ–™ ***************************************/
 				PostTypeService postTypeSVC = new PostTypeService();
 				postTypeVO = postTypeSVC.updatePostType(postTypeNo, postType);
 
-				/*************************** 5.·s¼W§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
-				req.setAttribute("postTypeVO", postTypeVO); // ¸ê®Æ®wupdate¦¨¥\«á,¥¿½TªºªºpostTypeVOª«¥ó,¦s¤Jreq
-				String url = requestURL + "?whichPage=" + whichPage + "&postTypeNo=" + postTypeNo; // °e¥X­×§ïªº¨Ó·½ºô­¶ªº²Ä´X­¶(¥u¥Î©ó:listAllPostType.jsp)©M­×§ïªº¬O­ş¤@µ§
+				/*************************** 5.æ–°å¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
+				req.setAttribute("postTypeVO", postTypeVO); // è³‡æ–™åº«updateæˆåŠŸå¾Œ,æ­£ç¢ºçš„çš„postTypeVOç‰©ä»¶,å­˜å…¥req
+				String url = requestURL + "?whichPage=" + whichPage + "&postTypeNo=" + postTypeNo; // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é (åªç”¨æ–¼:listAllPostType.jsp)å’Œä¿®æ”¹çš„æ˜¯å“ªä¸€ç­†
 				System.out.println("url=" + url);
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ·s¼W¦¨¥\«áÂà¥æ¦ÜlistAllPostType.jsp Åã¥Ü
+				RequestDispatcher successView = req.getRequestDispatcher(url); // æ–°å¢æˆåŠŸå¾Œè½‰äº¤è‡³listAllPostType.jsp é¡¯ç¤º
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("¸ê®Æ­×§ï¥¢±Ñ:" + e.getMessage());
+				errorMsgs.add("è³‡æ–™ä¿®æ”¹å¤±æ•—:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postType/update_PostType_input.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦Ûselect_page.jspªº"½Æ¦X¬d¸ß"½Ğ¨D ]
+		// [ ä¾†è‡ªselect_page.jspçš„"è¤‡åˆæŸ¥è©¢"è«‹æ±‚ ]
 		if ("listEmps_ByCompositeQuery".equals(action)) {
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			try {
 
-				/*************************** 1.±N¿é¤J¸ê®ÆÂà¬°Map **********************************/
-				// ±Ä¥ÎMap<String,String[]> getParameterMap()ªº¤èªk
-				// ª`·N:an immutable java.util.Map ! ¦Ó¥B¤£¯à¦s¶isession scope!
+				/*************************** 1.å°‡è¼¸å…¥è³‡æ–™è½‰ç‚ºMap **********************************/
+				// æ¡ç”¨Map<String,String[]> getParameterMap()çš„æ–¹æ³•
+				// æ³¨æ„:an immutable java.util.Map ! è€Œä¸”ä¸èƒ½å­˜é€²session scope!
 				// Map<String, String[]> map = req.getParameterMap();
 				HttpSession session = req.getSession();
 				Map<String, String[]> map = (Map<String, String[]>) session.getAttribute("map");
 
-				// ¥H¤Uªº if °Ï¶ô¥u¹ï²Ä¤@¦¸°õ¦æ®É¦³®Ä
+				// ä»¥ä¸‹çš„ if å€å¡Šåªå°ç¬¬ä¸€æ¬¡åŸ·è¡Œæ™‚æœ‰æ•ˆ
 				if (req.getParameter("whichPage") == null) {
 					Map<String, String[]> map1 = new HashMap<String, String[]>(req.getParameterMap());
-					// map¬Oimmutable! ©Ò¥H³o¸Ìnew ¤@­ÓHashMap ¬~±¼³o­Ó¯S©Ê!
-					// ¤£µM¤U­±ªºsession.setAttribute("map",map1)·|¥¢®Ä, ÅÜ¦¨¬d¥ş³¡!
+					// mapæ˜¯immutable! æ‰€ä»¥é€™è£¡new ä¸€å€‹HashMap æ´—æ‰é€™å€‹ç‰¹æ€§!
+					// ä¸ç„¶ä¸‹é¢çš„session.setAttribute("map",map1)æœƒå¤±æ•ˆ, è®ŠæˆæŸ¥å…¨éƒ¨!
 					session.setAttribute("map", map1);
 					map = map1;
 				}
 
-				/*************************** 2.¶}©l½Æ¦X¬d¸ß ***************************************/
+				/*************************** 2.é–‹å§‹è¤‡åˆæŸ¥è©¢ ***************************************/
 				PostTypeService postTypeSvc = new PostTypeService();
 				List<PostTypeVO> list = postTypeSvc.getAll(map);
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ************/
-				req.setAttribute("listEmps_ByCompositeQuery", list); // ¸ê®Æ®w¨ú¥Xªºlistª«¥ó,¦s¤Jrequest
-				RequestDispatcher successView = req.getRequestDispatcher("/emp/listEmps_ByCompositeQuery.jsp"); // ¦¨¥\Âà¥ælistEmps_ByCompositeQuery.jsp
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ************/
+				req.setAttribute("listEmps_ByCompositeQuery", list); // è³‡æ–™åº«å–å‡ºçš„listç‰©ä»¶,å­˜å…¥request
+				RequestDispatcher successView = req.getRequestDispatcher("/emp/listEmps_ByCompositeQuery.jsp"); // æˆåŠŸè½‰äº¤listEmps_ByCompositeQuery.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/select_page.jsp");

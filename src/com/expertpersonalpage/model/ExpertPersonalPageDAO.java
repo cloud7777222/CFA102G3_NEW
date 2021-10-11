@@ -12,29 +12,29 @@ import javax.sql.DataSource;
 
 import com.mempersonalpage.model.MemPersonalPageVO;
 
-//¹ê§@DAO¤¶­± : override©â¶H¤èªk, ¹ê§@"·s¼W­×¬d"¤èªk 
+//ï¿½ï¿½@DAOï¿½ï¿½ï¿½ï¿½ : overrideï¿½ï¿½Hï¿½ï¿½k, ï¿½ï¿½@"ï¿½sï¿½Wï¿½×¬d"ï¿½ï¿½k 
 
 public class ExpertPersonalPageDAO implements ExpertPersonalPageDAO_interface {
 
-	// ¤@­ÓÀ³¥Îµ{¦¡¤¤,°w¹ï¤@­Ó¸ê®Æ®w ,¦@¥Î¤@­ÓDataSource§Y¥i
+	// ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½Îµ{ï¿½ï¿½ï¿½ï¿½,ï¿½wï¿½ï¿½@ï¿½Ó¸ï¿½Æ®w ,ï¿½@ï¿½Î¤@ï¿½ï¿½DataSourceï¿½Yï¿½i
 	private static DataSource ds = null;
 	static {
 		try {
 			Context ctx = new javax.naming.InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/belovedb");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// ·s¼W­×¬dsql«ü¥O
+	// ï¿½sï¿½Wï¿½×¬dsqlï¿½ï¿½ï¿½O
 	public static final String INSERT_SQL = "insert into expertpersonalpage (expertNo, postPhoto, postContent, postTime, numOfLike, postState) values (?, ?, ?, ?, ?, ?)";
 	public static final String UpdateBy_postNo_SQL = "update expertpersonalpage set expertNo = ?, postPhoto = ?, postContent = ?, postTime = ?, numOfLike = ?, postState = ? where postNo = ?";
 	public static final String DeletBy_postNo_SQL = "delete from expertpersonalpage where postNo = ?";
 	public static final String FindBy_postNo_SQL = "select * from expertpersonalpage where postNo = ?";
 	public static final String getAll_SQL = "select * from expertpersonalpage";
 
-	// ¹ê§@·s¼W: ·|­û·s¼W¤@µ§­Ó¤H­¶­±¶K¤å
+	// ï¿½ï¿½@ï¿½sï¿½W: ï¿½|ï¿½ï¿½ï¿½sï¿½Wï¿½@ï¿½ï¿½ï¿½Ó¤Hï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½ï¿½
 	@Override
 	public void insert(ExpertPersonalPageVO eppVO) {
 		Connection con = null;
@@ -76,7 +76,7 @@ public class ExpertPersonalPageDAO implements ExpertPersonalPageDAO_interface {
 		}
 	}
 
-	// §ó·s¶K¤å¤º®e,¹Ï¤ù¤Î¶K¤å®É¶¡
+	// ï¿½ï¿½sï¿½Kï¿½å¤ºï¿½e,ï¿½Ï¤ï¿½ï¿½Î¶Kï¿½ï¿½É¶ï¿½
 	@Override
 	public void update(ExpertPersonalPageVO eppVO) {
 		Connection con = null;
@@ -119,7 +119,7 @@ public class ExpertPersonalPageDAO implements ExpertPersonalPageDAO_interface {
 		}
 	}
 
-	// §R°£¤@«h¶K¤å, ®Ú¾ÚPK : postNo
+	// ï¿½Rï¿½ï¿½ï¿½@ï¿½hï¿½Kï¿½ï¿½, ï¿½Ú¾ï¿½PK : postNo
 	@Override
 	public void delete(Integer postNo) {
 		Connection con = null;
@@ -153,7 +153,7 @@ public class ExpertPersonalPageDAO implements ExpertPersonalPageDAO_interface {
 		}
 	}
 
-	// ·j´M¤@µ§¶K¤å, ®Ú¾ÚPK : postNo
+	// ï¿½jï¿½Mï¿½@ï¿½ï¿½ï¿½Kï¿½ï¿½, ï¿½Ú¾ï¿½PK : postNo
 	@Override
 	public ExpertPersonalPageVO findByPrimaryKey(Integer postNo) {
 		Connection con = null;
@@ -206,7 +206,7 @@ public class ExpertPersonalPageDAO implements ExpertPersonalPageDAO_interface {
 		return eppVO;
 	}
 
-	// Åã¥Ü©Ò¦³¶K¤å
+	// ï¿½ï¿½Ü©Ò¦ï¿½ï¿½Kï¿½ï¿½
 	@Override
 	public List<ExpertPersonalPageVO> getAll() {
 		List<ExpertPersonalPageVO> list = new ArrayList<ExpertPersonalPageVO>();

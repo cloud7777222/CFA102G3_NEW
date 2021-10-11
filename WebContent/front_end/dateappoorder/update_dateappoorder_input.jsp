@@ -393,12 +393,12 @@ DateappoorderVO dateappoorderVO = (DateappoorderVO) request.getAttribute("dateap
 
                 hour.addEventListener("click", () => {
                   detial = data[d][h];
-                  detial = detial == "不可預約" ? "不可預約" : "您已有訂單編號 [" + detial["dateOrderNo"] + "] 的行程，請確認！"
+                  let detialText = detial == "不可預約" ? "不可預約" : "您已有訂單編號 [" + detial["dateOrderNo"] + "] 的行程，請確認！"
                   // swal("您不可選擇這天!", detial, "warning");
 
                   swal({
                     title: "您不可選擇這天! 需要前往查看相關訊息嗎？",
-                    text: detial,
+                    text: detialText,
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -406,7 +406,7 @@ DateappoorderVO dateappoorderVO = (DateappoorderVO) request.getAttribute("dateap
                     .then((willForward) => {
                       if (willForward) {
                         // 跳到該頁面
-                        window.location.href="<%=request.getContextPath()%>/front_end/dateappoorder/index.jsp";
+                        window.location.href="<%=request.getContextPath()%>"+"/front_end/dateappoorder/index.jsp?dateOrderNo=" + detial["dateOrderNo"];
                       } else {
                         swal("請重新選擇!");
                       }

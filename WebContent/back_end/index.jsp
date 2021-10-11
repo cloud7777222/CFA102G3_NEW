@@ -15,6 +15,9 @@
     List<EmpVO> list1 = empSvc.getAll();
     pageContext.setAttribute("list1",list1);
 %>
+<%
+	session.getAttribute("empVO");
+%>
 
 <!DOCTYPE html>
 <html>
@@ -23,6 +26,10 @@
 <title>後台管理</title>
 </head>
 <body>
+<h3>新增商品種類</h3>
+<a href="<%=request.getContextPath()%>/back_end/prodsort/listAllProdsort.jsp">ListAllProdsort</a>
+<a href="<%=request.getContextPath()%>/back_end/prodsort/addProdsort.jsp">addProdsort</a>
+
 <h3>後臺商品管理</h3>
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
@@ -36,7 +43,7 @@
 
 <a href="<%=request.getContextPath()%>/back_end/prod/listAllProd.jsp">ListAllProd</a>
 
-<a href="<%=request.getContextPath()%>/back_end/prod/addProd.jsp">addprod</a>
+<a href="<%=request.getContextPath()%>/back_end/prod/addProd.jsp">addProd</a>
 
 <h3>用商品種類搜尋</h3>
 <form method="post" action="<%=request.getContextPath()%>/prod/prod.do">
@@ -73,8 +80,9 @@
        <input type="hidden" name="action" value="getOne_For_Display">
        <input type="submit" value="送出">
      </FORM>
-  
-
-
+  <h3>全部訂單管理</h3>
+<a href="<%=request.getContextPath()%>/back_end/order/listAllOrder.jsp">ListAllOrder</a>
+<h3>客服服務</h3>
+<a href="<%=request.getContextPath()%>/back_end/customerservice/customerservice.jsp">customerservice</a>
 </body>
 </html>

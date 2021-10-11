@@ -11,4 +11,5 @@ public interface ChatDAO_interface {
 	public List<String> get_all(String memberAccountA,String memberAccountB);
 	public Integer unread_number(String memberAccountA,String memberAccountB);
 	public void update_unread_status(String memberAccountA,String memberAccountB);
+	public String get_last_message(String memberAccountA,String memberAccountB);
 }

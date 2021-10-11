@@ -10,6 +10,8 @@ public interface Orderlist_interface {
 	public void insert(OrderlistVO orderlistVO);
 	public void delete(Integer orderno, Integer prodno);
     public void update(OrderlistVO orderlistVO);
+    
+    public void updateQuantity(Integer quantity,Integer orderno,Integer prodno);
 	
 	 public OrderlistVO findByPrimaryKey(Integer orderno,Integer prodno);
 	 public List<OrderlistVO> getAll();

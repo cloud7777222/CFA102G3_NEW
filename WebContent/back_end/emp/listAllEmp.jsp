@@ -14,7 +14,7 @@
 <head>
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>全部員工</title>
-<%@include file="/includes/head.jsp"%>
+<%@ include file="/back_end/header.jsp"%>
 <style>
 @font-face {
     font-family: Poppins-Regular;
@@ -267,6 +267,8 @@ iframe {
 </style>
 </head>
 <body>
+
+<%@ include file="/back_end/sliderbar.jsp"%>
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
 	<font style="color:red">請修正以下錯誤:</font>
@@ -277,7 +279,7 @@ iframe {
 	</ul>
 </c:if>
  <div class="container" style="margin-top:30px">
-           <a href="<%=request.getContextPath()%>/back_end/index.jsp">回首頁</a>
+        
             <table class="table  table-hover table-sm">
                 <thead class="thead-dark">
                     <tr>
@@ -323,10 +325,10 @@ iframe {
         </div>
 
         
-       
+ <%@ include file="/back_end/footer.jsp"%>      
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>  
-<%@include file="/includes/footer.jsp"%>
+
 </body>
 </html>

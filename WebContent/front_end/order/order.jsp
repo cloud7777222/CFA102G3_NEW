@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.prod.model.*"%>
+<%@ page import="com.member.model.*"%>
 <%@ page import="java.util.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -62,7 +63,9 @@ body {
 <body>
 
 <% @SuppressWarnings("unchecked")
-Vector<ProdVO> buylist = (Vector<ProdVO>)session.getAttribute("shoppingcart");%>
+Vector<ProdVO> buylist = (Vector<ProdVO>)session.getAttribute("shoppingcart");
+MemberVO memberVO = (MemberVO)session.getAttribute("memberVO");
+%>
 <div class="container wrapper">
             <div class="row cart-head">
                 <div class="container">
@@ -91,7 +94,10 @@ Vector<ProdVO> buylist = (Vector<ProdVO>)session.getAttribute("shoppingcart");%>
                         </div>
                         <div class="panel-body">
                         
+                       	
                         <input type="hidden" name="action" value="insertWithOrderlist">
+                        <input type="hidden" name="memberno" value="<%=memberVO.getMemberNo()%>">
+                         
                         <%	
                     	int sum = 0;
               			for(int index = 0;index < buylist.size();index++){
@@ -147,6 +153,7 @@ Vector<ProdVO> buylist = (Vector<ProdVO>)session.getAttribute("shoppingcart");%>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <h4>訂單地址</h4>
+                                    <button type="button" onclick="getmeminfo()">帶入會員資訊</button>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -155,7 +162,7 @@ Vector<ProdVO> buylist = (Vector<ProdVO>)session.getAttribute("shoppingcart");%>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <strong>姓名:</strong>
-                                    <input type="text" name="orderer" class="form-control" value="" />
+                                    <input type="text" name="orderer" class="form-control" id="orderer" value="" />
                                 </div>
                                 
                             </div>
@@ -175,11 +182,11 @@ Vector<ProdVO> buylist = (Vector<ProdVO>)session.getAttribute("shoppingcart");%>
                             </div>
                            <div class="form-group">
                                 <div class="col-md-12"><strong>手機號碼:</strong></div>
-                                <div class="col-md-12"><input type="text" name="tel" class="form-control" value="" /></div>
+                                <div class="col-md-12"><input type="text" name="tel" id="tel" class="form-control" value="" /></div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12"><strong>電子郵件地址:</strong></div>
-                                <div class="col-md-12"><input type="email" name="email_address" class="form-control" value="" /></div>
+                                <div class="col-md-12"><input type="email" name="email_address" id="email_address" class="form-control" value="" /></div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12"><strong>付款方式:</strong></div>
@@ -219,7 +226,7 @@ Vector<ProdVO> buylist = (Vector<ProdVO>)session.getAttribute("shoppingcart");%>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12"><strong>信用卡號:</strong></div>
-                                <div class="col-md-12"><input type="text" class="form-control" name="car_number" value="" /></div>
+                                <div class="col-md-12"><input type="text" class="form-control" name="creditcardnum" value="" /></div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12"><strong>卡片安全碼:</strong></div>
@@ -284,6 +291,14 @@ function demtChange(){
     }else{
     	document.getElementById("credit").style.visibility="hidden";
     }
+}
+function getmeminfo(){
+	var orderer =  document.getElementById('orderer');
+	orderer.value = "<%=memberVO.getMemberName()%>";
+	var tel =  document.getElementById('tel');
+	tel.value = "<%=memberVO.getMemberPhone()%>";
+	var email_address = document.getElementById('email_address');
+	email_address.value = "billy81318@hotmail.com.tw";
 }
 </script>
 </body>

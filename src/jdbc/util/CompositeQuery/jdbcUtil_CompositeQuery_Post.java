@@ -48,11 +48,11 @@ public class jdbcUtil_CompositeQuery_Post {
 		// java.util.Map<java.lang.String,java.lang.String[]> 之測試
 		Map<String, String[]> map = new TreeMap<String, String[]>();
 		map.put("postNo", new String[] {});
-		map.put("postTypeNo", new String[] {});
-		map.put("memberNo", new String[] {});
+		map.put("postTypeNo", new String[] {"1", "2", "3", "4", "5", "6", "7"});
+		map.put("memberNo", new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
 		map.put("postContent", new String[] {});
 		map.put("postTime", new String[] {});
-		map.put("postState", new String[] {});
+		map.put("postState", new String[] {"0", "1"});
 		map.put("mesCount", new String[] {});
 		map.put("numOfLike", new String[] {});
 		map.put("action", new String[] { "getXXX" }); // 注意Map裡面會含有action的key

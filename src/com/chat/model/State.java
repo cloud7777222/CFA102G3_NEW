@@ -1,5 +1,6 @@
 package com.chat.model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,6 +10,8 @@ public class State {
 	private String user;
 	// total users
 	private Set<String> users;
+	
+	
 	
 	
 	
@@ -39,6 +42,4 @@ public class State {
 		this.users = users;
 	}
 	
-
-
-}
+	}

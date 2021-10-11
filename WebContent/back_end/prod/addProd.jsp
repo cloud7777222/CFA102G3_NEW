@@ -9,6 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <title>商品新增</title>
+<%@ include file="/back_end/header.jsp"%>
 <script
   src="https://code.jquery.com/jquery-1.12.4.js"
   ></script>
@@ -21,6 +22,7 @@ height:150px;
 }
 </style>
 <body>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <h3>商品新增</h3>
 
 <%-- 錯誤表列 --%>
@@ -108,7 +110,7 @@ height:150px;
 <input type="hidden" name="action" value="insert">
 <input type="submit" value="新增產品">
 </form>
-
+<%@ include file="/back_end/footer.jsp"%>
 <script>
 $('#file1').on('change', function(e){      
 	  const file = this.files[0];

@@ -12,9 +12,13 @@
 <head>
 <meta charset="UTF-8">
 <title>商品種類查詢</title>
-<%@ include file="/includes/head.jsp"%>
+<%@ include file="/back_end/header.jsp"%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="cssandjs/sidebars.css">
 </head>
 <body>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
 	<font style="color:red">請修正以下錯誤:</font>
@@ -24,7 +28,7 @@
 		</c:forEach>
 	</ul>
 </c:if>
-<a href="<%=request.getContextPath()%>/back_end/index.jsp">回首頁</a>
+
 <table class="table">
   <thead>
     <tr>
@@ -87,7 +91,9 @@
   </tbody>
 </table>
 
-
-<%@include file="/includes/footer.jsp"%>
+<%@ include file="/back_end/footer.jsp"%>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>

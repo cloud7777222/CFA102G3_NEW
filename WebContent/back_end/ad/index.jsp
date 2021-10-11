@@ -19,7 +19,7 @@
 <head>
 <title>所有廣告資料</title>
 <%-- <%=request.getContextPath() + request.getServletPath()%> --%>
-
+<%@ include file="/back_end/header.jsp"%>
 <%@ include file="/back_end/pages/link.file"%>
 
 
@@ -77,17 +77,16 @@ table td {
 	<div id="wrapper">
 
 		<!-- Sidebar -->
-		<jsp:include page="../sidebar.jsp" flush="true" />
+		<%@ include file="/back_end/sliderbar.jsp"%>
 		<!-- End of Sidebar -->
 
-		<!-- Content Wrapper -->
-		<div id="content-wrapper" class="d-flex flex-column">
+		
 
 			<!-- Main Content -->
 			<div id="content">
 
 				<!-- Topbar -->
-				<jsp:include page="/back_end/topbar.jsp" flush="true" />
+			
 				<!-- End of Topbar -->
 
 				<!-- ajax Page Content -->
@@ -338,7 +337,7 @@ table td {
 	</div>
 
 	<%@ include file="/back_end/pages/script.file"%>
-
+<%@ include file="/back_end/footer.jsp"%>
 	<script>
 	//post請求
 	function keywordSearch(path) {

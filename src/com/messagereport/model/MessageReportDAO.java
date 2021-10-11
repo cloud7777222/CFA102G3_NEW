@@ -13,26 +13,26 @@ import javax.sql.DataSource;
 
 public class MessageReportDAO implements MessageReportDAO_interface {
 
-	// ¤@­ÓÀ³¥Îµ{¦¡¤¤,°w¹ï¤@­Ó¸ê®Æ®w ,¦@¥Î¤@­ÓDataSource§Y¥i
+	// ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½Îµ{ï¿½ï¿½ï¿½ï¿½,ï¿½wï¿½ï¿½@ï¿½Ó¸ï¿½Æ®w ,ï¿½@ï¿½Î¤@ï¿½ï¿½DataSourceï¿½Yï¿½i
 	private static DataSource ds = null;
 	static {
 		Context ctx;
 		try {
 			ctx = new javax.naming.InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/belovedb");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// ·s¼W­×¬dsql«ü¥O
+	// ï¿½sï¿½Wï¿½×¬dsqlï¿½ï¿½ï¿½O
 	public static final String INSERT_SQL = "insert into messagereport (memberNo, mesNo, mesRepTime, mesRepFor, mesRevState) values (?, ?, ?, ?, ?)";
 	public static final String UpdateBy_PKs_SQL = "update messagereport set mesRepTime = ?, mesRepFor = ?, mesRevState = ? where memberNo = ? and mesNo = ?";
 	public static final String DeletBy_PKs_SQL = "delete from messagereport where memberNo = ? and mesNo = ?";
 	public static final String FindBy_PKs_SQL = "select * from messagereport where memberNo = ? and mesNo = ?";
 	public static final String getAll_SQL = "select * from messagereport";
 
-	// ·s¼W¤@µ§½×¾Â¤å³¹¯d¨¥ÀËÁ|
+	// ï¿½sï¿½Wï¿½@ï¿½ï¿½ï¿½×¾Â¤å³¹ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½|
 	@Override
 	public void insert(MessageReportVO messageReportVO) {
 		
@@ -73,7 +73,7 @@ public class MessageReportDAO implements MessageReportDAO_interface {
 
 	}
 
-	// §ó·s½×¾Â¤å³¹¯d¨¥ÀËÁ|¤º®e¤Îª¬ºA
+	// ï¿½ï¿½sï¿½×¾Â¤å³¹ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½eï¿½Îªï¿½ï¿½A
 	@Override
 	public void update(MessageReportVO messageReportVO) {
 		
@@ -114,7 +114,7 @@ public class MessageReportDAO implements MessageReportDAO_interface {
 		}
 	}
 
-	// §R°£¤@«h½×¾Â¤å³¹¯d¨¥ÀËÁ|, ®Ú¾Ú½Æ¦XPK : memberNo+mesNo
+	// ï¿½Rï¿½ï¿½ï¿½@ï¿½hï¿½×¾Â¤å³¹ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½|, ï¿½Ú¾Ú½Æ¦XPK : memberNo+mesNo
 	@Override
 	public void delete(Integer memberNo, Integer mesNo) {
 		
@@ -152,7 +152,7 @@ public class MessageReportDAO implements MessageReportDAO_interface {
 
 	}
 
-	// ·j´M¤@«h½×¾Â¤å³¹¯d¨¥ÀËÁ|, ®Ú¾Ú½Æ¦XPK : memberNo + mesNo
+	// ï¿½jï¿½Mï¿½@ï¿½hï¿½×¾Â¤å³¹ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½|, ï¿½Ú¾Ú½Æ¦XPK : memberNo + mesNo
 	@Override
 	public MessageReportVO findByPrimaryKey(Integer memberNo, Integer mesNo) {
 
@@ -207,7 +207,7 @@ public class MessageReportDAO implements MessageReportDAO_interface {
 		return messageReportVO;
 	}
 
-	// Åã¥Ü©Ò¦³½×¾Â¤å³¹¯d¨¥ÀËÁ|
+	// ï¿½ï¿½Ü©Ò¦ï¿½ï¿½×¾Â¤å³¹ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½|
 	@Override
 	public List<MessageReportVO> getAll() {
 

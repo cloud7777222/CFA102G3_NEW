@@ -543,6 +543,7 @@ public class DateappoorderServlet extends HttpServlet implements Runnable {
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			String requestURL = req.getParameter("requestURL");
+			System.out.println("member="+requestURL);
 
 			try {
 				/***********************
@@ -607,7 +608,7 @@ public class DateappoorderServlet extends HttpServlet implements Runnable {
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("dateappoorderVO", dateappoorderVO); // �t����J�榡���~��dateappoorderVO����,�]�s�Jreq
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front_end/dateappoorder/addDateappoorder.jsp");
+							.getRequestDispatcher("/memTime/memTime.do");
 					failureView.forward(req, res);
 					return;
 				}
@@ -635,8 +636,9 @@ public class DateappoorderServlet extends HttpServlet implements Runnable {
 				ds.messageText = messageText;
 				Thread t = new Thread(ds);
 				t.start();
-
-				String url = requestURL;
+//				req.removeAttribute("memberNo");
+//				req.setAttribute("memberNo",memberNoB);
+				String url = requestURL+"?memberNo="+memberNoB;
 				RequestDispatcher successView = req.getRequestDispatcher(url); // �s�W���\�����listAllDateappoorder.jsp
 				successView.forward(req, res);
 

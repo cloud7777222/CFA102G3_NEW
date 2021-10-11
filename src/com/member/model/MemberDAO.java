@@ -7,12 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import com.member.controller.jdbcUtil_CompositeQuery_Member;
 
 public class MemberDAO implements MemberDAO_interface{
 	private static DataSource ds=null;
@@ -38,7 +41,7 @@ public class MemberDAO implements MemberDAO_interface{
 	private static final String CHECK_ACCOUNT="SELECT * FROM MEMBER WHERE memberAccount=?";
 	private static final String CHECK_EMAIL="SELECT * FROM MEMBER WHERE memberEmail=?";
 	private static final String CHECK_ACCOUNT_PASSWORD="SELECT * FROM MEMBER WHERE memberAccount=? AND memberPassword=?";
-	private static final String CHECK_ACCOUNT_EMAIL="SELECT * FROM MEMBER WHERE memberAccount=? AND memberEmail";
+	private static final String CHECK_ACCOUNT_EMAIL="SELECT * FROM MEMBER WHERE memberAccount=? AND memberEmail=?";
 	
 	@Override
 	public void insert(MemberVO memberVO) {
@@ -591,6 +594,60 @@ public class MemberDAO implements MemberDAO_interface{
 		}
 		
 		return memberVO;
+	}
+
+
+	@Override
+	public List<MemberVO> compositeQuery(Map<String, String[]> map) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		MemberVO memberVO=null;
+		List<MemberVO> list=new ArrayList<MemberVO>();
+		
+		try {
+			con=ds.getConnection();
+			
+			String finalSQL = "select * from member "
+		          + jdbcUtil_CompositeQuery_Member.get_WhereCondition(map)
+		          + "order by memberno";
+			pstmt = con.prepareStatement(finalSQL);
+			System.out.println("●●finalSQL(by DAO) = "+finalSQL);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				memberVO=new MemberVO();
+				memberVO.setMemberNo(rs.getInt("memberNo"));
+				memberVO.setMemberAccount(rs.getString("memberAccount"));
+				memberVO.setMemberPassword(rs.getString("memberPassword"));
+				memberVO.setMemberPhoto(rs.getBytes("memberPhoto"));
+				memberVO.setMemberName(rs.getString("memberName"));
+				memberVO.setMemberGender(rs.getInt("memberGender"));
+				memberVO.setMemberBirthday(rs.getDate("memberBirthday"));
+				memberVO.setMemberJob(rs.getString("memberJob"));
+				memberVO.setMemberCountry(rs.getInt("memberCountry"));
+				memberVO.setMemberPhone(rs.getString("memberPhone"));
+				memberVO.setMemberEmail(rs.getString("memberEmail"));
+				memberVO.setMemberIntroduce(rs.getString("memberIntroduce"));
+				memberVO.setMemberPoint(rs.getInt("memberPoint"));
+				memberVO.setMemberBlackList(rs.getInt("memberBlackList"));
+				list.add(memberVO);
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(con!=null) {
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
 	}
 
 

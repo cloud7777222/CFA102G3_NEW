@@ -38,6 +38,9 @@ public class OrderlistDAO implements Orderlist_interface {
 	
 	private static final String GET_ALL_DETAIL="select * from orderlist where orderno = ? ";
 	
+	private static final String UPDATE_QUAN="update orderlist set quantity=? where orderno = ? and prodno =?"; 
+	
+	
 	@Override
 	public void insert(OrderlistVO orderlistVO) {
 		Connection con = null;
@@ -84,12 +87,11 @@ public class OrderlistDAO implements Orderlist_interface {
 
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
+			pstmt.setInt(1, orderlistVO.getPrice());
+			pstmt.setInt(2, orderlistVO.getQuantity());
+			pstmt.setInt(3, orderlistVO.getOrderno());
+			pstmt.setInt(4, orderlistVO.getProdno());
 			
-			pstmt.setInt(1, orderlistVO.getOrderno());
-			pstmt.setInt(2, orderlistVO.getProdno());
-			pstmt.setInt(3, orderlistVO.getQuantity());
-			pstmt.setInt(4, orderlistVO.getPrice());
-		
 			pstmt.executeUpdate();
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured."
@@ -361,6 +363,43 @@ public class OrderlistDAO implements Orderlist_interface {
 		
 		return list;
 	
+	}
+
+	@Override
+	public void updateQuantity(Integer quantity,Integer orderno,Integer prodno) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_QUAN);
+			
+			pstmt.setInt(1,quantity);
+			pstmt.setInt(2, orderno);
+			pstmt.setInt(3, prodno);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured."
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
 	}
 
 	

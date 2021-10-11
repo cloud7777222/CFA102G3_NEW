@@ -159,7 +159,7 @@ public class ActivityorderJDBCDAO implements ActivityorderDAO_interface {
 		}
 
 		@Override
-		public ActivityorderVO findByPrimaryKey(Integer actNo) {
+		public ActivityorderVO findByPrimaryKey(Integer actNo,Integer memberno) {
 			ActivityorderVO activityorderVO = null;
 			Connection con = null;
 			PreparedStatement pstmt = null;
@@ -301,10 +301,10 @@ public class ActivityorderJDBCDAO implements ActivityorderDAO_interface {
 			activityorderVO2.setActRegisterOrderDate(java.sql.Date.valueOf("2021-09-05"));
 			dao.update(activityorderVO2);
 
-			// �R��
+			
 			dao.delete(9);
-			// �d��
-			ActivityorderVO ActivityorderVO3 = dao.findByPrimaryKey(1);
+			
+			ActivityorderVO ActivityorderVO3 = dao.findByPrimaryKey(1,1);
 			System.out.print(ActivityorderVO3.getActNo() + ",");
 			System.out.print(ActivityorderVO3.getMemberNo() + ",");
 			System.out.print(ActivityorderVO3.getActOrderPoint() + ",");
@@ -312,7 +312,7 @@ public class ActivityorderJDBCDAO implements ActivityorderDAO_interface {
 			System.out.print(ActivityorderVO3.getActRegisterOrderDate() + ",");
 			System.out.println("---------------------");
 
-			// �d��
+			
 			List<ActivityorderVO> list = dao.getAll();
 			for (ActivityorderVO aActivityorder : list) {
 				System.out.print(aActivityorder.getActNo() + ",");
@@ -323,4 +323,18 @@ public class ActivityorderJDBCDAO implements ActivityorderDAO_interface {
 				System.out.println();
 			}
 		}
+
+
+
+
+		@Override
+		public void insertWithactivityorder(ActivityorderVO activityorderVO, List<ActivityorderVO> list) {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+
+
+		
 	}

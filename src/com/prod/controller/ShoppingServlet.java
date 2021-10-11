@@ -70,6 +70,9 @@ public class ShoppingServlet extends HttpServlet {
 			session.setAttribute("shoppingcart", buylist);
 			String url ="";
 			if(action.equals("AddToCart")) {
+				String mess = "加入購物車成功";
+				req.setAttribute("message", mess);
+				
 				url ="/front_end/prod/Shop.jsp";
 				RequestDispatcher rd = req.getRequestDispatcher(url);
 				rd.forward(req, res);
@@ -77,6 +80,9 @@ public class ShoppingServlet extends HttpServlet {
 				url="/front_end/prod/Cart.jsp";
 				res.sendRedirect(req.getContextPath()+url);
 			}else if(action.equals("AddToCart_Detail")) {
+				String mess = "加入購物車成功";
+				req.setAttribute("message", mess);
+				
 				url=requestURL;
 				RequestDispatcher rd = req.getRequestDispatcher(url);
 				rd.forward(req, res);
@@ -120,7 +126,7 @@ public class ShoppingServlet extends HttpServlet {
 				}
 			}
 		}	
-		if(action.equals("AddToCartList")) {
+		if(action.equals("AddToCartList")) {//再買一次
 			int orderno = new Integer(req.getParameter("orderno"));
 			OrderlistService orderlistSvc = new OrderlistService();
 			List<OrderlistVO> orderlistVO = orderlistSvc.getOrderDetail(orderno);

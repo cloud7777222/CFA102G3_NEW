@@ -4,7 +4,7 @@
 <%@ page import="com.prod.model.*"%>
 <%@ page import="java.util.*"%>
 
- <%
+<%
     ProdService prodSvc = new ProdService();
     List<ProdVO> list = prodSvc.getAll();
     pageContext.setAttribute("list",list);
@@ -15,13 +15,15 @@
 <head>
 <meta charset="UTF-8">
 <title>全部商品</title>
-<%@include file="/includes/head.jsp"%>
-
-
+<%@ include file="/back_end/header.jsp"%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="cssandjs/sidebars.css">
 </head>
 <body>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <div class="container">
-<a href="<%=request.getContextPath()%>/back_end/index.jsp">回首頁</a>
+
 </div>
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
@@ -32,6 +34,18 @@
 		</c:forEach>
 	</ul>
 </c:if>
+<div class="container">
+<form method="post" action="<%=request.getContextPath()%>/prod/prod.do">
+<div style="color:red;">用商品類別搜尋</div>
+<jsp:useBean id="prodsortSvc" scope="page" class="com.prodsort.model.ProdsortService" />
+		<select size="1" name="prodsortno">
+			<c:forEach var="prodsortVO" items="${prodsortSvc.all}">
+				<option value="${prodsortVO.prodsortno}">${prodsortVO.prodsortname}
+			</c:forEach>
+	    </select>
+<input type="hidden" name="action" value="getBySort">
+<input type="submit" value="查詢產品">
+</form>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -107,8 +121,11 @@
   </c:forEach>
 </table>
 
-
 <%@ include file="/back_end/prod/page2.file" %>
-<%@include file="/includes/footer.jsp"%>
+<%@ include file="/back_end/footer.jsp"%>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>

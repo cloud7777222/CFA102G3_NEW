@@ -5,11 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import com.post.model.PostVO;
+
 import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Post;
 
 public class PostTypeDAO implements PostTypeDAO_interface {
@@ -20,7 +25,7 @@ public class PostTypeDAO implements PostTypeDAO_interface {
 		Context ctx;
 		try {
 			ctx = new javax.naming.InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/belovedb");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -32,6 +37,7 @@ public class PostTypeDAO implements PostTypeDAO_interface {
 	public static final String DeletBy_postTypeNo_SQL = "delete from posttype where postTypeNo = ?";
 	public static final String FindBy_postTypeNo_SQL = "select * from posttype where postTypeNo = ?";
 	public static final String getAll_SQL = "select * from posttype";
+	public static final String GET_Posts_By_PostTypeNo = "SELECT postNo, postTypeNo, memberNo, postContent, postTime, postState, mesCount, numOfLike FROM post where postTypeNo = ? order by postNo desc";
 
 	@Override
 	public void insert(PostTypeVO postTypeVO) {
@@ -288,6 +294,67 @@ public class PostTypeDAO implements PostTypeDAO_interface {
 			}
 		}
 		return list;
+	}
+
+	//¾Ü¤@¬d¦h
+	@Override
+	public Set<PostVO> getPostsByPostTypeNo(Integer postTypeNo) {
+		
+		Set<PostVO> set = new LinkedHashSet<PostVO>();
+		PostVO postVO = null;
+	
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+	
+		try {
+	
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_Posts_By_PostTypeNo);
+			pstmt.setInt(1, postTypeNo);
+			rs = pstmt.executeQuery();
+	
+			while (rs.next()) {
+				postVO = new PostVO();
+				postVO.setPostNo(rs.getInt("postNo"));
+				postVO.setPostTypeNo(rs.getInt("postTypeNo"));
+				postVO.setMemberNo(rs.getInt("memberNo"));
+				postVO.setPostContent(rs.getString("postContent"));
+				postVO.setPostTime(rs.getDate("postTime"));
+				postVO.setPostState(rs.getInt("postState"));
+				postVO.setMesCount(rs.getInt("mesCount"));
+				postVO.setNumOfLike(rs.getInt("numOfLike"));
+				set.add(postVO); // Store the row in the vector
+			}
+	
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return set;
 	}
 
 }

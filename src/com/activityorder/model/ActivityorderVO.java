@@ -10,6 +10,9 @@ public class ActivityorderVO {
 		private Integer actOrderPoint;
 		private Integer actTotalParticipant;
 		private Date actRegisterOrderDate;
+		public Integer getOrderno() {
+			return actNo;
+		}
 		public Integer getActNo() {
 			return actNo;
 		}

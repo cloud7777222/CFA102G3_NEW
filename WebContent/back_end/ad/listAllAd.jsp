@@ -17,6 +17,7 @@
 <html>
 <head>
 <title>所有廣告資料</title>
+<%@ include file="/back_end/header.jsp"%>
 <%-- <%=request.getContextPath() + request.getServletPath()%> --%>
 <%@ include file="/back_end/pages/link.file"%>
 <style>
@@ -66,7 +67,7 @@ table td {
 </style>
 </head>
 <body>
-
+<%@ include file="/back_end/sliderbar.jsp"%>
 	<div id="layoutSidenav_content">
 		<main>
 			<div class="container-fluid px-4">
@@ -249,6 +250,7 @@ table td {
 		</main>
 	</div>
 	<%@ include file="/back_end/pages/script.file"%>
+	<%@ include file="/back_end/footer.jsp"%>
 	<script>
 	$(document).ready(()=>{
 		if($(".a-<%=whichPage%>")){

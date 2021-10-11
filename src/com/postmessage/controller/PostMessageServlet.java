@@ -8,9 +8,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.member.model.MemberVO;
+import com.post.model.PostService;
 import com.postmessage.model.PostMessageService;
 import com.postmessage.model.PostMessageVO;
+import com.posttype.model.PostTypeService;
+import com.member.model.MemberVO;
 
 public class PostMessageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -26,108 +31,124 @@ public class PostMessageServlet extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
 
-		// [ ¨Ó¦Ûselect_page.jspªº"¾Ü¤@mesNO ¬İ¶K¤å"ªº½Ğ¨D ]
+		// [ ä¾†è‡ªselect_page.jspçš„"æ“‡ä¸€mesNO çœ‹è²¼æ–‡"çš„è«‹æ±‚ ]
 		if ("getOne_For_Display".equals(action)) {
 
-			List<String> errorMsgs = new LinkedList<String>(); // »`¶°¿ù»~µ¹jsp§e²{
+			List<String> errorMsgs = new LinkedList<String>(); // è’é›†éŒ¯èª¤çµ¦jspå‘ˆç¾
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ - ¿é¤J®æ¦¡ªº¿ù»~³B²z **********************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ - è¼¸å…¥æ ¼å¼çš„éŒ¯èª¤è™•ç† **********************/
 				String str = req.getParameter("mesNo");
 				if (str == null || (str.trim()).length() == 0) {
-					errorMsgs.add("½Ğ¿é¤J¤å³¹¯d¨¥½s¸¹");
+					errorMsgs.add("è«‹è¼¸å…¥æ–‡ç« ç•™è¨€ç·¨è™Ÿ");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postMessage/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
 				Integer mesNo = null;
 				try {
-					mesNo = new Integer(str); // µ¹³W©w½s¸¹¥u¦³¼Æ¦r
+					mesNo = new Integer(str); // çµ¦è¦å®šç·¨è™Ÿåªæœ‰æ•¸å­—
 				} catch (Exception e) {
-					errorMsgs.add("¤å³¹¯d¨¥½s¸¹®æ¦¡¤£¥¿½T");
+					errorMsgs.add("æ–‡ç« ç•™è¨€ç·¨è™Ÿæ ¼å¼ä¸æ­£ç¢º");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postMessage/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ *****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ *****************************************/
 				PostMessageService postMessageSvc = new PostMessageService();
 				PostMessageVO postMessageVO = postMessageSvc.getOnePostMessage(mesNo);
 				if (postMessageVO == null) {
-					errorMsgs.add("¬dµL¸ê®Æ");
+					errorMsgs.add("æŸ¥ç„¡è³‡æ–™");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postMessage/select_page.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) *************/
-				req.setAttribute("postMessageVO", postMessageVO); // ¸ê®Æ®w¨ú¥XªºpostVOª«¥ó,¦s¤Jreq
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) *************/
+				req.setAttribute("postMessageVO", postMessageVO); // è³‡æ–™åº«å–å‡ºçš„postVOç‰©ä»¶,å­˜å…¥req
 				String url = "/back_end/postMessage/listOnePostMessage.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ¦¨¥\®Éµe­±forwardÂà¥æµ¹ listOnePostMessage.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url); // æˆåŠŸæ™‚ç•«é¢forwardè½‰äº¤çµ¦ listOnePostMessage.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("µLªk¨ú±o¸ê®Æ:" + e.getMessage());
+				errorMsgs.add("ç„¡æ³•å–å¾—è³‡æ–™:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postMessage/select_page.jsp");
 				failureView.forward(req, res);
 			}
 		}
+		
+		
+		
+		
 
-		// [ ¨Ó¦ÛaddPostMessage.jspªº"·s¼W"½Ğ¨D ]
+		// [ ä¾†è‡ªaddPostMessage.jspçš„"æ–°å¢"è«‹æ±‚ ]
 		if ("insert".equals(action)) {
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºæ–°å¢çš„ä¾†æºç¶²é è·¯å¾‘
 
-			/*********************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ - ¿é¤J®æ¦¡ªº¿ù»~³B²z *************************/
-			/* ¤å³¹½s¸¹ */
+			/*********************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ - è¼¸å…¥æ ¼å¼çš„éŒ¯èª¤è™•ç† *************************/
+			Integer postTypeNo = new Integer(req.getParameter("postTypeNo"));
+			/* æ–‡ç« ç·¨è™Ÿ */
 			String ptn = req.getParameter("postNo");
 			if (ptn == null || (ptn.trim()).length() == 0) {
-				errorMsgs.add("½Ğ¿é¤J¤å³¹½s¸¹");
+				errorMsgs.add("è«‹è¼¸å…¥æ–‡ç« ç·¨è™Ÿ");
 			}
 			Integer postNo = null;
 			try {
-				postNo = new Integer(req.getParameter("postNo").trim());
+				postNo = new Integer(req.getParameter("postNo"));
 			} catch (Exception e) {
-				errorMsgs.add("¤å³¹½s¸¹®æ¦¡¿ù»~, ½Ğ¶ñ¼Æ¦r!");
+				errorMsgs.add("æ–‡ç« ç·¨è™Ÿæ ¼å¼éŒ¯èª¤, è«‹å¡«æ•¸å­—!");
 			}
 
-			/* ·|­û½s¸¹ */
-			String str = req.getParameter("memberNo");
-			if (str == null || (str.trim()).length() == 0) {
-				errorMsgs.add("½Ğ¿é¤J·|­û½s¸¹");
-			}
+			/* æœƒå“¡ç·¨è™Ÿ */				
+			HttpSession session = req.getSession();
 			Integer memberNo = null;
 			try {
-				memberNo = new Integer(req.getParameter("memberNo").trim()); // ¦p¦ó¦Û°Ê¨ú±oµn¤JªÌ±b¸¹¦Û°Ê±a¤J³o¸Ì? session
-				// ¦³setAttribute¶Ü?
-			} catch (Exception e) {
-				errorMsgs.add("·|­û½s¸¹®æ¦¡¿ù»~");
+				memberNo = ((MemberVO) session.getAttribute("memberVO")).getMemberNo();
+			}catch (Exception e) {
+				errorMsgs.add("è«‹å…ˆç™»å…¥!");
 			}
-			try {
-				/* ¤å³¹¯d¨¥¤º®e */
-				String mesContent = req.getParameter("mesContent");
+			
+//			String str = req.getParameter("memberNo");
+//			if (str == null || (str.trim()).length() == 0) {
+//				errorMsgs.add("è«‹è¼¸å…¥æœƒå“¡ç·¨è™Ÿ");
+//			}
+//			Integer memberNo = null;
+//			try {
+//				memberNo = new Integer(req.getParameter("memberNo").trim()); // å¦‚ä½•è‡ªå‹•å–å¾—ç™»å…¥è€…å¸³è™Ÿè‡ªå‹•å¸¶å…¥é€™è£¡? session
+//				// æœ‰setAttributeå—?
+//			} catch (Exception e) {
+//				errorMsgs.add("æœƒå“¡ç·¨è™Ÿæ ¼å¼éŒ¯èª¤");
+//			}
+			
+			/* æ–‡ç« ç•™è¨€å…§å®¹ */
+			String mesContent = null;
+			try {				
+				mesContent = req.getParameter("mesContent");
 				if (mesContent == null || (mesContent.trim()).length() == 0) {
-					errorMsgs.add("½Ğ¿é¤J¤å³¹¤º®e");
+					errorMsgs.add("è«‹è¼¸å…¥æ–‡ç« å…§å®¹");
 				}
-				/* ¤å³¹µoªí®É¶¡ */
+				/* æ–‡ç« ç™¼è¡¨æ™‚é–“ */
 				java.sql.Date mesTime = null;
-				mesTime = new java.sql.Date(System.currentTimeMillis()); // ¨ú±o·í¤Upo¤å¨t²Î®É¶¡
-				/* ¤å³¹ª¬ºA */
-				Integer mesState = 1; // ¹w³]
+				mesTime = new java.sql.Date(System.currentTimeMillis()); // å–å¾—ç•¶ä¸‹poæ–‡ç³»çµ±æ™‚é–“
+				/* æ–‡ç« ç‹€æ…‹ */
+				Integer mesState = 1; // é è¨­
 				
-				/* ==================«Øºc===================== */
+				/* ==================å»ºæ§‹===================== */
 				PostMessageVO postMessageVO = new PostMessageVO();
 				postMessageVO.setPostNo(postNo);
 				postMessageVO.setMemberNo(memberNo);
@@ -136,131 +157,131 @@ public class PostMessageServlet extends HttpServlet {
 				postMessageVO.setMesState(mesState);
 				
 				if (!errorMsgs.isEmpty()) {
-					req.setAttribute("postMessageVO", postMessageVO); // §t¦³¿é¤J®æ¦¡¿ù»~ªºpostVOª«¥ó,¤]¦s¤Jreq, Åı¨Ï¥ÎªÌ¤£¥²­«¶ñ¤@¨Ç¸ê°T
-					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/post/addPost.jsp");
+					req.setAttribute("postMessageVO", postMessageVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„postVOç‰©ä»¶,ä¹Ÿå­˜å…¥req, è®“ä½¿ç”¨è€…ä¸å¿…é‡å¡«ä¸€äº›è³‡è¨Š
+					RequestDispatcher failureView = req.getRequestDispatcher("/front_end/postMessage/postMessage_add.jsp");
 					failureView.forward(req, res);
 					return;
 				}
 
-				/*************************** 2.¶}©l·s¼W¸ê®Æ ***************************************/
+				/*************************** 2.é–‹å§‹æ–°å¢è³‡æ–™ ***************************************/
 				PostMessageService postMessageSvc = new PostMessageService();
-				postMessageVO = postMessageSvc.addPostMessage(postNo, memberNo, mesContent, mesTime, mesState);
+				postMessageVO = postMessageSvc.addPostMessage(memberNo, postNo, mesContent, mesTime, mesState);
 
-				/*************************** 3.·s¼W§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
+				/*************************** 3.æ–°å¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
+				//[æ³¨æ„] æ­¤ç‚ºcom.posttype.modelä¾†çš„æ–°å¢è«‹æ±‚(å‰ç«¯)
+				PostTypeService postTypeSvc = new PostTypeService();
+				req.setAttribute("listPostsBy_PostTypeNo", postTypeSvc.getPostsByPostTypeNo(postTypeNo)); // è³‡æ–™åº«å–å‡ºçš„listç‰©ä»¶,å­˜å…¥request				
+				String url = "/postType/PostTypeServlet"+"?postTypeNo="+ postTypeNo + "&action=listPostsBy_PostTypeNo_C";				
 				req.setAttribute("postMessageVO", postMessageVO);
-				String url = "/back_end/postMessage/listAllPostMessage.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ·s¼W¦¨¥\«áÂà¥æ¦ÜlistAllPostMessage.jsp
-				successView.forward(req, res);
+				res.sendRedirect(req.getContextPath()+url); //ä½¿ç”¨é‡å°ä¸æœƒå¸¶å€¼å›å», æ‰€ä»¥åˆ·æ–°ä¸æœƒå†æ¬¡é€å‡ºpoæ–‡	
+//				RequestDispatcher successView = req.getRequestDispatcher(url); // æ–°å¢æˆåŠŸå¾Œè½‰äº¤è‡³listAllPostMessage.jsp
+//				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("¤å³¹·s¼W¥¢±Ñ:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postMessage/addPostMessage.jsp");
+				errorMsgs.add("æ–‡ç« æ–°å¢å¤±æ•—:" + e.getMessage());
+				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/postMessage/postMessage_add.jsp");
 				failureView.forward(req, res);
-				return;// µ{¦¡¤¤Â_
+				return;// ç¨‹å¼ä¸­æ–·
 			}
 		}
 
-		// [ ¨Ó¦ÛlistAllPostMessage.jsp ªº"§R°£"½Ğ¨D]
+		// [ ä¾†è‡ªlistAllPostMessage.jsp çš„"åˆªé™¤"è«‹æ±‚]
 		if ("delete".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
-			String requestURL = req.getParameter("requestURL"); // °e¥X§R°£ªº¨Ó·½ºô­¶¸ô®|
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºåˆªé™¤çš„ä¾†æºç¶²é è·¯å¾‘
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ***************************************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ***************************************/
 				Integer mesNo = new Integer(req.getParameter("mesNo"));
 
-				/*************************** 2.¶}©l§R°£¸ê®Æ ***************************************/
+				/*************************** 2.é–‹å§‹åˆªé™¤è³‡æ–™ ***************************************/
 				PostMessageService postMessageSvc = new PostMessageService();
 				postMessageSvc.deletePostMessage(mesNo);
 
-				/*************************** 3.§R°£§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
+				/*************************** 3.åˆªé™¤å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
 				String url = requestURL;
-				RequestDispatcher successView = req.getRequestDispatcher(url);// §R°£¦¨¥\«á,Âà¥æ¦^listAllPostMessage.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url);// åˆªé™¤æˆåŠŸå¾Œ,è½‰äº¤å›listAllPostMessage.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
-				errorMsgs.add("§R°£¸ê®Æ¥¢±Ñ:" + e.getMessage());
+				errorMsgs.add("åˆªé™¤è³‡æ–™å¤±æ•—:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postMessage/listAllPostMessage.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦ÛlistAllPostMessage.jsp "³æµ§¤å³¹ÀËµø"ªº½Ğ¨D ]
-		if ("getOne_For_Update".equals(action)) {
+		// [ ä¾†è‡ªlistAllPostMessage.jsp "å–®ç­†æ–‡ç« æª¢è¦–"çš„è«‹æ±‚ ]
+		if ("getOne_For_Update".equals(action) || "getOne_For_Update_frontEnd".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ****************************************/
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
 				Integer mesNo = new Integer(req.getParameter("mesNo").trim());
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ ****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
 				PostMessageService postMessageSvc = new PostMessageService();
 				PostMessageVO postMessageVO = postMessageSvc.getOnePostMessage(mesNo);
 
-				/*************************** 3.¬d¸ß§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ************/
-				req.setAttribute("postMessageVO", postMessageVO); // ¸ê®Æ®w¨ú¥XªºpostMessageVOª«¥ó,¦s¤Jreq
+				/*************************** 3.æŸ¥è©¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ************/
+				req.setAttribute("postMessageVO", postMessageVO); // è³‡æ–™åº«å–å‡ºçš„postMessageVOç‰©ä»¶,å­˜å…¥req
 				String url = "/back_end/postMessage/update_PostMessage_input.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url);// ¦¨¥\Âà¥æ update_PostMessage_input.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url);// æˆåŠŸè½‰äº¤ update_PostMessage_input.jsp
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z **********************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† **********************************/
 			} catch (Exception e) {
-				errorMsgs.add("µLªk¨ú±o­n­×§ïªº¸ê®Æ:" + e.getMessage());
+				errorMsgs.add("ç„¡æ³•å–å¾—è¦ä¿®æ”¹çš„è³‡æ–™:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postMessage/listAllPostMessage.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		// [ ¨Ó¦Ûupdate_PostMessage_input.jspªº"­×¥¿"½Ğ¨D ]
+		// [ ä¾†è‡ªupdate_PostMessage_input.jspçš„"ä¿®æ­£"è«‹æ±‚ ]
 		if ("update".equals(action)) {
 
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
-			String requestURL = req.getParameter("requestURL"); // °e¥X­×§ïªº¨Ó·½ºô­¶
-			String whichPage = req.getParameter("whichPage"); // °e¥X­×§ïªº¨Ó·½ºô­¶ªº²Ä´X­¶
+			String requestURL = req.getParameter("requestURL"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é 
+			String whichPage = req.getParameter("whichPage"); // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é 
 
 			try {
-				/*************************** 1.±µ¦¬½Ğ¨D°Ñ¼Æ ****************************************/
-				/* ¤å³¹½s¸¹ */
+				/*************************** 1.æ¥æ”¶è«‹æ±‚åƒæ•¸ ****************************************/
+				/* ç•™è¨€ç·¨è™Ÿ */
 				Integer mesNo = new Integer(req.getParameter("mesNo").trim());
 
-				/*************************** 2.¶}©l¬d¸ß¸ê®Æ ****************************************/
+				/*************************** 2.é–‹å§‹æŸ¥è©¢è³‡æ–™ ****************************************/
 				PostMessageService postMessageSvc = new PostMessageService();
 
-				/**************************** 3.Åª¨úclientºİ°e¹L¨Óªº¸ê®Æ ******************************/
+				/**************************** 3.è®€å–clientç«¯é€éä¾†çš„è³‡æ–™ ******************************/
 
-				/* ¤å³¹½s¸¹ */
-				String ptn = req.getParameter("postNo"); // ¤å³¹½s¸¹²zÀ³¤£·|­×§ï
-				Integer postNo = new Integer(ptn);
-				if (ptn == null) {
-					postNo = postMessageSvc.getOnePostMessage(mesNo).getPostNo();
-				}
-				/* ·|­û½s¸¹ */
-				Integer memberNo = postMessageSvc.getOnePostMessage(mesNo).getMemberNo(); // ·|­û½s¸¹¤£¯à§ïÅÜ, ©Ò¥Hªu¥ÎÂÂ¸ê®Æ
+				/* æ–‡ç« ç·¨è™Ÿ */
+				Integer postNo = postMessageSvc.getOnePostMessage(mesNo).getPostNo(); // ä¸èƒ½æ”¹è®Š, æ‰€ä»¥æ²¿ç”¨èˆŠè³‡æ–™
+				/* æœƒå“¡ç·¨è™Ÿ */
+				Integer memberNo = postMessageSvc.getOnePostMessage(mesNo).getMemberNo(); // æœƒå“¡ç·¨è™Ÿä¸èƒ½æ”¹è®Š, æ‰€ä»¥æ²¿ç”¨èˆŠè³‡æ–™
 
-				/* ¤å³¹¤º®e */
+				/* ç•™è¨€å…§å®¹ */
 				String mesContent = req.getParameter("mesContent");
 				if (mesContent == null) {
-					mesContent = postMessageSvc.getOnePostMessage(mesNo).getMesContent(); // ¤å³¹¤º®e­Y¨S­×§ï´N·ÓÂÂ
+					mesContent = postMessageSvc.getOnePostMessage(mesNo).getMesContent(); // æ–‡ç« å…§å®¹è‹¥æ²’ä¿®æ”¹å°±ç…§èˆŠ
 				}
-				/* ¤å³¹µoªí®É¶¡ */
+				/* ç•™è¨€ç™¼è¡¨æ™‚é–“ */
 				java.sql.Date mesTime = postMessageSvc.getOnePostMessage(mesNo).getMesTime();
 				
-				/* ¤å³¹ª¬ºA */
-				String str = req.getParameter("mesState"); // ¤å³¹ª¬ºA­Y¨S­×§ï´N·ÓÂÂ
+				/* ç•™è¨€ç‹€æ…‹ */
+				String str = req.getParameter("mesState"); // æ–‡ç« ç‹€æ…‹è‹¥æ²’ä¿®æ”¹å°±ç…§èˆŠ
 				Integer mesState = new Integer(str);
 				if (str == null) {
 					mesState = postMessageSvc.getOnePostMessage(mesNo).getMesState();
 				}			
 
-				/* ==================«Øºc===================== */
+				/* ==================å»ºæ§‹===================== */
 				PostMessageVO postMessageVO = new PostMessageVO();
 				postMessageVO.setPostNo(mesNo);
 				postMessageVO.setPostNo(postNo);
@@ -270,26 +291,31 @@ public class PostMessageServlet extends HttpServlet {
 				postMessageVO.setMesState(mesState);
 		
 				if (!errorMsgs.isEmpty()) {
-					req.setAttribute("postMessageVO", postMessageVO); // §t¦³¿é¤J®æ¦¡¿ù»~ªºpostMessageVOª«¥ó,¤]¦s¤Jreq
+					req.setAttribute("postMessageVO", postMessageVO); // å«æœ‰è¼¸å…¥æ ¼å¼éŒ¯èª¤çš„postMessageVOç‰©ä»¶,ä¹Ÿå­˜å…¥req
 					RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postMessage/update_PostMessage_input.jsp");
 					failureView.forward(req, res);
 					return;
 				}
 
-				/*************************** 4.¶}©l·s¼W¸ê®Æ ***************************************/
+				/*************************** 4.é–‹å§‹æ–°å¢è³‡æ–™ ***************************************/
 				PostMessageService postMessageSVC = new PostMessageService();
 				postMessageVO = postMessageSVC.updatePostMessage(mesNo, postNo, memberNo, mesContent, mesTime, mesState);
 
-				/*************************** 5.·s¼W§¹¦¨,·Ç³ÆÂà¥æ(Send the Success view) ***********/
-				req.setAttribute("postMessageVO", postMessageVO); // ¸ê®Æ®wupdate¦¨¥\«á,¥¿½TªºªºpostMessageVOª«¥ó,¦s¤Jreq
-				String url = requestURL + "?whichPage=" + whichPage + "&mesNo=" + mesNo; // °e¥X­×§ïªº¨Ó·½ºô­¶ªº²Ä´X­¶(¥u¥Î©ó:listAllMemPerPage.jsp)©M­×§ïªº¬O­ş¤@µ§
+				/*************************** 5.æ–°å¢å®Œæˆ,æº–å‚™è½‰äº¤(Send the Success view) ***********/
+				//[æ³¨æ„] æ­¤ç‚ºcom.post.modelä¾†çš„ä¿®æ”¹æ›´æ–°è«‹æ±‚(æ“‡ä¸€æŸ¥å¤š)
+				PostService postSvc = new PostService();
+				if(requestURL.equals("/back_end/post/listMessagesBy_PostNo.jsp"))
+					req.setAttribute("listMessagesBy_PostNo", postSvc.getMessagesByPostNo(postNo)); // è³‡æ–™åº«å–å‡ºçš„listç‰©ä»¶,å­˜å…¥request
+				//æ­¤ç‚ºcom.postmessage.modelä¾†çš„ä¿®æ”¹æ›´æ–°è«‹æ±‚
+				req.setAttribute("postMessageVO", postMessageVO); // è³‡æ–™åº«updateæˆåŠŸå¾Œ,æ­£ç¢ºçš„çš„postMessageVOç‰©ä»¶,å­˜å…¥req
+				String url = requestURL + "?whichPage=" + whichPage + "&mesNo=" + mesNo; // é€å‡ºä¿®æ”¹çš„ä¾†æºç¶²é çš„ç¬¬å¹¾é (åªç”¨æ–¼:listAllPostMessage.jsp.jsp)å’Œä¿®æ”¹çš„æ˜¯å“ªä¸€ç­†
 				System.out.println("url=" + url);
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ·s¼W¦¨¥\«áÂà¥æ¦ÜlistOneMemPerPage.jsp Åã¥Ü
+				RequestDispatcher successView = req.getRequestDispatcher(url); // æ–°å¢æˆåŠŸå¾Œè½‰äº¤è‡³listOnePostMessage.jsp.jsp é¡¯ç¤º
 				successView.forward(req, res);
 
-				/*************************** ¨ä¥L¥i¯àªº¿ù»~³B²z *************************************/
+				/*************************** å…¶ä»–å¯èƒ½çš„éŒ¯èª¤è™•ç† *************************************/
 			} catch (Exception e) {
-				errorMsgs.add("¸ê®Æ­×§ï¥¢±Ñ:" + e.getMessage());
+				errorMsgs.add("è³‡æ–™ä¿®æ”¹å¤±æ•—:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back_end/postMessage/update_PostMessage_input.jsp");
 				failureView.forward(req, res);
 			}

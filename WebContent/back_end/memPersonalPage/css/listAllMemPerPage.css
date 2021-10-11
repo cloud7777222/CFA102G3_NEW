@@ -1,0 +1,30 @@
+@charset "BIG5";
+body{
+		width: 100%; 
+		height: 100%;
+		font-family: 'Noto Sans TC', sans-serif;
+		font-size: 14px !important;
+		margin-top: 100px;
+		margin-left: 200px;
+		margin-bottom: 200px;
+	}
+	table.table-hover{
+		width: 70%; 
+		height: auto;
+		font-size: 14px !important;
+		cellpadding: 5px !important;
+		border: 2px;
+		bordercolor: black;
+	}
+	button{
+		font-size: 12px !important;
+	}
+	nav{
+		font-size: 14px !important;
+	} 
+
+	img{
+	  	max-width: 100%;
+	  	width: 150px;
+	  	height: auto;
+	  }

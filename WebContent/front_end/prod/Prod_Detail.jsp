@@ -16,7 +16,8 @@ ProdVO prodVO = prodSvc.getProdDetail(prodno);
 <title>商品詳情</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
-<%@include file="/includes/head.jsp"%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/front_end/prod/css/Prod_Detail.css">
 </head>
 <body>
@@ -42,7 +43,7 @@ ProdVO prodVO = prodSvc.getProdDetail(prodno);
                     <p class="pn"><%=prodVO.getProdname()%></p>
                     <div>產品介紹</div>
                     <p><%=prodVO.getIndroce()%></p>
-                    <p>所需點數</p>	
+                    <p>建議售價</p>	
                     <div>
                     <div class="ctpnpc">
                     <div class="pnpc"><%=prodVO.getPrice()%></div>
@@ -80,15 +81,20 @@ ProdVO prodVO = prodSvc.getProdDetail(prodno);
     </div>
 </div>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<%
+String mess=(String)request.getAttribute("message");
+if(mess==null){
+}else{%>
+<script type="text/javascript">
+Swal.fire("<%=mess%>");
+</script>
+<%}%>
 
 <script type="text/javascript">
 function changeImage(element) {
 var main_prodcut_image = document.getElementById('main_product_image');
 main_prodcut_image.src = element.src;
 
-}
-function addcart(){
-	Swal.fire('加入購物車');
 }
 var quan = document.getElementById('quantity');
 var quan1 = document.getElementById('quan1');
@@ -108,6 +114,8 @@ function des(){
 quan1.value = quan.value;
 quan2.value = quan.value;
 </script>
-<%@include file="/includes/footer.jsp"%>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>

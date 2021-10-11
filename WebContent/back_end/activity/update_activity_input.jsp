@@ -8,6 +8,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <title>活動資料修改 - update_activity_input.jsp</title>
+<%@ include file="/back_end/header.jsp"%>
 <style>
   table#table-1 {
 	background-color: #CCCCFF;
@@ -27,7 +28,7 @@
 
 <style>
   table {
-	width: 450px;
+	width: 650px;
 	background-color: white;
 	margin-top: 1px;
 	margin-bottom: 1px;
@@ -41,12 +42,13 @@
 </style>
 
 </head>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <body bgcolor='white'>
 
 <table id="table-1">
 	<tr><td>
 		 <h3>活動資料修改 - update_activity_input.jsp</h3>
-		 <h4><a href="<%=request.getContextPath()%>/back_end/activity/select_page.jsp"><img src="<%=request.getContextPath()%>/back_end/activity/images/original.gif" width="100" height="32" border="0">回首頁</a></h4>
+		 <h4><img src="<%=request.getContextPath()%>/back_end/activity/images/original.gif" width="100" height="32" border="0"></h4>
 	</td></tr>
 </table>
 
@@ -62,7 +64,7 @@
 	</ul>
 </c:if>
 
-<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/activity/activity.do" name="form1">
+<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/activity/activity.do" name="form1"  enctype="multipart/form-data">
 <table>
 <tr>
 	<tr>
@@ -121,7 +123,8 @@
 	</tr>
 	<tr>
 		<td>活動圖片:</td>
-		<td><input type="file" name="actPicture" size="45"	value="${activityVO.actPicture}" /></td>
+		<img id="Preview" src="<%=request.getContextPath()%>/GetPicture?actName=${activityVO.actName}">
+		<td><input type="file" name="actPicture" size="45"	" /></td>
 	</tr>
 		<tr>
 		<td>總星星數:</td>
@@ -138,7 +141,7 @@
 <input type="hidden" name="actNo" value="${activityVO.actNo}">
 <input type="submit" value="送出修改"></FORM>
 </body>
-
+<%@ include file="/back_end/footer.jsp"%>
 <!-- =========================================以下為 datetimepicker 之相關設定========================================== -->
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.css" />
@@ -153,7 +156,7 @@
            height: 151px;   /* height:  151px; */
   }
 </style>
-
+  
 <script>
         $.datetimepicker.setLocale('zh');
         $('#f_date1').datetimepicker({
@@ -165,4 +168,5 @@
         });
     
 </script>
+
 </html>

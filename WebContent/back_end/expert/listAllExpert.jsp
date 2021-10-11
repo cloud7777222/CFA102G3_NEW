@@ -125,7 +125,7 @@ pageContext.setAttribute("list",list);
 		</tr>
 	</c:forEach>
 </table>
-<%@ include file="./page2.file" %>
+
 
 </body>
 </html>

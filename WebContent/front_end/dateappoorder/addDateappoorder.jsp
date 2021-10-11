@@ -372,7 +372,7 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
 
 
 
-
+        let no;
         // =======================hour顯示pink=========================================
         function hoursToPink() {
           //2.判斷該天小時行程
@@ -390,9 +390,10 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
 
                 hour.addEventListener("click", () => {
                   detial = data[d][h];
+
                   detial = detial == "不可預約" ? "不可預約" : "您已有訂單編號 [" + detial["dateOrderNo"] + "] 的行程，請確認！"
                   // swal("您不可選擇這天!", detial, "warning");
-
+					no =detial["dateOrderNo"];
                   swal({
                     title: "您不可選擇這天! 需要前往查看相關訊息嗎？",
                     text: detial,
@@ -400,10 +401,11 @@ MemberVO memberVO=memberSvc.getOneMember(Integer.valueOf(request.getParameter("m
                     buttons: true,
                     dangerMode: true,
                   })
-                    .then((willForward) => {
+                    .then((willForward,no) => {
                       if (willForward) {
                         // 跳到該頁面
-                        window.location.href="<%=request.getContextPath()%>/front_end/dateappoorder/index.jsp";
+                        let no =data[d][h]["dateOrderNo"];
+                        window.location.href="<%=request.getContextPath()%>/front_end/dateappoorder/index.jsp?dateOrderNo="+no;
                       } else {
                         swal("請重新選擇!");
                       }

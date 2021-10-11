@@ -1,10 +1,5 @@
 @charset "BIG5";
-.card{
-  
-}
-.container-fluid{
-	border-bottom:3px solid #ff8000;
-}
+
 .fz-2{
   font-size: 14px;
   font-weight: 350;
@@ -130,5 +125,75 @@
 	 width: 100%;
 	
 }
+.css_button {
+   padding: 16.5px 33px;
+   border: 1px solid #C7C7C7;
+   background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#FF8C00));
+   background: -webkit-linear-gradient(top, #FFFFFF, #FF8C00);
+   background: -moz-linear-gradient(top, #FFFFFF, #FF8C00);
+   background: -ms-linear-gradient(top, #FFFFFF, #FF8C00);
+   background: -o-linear-gradient(top, #FFFFFF, #FF8C00);
+   background-color: #FF8C00;
+   box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 3px #17009C;
+   -webkit-box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 3px #17009C;
+   -moz-box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 3px #17009C;
+   -webkit-border-radius: 8px;
+   -moz-border-radius: 8px;
+   border-radius: 8px;
+   text-shadow: #FF7A7A 1px 1px 0px;
+   color: #8F4800;
+   font-size: 17px;
+   font-family: Arial;
+   text-decoration: none;
+   font-weight: bold;
+   -webkit-transition: 0.2s;
+   -moz-transition: 0.2s;
+   -o-transition: 0.2s;
+   cursor: pointer;
+   }
+.css_button:hover {
+   background: none;
+   background-color: #FF8C00;
+   box-shadow: 0px 0px 5px 0px #AAAAAA;
+   -webkit-box-shadow: 0px 0px 5px 0px #AAAAAA;
+   -moz-box-shadow: 0px 0px 5px 0px #AAAAAA;
+   border: 1px solid #ffffff;
+   color: #47001A;
+   }
+.css_button:active {
+   top: 1px;
+   position: relative;
+   }
+
+#pricebtn{
+   padding: 16.5px 33px;
+   border: 1px solid #C7C7C7;
+   background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#FF8C00));
+   background: -webkit-linear-gradient(top, #FFFFFF, #FF8C00);
+   background: -moz-linear-gradient(top, #FFFFFF, #FF8C00);
+   background: -ms-linear-gradient(top, #FFFFFF, #FF8C00);
+   background: -o-linear-gradient(top, #FFFFFF, #FF8C00);
+   background-color: #FF8C00;
+   box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 3px #17009C;
+   -webkit-box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 3px #17009C;
+   -moz-box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 3px #17009C;
+   -webkit-border-radius: 8px;
+   -moz-border-radius: 8px;
+   border-radius: 8px;
+   text-shadow: #FF7A7A 1px 1px 0px;
+   color: #8F4800;
+   font-size: 17px;
+   font-family: Arial;
+   text-decoration: none;
+   font-weight: bold;
+   -webkit-transition: 0.2s;
+   -moz-transition: 0.2s;
+   -o-transition: 0.2s;
+   cursor: pointer;
+   }
+
+
+
+
  
  

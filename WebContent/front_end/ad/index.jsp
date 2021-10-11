@@ -14,7 +14,7 @@
 			.collect(Collectors.toList());
 	pageContext.setAttribute("list", list);
 	AdVO adVO = (AdVO) request.getAttribute("adVO");
-	request.setAttribute("date",new Date());
+	pageContext.setAttribute("date",new Date());
 %>
 <jsp:useBean id="adSvc" scope="page" class="com.ad.model.AdService" />
 
@@ -107,7 +107,7 @@ a{
                                 <div class="recent-post">
                                 
                                 	<c:forEach var="adVO_list" items="${list}" >
-<%--                                 		<c:if test="${adVO_list.postTime>param.date}"> --%>
+                                		<c:if test="${adVO_list.postTime<date}">
 	                                		<FORM METHOD="post"  onclick="$(this).submit()"
 												ACTION="<%=request.getContextPath()%>/ad/ad.do"
 												style="margin-bottom: 0px;">
@@ -126,7 +126,7 @@ a{
 			                                        </div>
 			                                    </div>
 											</FORM>
-<%-- 										</c:if> --%>
+										</c:if>
                                    </c:forEach> 
                                     
                                     

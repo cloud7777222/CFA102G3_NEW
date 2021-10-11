@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.text p {
+	width: 100%;
+}
+
+.carousel {
+	background: #940a3f;
+	min-height: 130px;
+}
+
+@media ( max-width : 991.98px) {
+	.carousel {
+		min-height: 0;
+	}
+}

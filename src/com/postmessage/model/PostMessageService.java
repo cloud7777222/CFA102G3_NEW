@@ -2,6 +2,9 @@ package com.postmessage.model;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
+
+import com.post.model.PostVO;
 
 
 public class PostMessageService {
@@ -50,5 +53,6 @@ public class PostMessageService {
 	public List<PostMessageVO> getAll() {
 		return dao.getAll();
 	}
-
+	
+	
 }

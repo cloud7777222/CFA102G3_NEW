@@ -24,7 +24,7 @@ public class AdDAO implements AdDAO_interface {
 	private static final String INSERT_STMT = 
 			"INSERT INTO advertise (adtitle, ad, adpic1, adpic2, adpic3, adstate, posttime, deadline) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String GET_ALL_STMT = 
-			"SELECT adno, adtitle, ad, adpic1, adpic2, adpic3, adstate, posttime, deadline FROM advertise";
+			"SELECT adno, adtitle, ad, adpic1, adpic2, adpic3, adstate, posttime, deadline FROM advertise order by adno desc";
 	private static final String GET_ONE_STMT = 
 			"SELECT * FROM advertise where adno = ?";
 	private static final String DELETE = 

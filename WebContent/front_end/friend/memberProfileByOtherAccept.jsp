@@ -3,7 +3,6 @@
 <%@ page import="com.member.model.*"%>
 <%@ page import="com.friend.model.*"%>
 <%@ page import="java.util.*"%>
-<%-- 此頁暫練習採用 Script 的寫法取值 --%>
 <%
   MemberVO memberVOA = (MemberVO) request.getAttribute("memberVOA");
   MemberVO memberVOB = (MemberVO) request.getAttribute("memberVOB");
@@ -22,44 +21,116 @@
   if(check){
   friendVO=friendService.getOneFriend(memberNoA, memberNoB);
   }
+  
+  String memberCountry=memberVOB.getMemberCountry().toString();
+  switch(memberCountry) {
+	case "1":
+		memberCountry="臺北市";
+		break;
+	case "2":
+		memberCountry="新北市";
+		break;
+	case "3":
+		memberCountry="桃園市";
+		break;
+	case "4":
+		memberCountry="臺中市";
+		break;
+	case "5":
+		memberCountry="臺南市";
+		break;
+	case "6":
+		memberCountry="高雄市";
+		break;
+	case "7":
+		memberCountry="基隆市";
+		break;
+	case "8":
+		memberCountry="新竹市";
+		break;
+	case "9":
+		memberCountry="嘉義市";
+		break;
+	case "10":
+		memberCountry="新竹縣";
+		break;
+	case "11":
+		memberCountry="苗栗縣";
+		break;
+	case "12":
+		memberCountry="彰化縣";
+		break;
+	case "13":
+		memberCountry="南投縣";
+		break;
+	case "14":
+		memberCountry="雲林縣";
+		break;
+	case "15":
+		memberCountry="嘉義縣";
+		break;
+	case "16":
+		memberCountry="屏東縣";
+		break;
+	case "17":
+		memberCountry="宜蘭縣";
+		break;
+	case "18":
+		memberCountry="花蓮縣";
+		break;
+	case "19":
+		memberCountry="臺東縣";
+		break;
+	case "20":
+		memberCountry="澎湖縣";
+		break;
+	}
 %>
 
 <html>
 <head>
-<title>員工資料 - listOneEmp.jsp</title>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
+
+<title>個人資料瀏覽</title>
+
+ <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="Free Website Template" name="keywords">
+<meta content="Free Website Template" name="description">
+
+<%@ include file="/front_end/pages/link.file"%>
 <style>
-  table#table-1 {
-	background-color: #CCCCFF;
-    border: 2px solid black;
-    text-align: center;
-  }
-  table#table-1 h4 {
-    color: red;
-    display: block;
-    margin-bottom: 1px;
-  }
-  h4 {
-    color: blue;
-    display: inline;
-  }
+
+.text p {
+	width: 100%;
+}
+
+.carousel {
+	background: #940a3f;
+	min-height: 130px;
+}
+
+@media ( max-width : 991.98px) {
+	.carousel {
+		min-height: 0;
+	}
+}
+</style>
+<style>
+ img{
+ 	  height:150px;
+ 	  width:150px;
+      border-radius: 100px;
+    }
 </style>
 
-<style>
-  table {
-	width: 600px;
-	background-color: white;
-	margin-top: 5px;
-	margin-bottom: 5px;
-  }
-  table, th, td {
-    border: 1px solid #CCCCFF;
-  }
-  th, td {
-    padding: 5px;
-    text-align: center;
-  }
-</style>
+
+
+
+
+
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script>   
 $(document).ready(function() {
@@ -78,14 +149,48 @@ $(document).ready(function() {
 
 </head>
 <body bgcolor='white'>
+<!-- Top Bar Start -->
+	<jsp:include page="/front_end/topbar.jsp" flush="true" />
+	<!-- Nav Bar End -->
 
---------------------------------------<br>
+	<div class="carousel">
+		<div class="container-fluid">
+			<div class="owl-carousel"></div>
+		</div>
+	</div>
+	<!-- Carousel End -->
+
+	<div class="container-fluid" style="margin-left: 280px;">
 
 
 
-<table>
-	<tr>
-		<th>相片</th>
+<div class="container">
+    <div class="row col-md-6 col-md-offset-2 custyle">
+    <table class="table table-striped custab">
+    
+	 	<form action="<%=request.getContextPath()%>/friend/friend" method="POST">
+		<input type="hidden" name="action" value="back">
+		<input type="hidden" name="memberAccountA" value="${memberVOA.memberAccount}">
+		<button class='btn btn-info btn-xs' type="submit" style="float:right; position: relative; right: 350px; top: -40px; margin-right: 10px;"><i class="fas fa-arrow-circle-left"></i> 回上一頁</button>
+		</form>
+
+        <button id="btn" class='btn btn-info btn-xs' type="button" style="float:right; position: relative; right: -330px; top: -10px; margin-right: 10px;"><i class="fas fa-user"></i>回復好友邀請</button>
+		<form action="<%=request.getContextPath()%>/friend/friend" method="POST">
+		<input type="hidden" name="action" value="response_Friend">
+		<input type="hidden" name="memberAccountA" value="${memberVOA.memberAccount}">
+		<input type="hidden" name="memberAccountB" value="${memberVOB.memberAccount}">
+        <button id="AddFriend" class='btn btn-info btn-xs' type="submit" style="float:right; position: relative; right: -240px; top: 20px; margin-right: 10px; display: none;">確認邀請</button>
+		</form>
+		<form action="<%=request.getContextPath()%>/friend/friend" method="POST">
+		<input type="hidden" name="action" value="delete_Friend">
+		<input type="hidden" name="memberAccountA" value="${memberVOA.memberAccount}">
+		<input type="hidden" name="memberAccountB" value="${memberVOB.memberAccount}">
+        <button id="DeleteFriend" class='btn btn-info btn-xs' type="submit" style="float:right; position: relative; right: -165px; top: 50px; margin-right: 10px;display: none;">刪除邀請</button>
+		</form>
+    	
+        <tr>
+		<th></th>
+		
 		<td><img src="<%=request.getContextPath()%>/GetPhoto?memberAccount=${memberVOB.memberAccount}"></td>
 	</tr>
 	<tr>
@@ -94,7 +199,7 @@ $(document).ready(function() {
 	</tr>
 	<tr>
 		<th>性別</th>
-		<td><%=memberVOB.getMemberGender()%></td>
+		<td><%= (memberVOB.getMemberGender()==1)? "男生" : "女生"%></td>
 	</tr>
 	<tr>
 		<th>生日</th>
@@ -106,36 +211,76 @@ $(document).ready(function() {
 	</tr>
 	<tr>
 		<th>居住地</th>
-		<td><%=memberVOB.getMemberCountry()%></td>
+		<td><%=memberCountry%></td>
 	</tr>
-	
+	<tr>
+		<th>手機</th>
+		<td><%=memberVOB.getMemberPhone()%></td>
+	</tr>
 	<tr>
 		<th>自我介紹</th>
 		<td><%=memberVOB.getMemberIntroduce()%></td>
-	</tr>	
-	<tr>	
-		<td>
-		<input id="btn" type="button" value="回復好友邀請">
-		<form action="<%=request.getContextPath()%>/friend/friend" method="POST">
-		<input id="AddFriend" type="submit" style="display: none;" value="確認好友"><br>
-		<input type="hidden" name="action" value="response_Friend">
-		<input type="hidden" name="memberAccountA" value="${memberVOA.memberAccount}">
-		<input type="hidden" name="memberAccountB" value="${memberVOB.memberAccount}">
-		</form>
-		<form action="<%=request.getContextPath()%>/friend/friend" method="POST">
-		<input id="DeleteFriend" type="submit" style="display: none;" value="刪除好友"><br>
-		<input type="hidden" name="action" value="delete_Friend">
-		<input type="hidden" name="memberAccountA" value="${memberVOA.memberAccount}">
-		<input type="hidden" name="memberAccountB" value="${memberVOB.memberAccount}">
-		</form>
-		</td>
+	</tr>
+    </table>
+    
+    </div>
+</div>
+
+
+
+
 		<form id="Refresh" action="<%=request.getContextPath()%>/friend/friend" method="POST">
 		<input type="hidden" name="action" value="member_Profile_By_Other">
 		<input type="hidden" name="memberAccountA" value="${memberVOA.memberAccount}">
 		<input type="hidden" name="memberAccountB" value="${memberVOB.memberAccount}">
 		</form>
-	</tr>
-</table>
+		
+		
+</div>
+
+	<!-- Footer Start -->
+	<jsp:include page="/front_end/footer.jsp" flush="true" />
+	<!-- Footer End -->
+
+	<!-- Back to top button -->
+	<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+	<!-- Pre Loader -->
+	<div id="loader" class="show">
+		<div class="loader"></div>
+	</div>
+
+	<%@ include file="/front_end/pages/script.file"%>
+
+	<script>
+        // $(".nav-item.dropdown").click(()=>{
+        //     console.log("ijoioi")
+        // //    $(this).next().toggle();
+        // // $(this).children().html("99999999999")
+        // // $(".dropdown-menu.dropdown-menu-end").toggle();
+        // //    console.log($(this).children(".dropdown-menu.dropdown-menu-end").toggle());
+        // //    $(".dropdown-menu.dropdown-menu-end").hover();
+        // //    $(".dropdown-menu.dropdown-menu-end").toggle();
+        // })
+        let newsText = [
+            "大受歡迎",
+            "名額有限",
+            "成為受歡迎對象吧"
+        ];
+        let i = 0;
+
+        let carouselNews = window.setInterval(() => {
+            $("#news").html(newsText[i++ % 3]);
+
+            if(i%2==0){
+                $("#news").addClass("run");
+            }else{
+                $("#news").removeClass("run");
+            }
+        }, 4000);
+
+
+    </script>
 <script>
 function test(){
 if(<%=!check%>){

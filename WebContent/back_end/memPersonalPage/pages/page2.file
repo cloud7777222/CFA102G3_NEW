@@ -1,0 +1,17 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
+
+  
+<div class="container">
+ 
+    <nav aria-label="Page navigation example">
+  		<ul class="pagination">   
+	      	<li class="page-item"><a class="page-link" href="<%=request.getRequestURI()%>?whichPage=<%=whichPage-1%>">Previous</a></li>
+	        <li class="page-item"><a class="page-link" href="<%=request.getRequestURI()%>?whichPage=1">1</a></li>
+	    	<li class="page-item"><a class="page-link" href="<%=request.getRequestURI()%>?whichPage=2">2</a></li>
+	    	<li class="page-item"><a class="page-link" href="<%=request.getRequestURI()%>?whichPage=3">3</a></li>
+	       	<li class="page-item"><a class="page-link" href="<%=request.getRequestURI()%>?whichPage=<%=whichPage+1%>">Next</a></li>
+	    	<li class="page-item"><a class="page-link" href="<%=request.getRequestURI()%>?whichPage=<%=pageNumber%>">Last</a>
+ 	 	</ul>
+	</nav>
+  </div>
+  

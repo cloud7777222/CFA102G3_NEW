@@ -6,10 +6,12 @@
 <head>
 <meta charset="UTF-8">
 <title>員工更新</title>
+<%@ include file="/back_end/header.jsp"%>
 </head>
+<%@ include file="/back_end/sliderbar.jsp"%>
 <h3>員工資料更新</h3>
 <body>
-<a href="<%=request.getContextPath()%>/back_end/index.jsp">回首頁</a><br>
+
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
 	<font style="color:red">請修正以下錯誤:</font>
@@ -50,5 +52,6 @@
 <input type="hidden" name="empno" value="${empVO.empno}">
 <input type="submit" value="送出修改">
 </FORM>
+<%@ include file="/back_end/footer.jsp"%> 
 </body>
 </html>

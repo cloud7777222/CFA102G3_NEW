@@ -5,61 +5,274 @@
 
 <%
   MemberVO memberVO = (MemberVO) request.getAttribute("memberVO");
+  boolean beMember =(boolean) request.getAttribute("beMember");
 %>
-<%= memberVO==null%>
-
+<script>
+if(<%=beMember%>){
+	alert("已經成為會員開始填寫基本資料")
+}
+</script>
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<title>Insert title here</title>
+<title>修改會員資料</title>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<style>
+ img{
+      border-radius: 100px;
+    }
+</style>
+
+
+
+
+
+
+
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="Free Website Template" name="keywords">
+<meta content="Free Website Template" name="description">
+
+<%@ include file="/front_end/pages/link.file"%>
+<style>
+
+.text p {
+	width: 100%;
+}
+
+.carousel {
+	background: #940a3f;
+	min-height: 130px;
+}
+
+@media ( max-width : 991.98px) {
+	.carousel {
+		min-height: 0;
+	}
+}
+</style>
 </head>
 <body>
---------------------${memberVO.memberAccount}------------------------
+	<!-- Top Bar Start -->
+	<jsp:include page="/front_end/topbar.jsp" flush="true" />
+	<!-- Nav Bar End -->
+
+	<div class="carousel">
+		<div class="container-fluid">
+			<div class="owl-carousel"></div>
+		</div>
+	</div>
+	<!-- Carousel End -->
+
+	<div class="container-fluid" style="margin-left: 100px;">
+
+
+
+
+
+
+
+
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+<div class="row">
+<div class="col-md-10 ">
+<form class="form-horizontal" action="<%=request.getContextPath()%>/member/member" method="POST" enctype="multipart/form-data">
+<fieldset>
+
+<!-- Form Name -->
+<legend>修改會員資料</legend>
 <c:if test="${not empty errorMsgs}">
-	<font style="color:red">請修正以下錯誤:</font>
 	<ul>
 		<c:forEach var="message" items="${errorMsgs}">
 			<li style="color:red">${message}</li>
 		</c:forEach>
 	</ul>
 </c:if>
-	<form action="<%=request.getContextPath()%>/member/member" method="POST" enctype="multipart/form-data">
-    <img id="Preview" src="<%=request.getContextPath()%>/GetPhoto?memberAccount=${memberVO.memberAccount}"><br>
-    <input type="file" id="MemberPhoto" name="memberPhoto"><br>
-    姓名<input type="text" id="MemberName" name="memberName" value="<%= (memberVO.getMemberName()==null)? "" : memberVO.getMemberName()%>"><br>
-    男<input type="radio" name="memberGender" value="1" checked>
-    女<input type="radio" name="memberGender" value="2" ${(memberVO.memberGender==2)?'checked':'' }><br>
-    生日<input id="MemberBirthday" name="memberBirthday" type="text" ><br>
-    職業<input type="text" id="MemberJob" name="memberJob" value="<%= (memberVO.getMemberJob()==null)? "" : memberVO.getMemberJob()%>"><br>
-    手機<input type="text" id="MemberPhone" name="memberPhone" value="<%= (memberVO.getMemberPhone()==null)? "" : memberVO.getMemberPhone()%>"><br>
-   居住地<select id="MemberCountry" name="memberCountry">
-        <option value="1" ${(memberVO.memberCountry==1)?'selected':'' }>臺北市</option>
-        <option value="2" ${(memberVO.memberCountry==2)?'selected':'' }>新北市</option>
-        <option value="3" ${(memberVO.memberCountry==3)?'selected':'' }>桃園市</option>
-        <option value="4" ${(memberVO.memberCountry==4)?'selected':'' }>臺中市</option>
-        <option value="5" ${(memberVO.memberCountry==5)?'selected':'' }>臺南市</option>
-        <option value="6" ${(memberVO.memberCountry==6)?'selected':'' }>高雄市</option>
-        <option value="7" ${(memberVO.memberCountry==7)?'selected':'' }>基隆市</option>
-        <option value="8" ${(memberVO.memberCountry==8)?'selected':'' }>新竹市</option>
-        <option value="9" ${(memberVO.memberCountry==9)?'selected':'' }>嘉義市</option>
-        <option value="10" ${(memberVO.memberCountry==10)?'selected':'' }>新竹縣</option>
-        <option value="11" ${(memberVO.memberCountry==11)?'selected':'' }>苗栗縣</option>
-        <option value="12" ${(memberVO.memberCountry==12)?'selected':'' }>彰化縣</option>
-        <option value="13" ${(memberVO.memberCountry==13)?'selected':'' }>南投縣</option>
-        <option value="14" ${(memberVO.memberCountry==14)?'selected':'' }>雲林縣</option>
-        <option value="15" ${(memberVO.memberCountry==15)?'selected':'' }>嘉義縣</option>
-        <option value="16" ${(memberVO.memberCountry==16)?'selected':'' }>屏東縣</option>
-        <option value="17" ${(memberVO.memberCountry==17)?'selected':'' }>宜蘭縣</option>
-        <option value="18" ${(memberVO.memberCountry==18)?'selected':'' }>花蓮縣</option>
-        <option value="19" ${(memberVO.memberCountry==19)?'selected':'' }>臺東縣</option>
-        <option value="20" ${(memberVO.memberCountry==20)?'selected':'' }>澎湖縣</option>
-    </select><br>
-    <textarea id="MemberIntroduce" name="memberIntroduce"  cols="30" rows="10"><%= (memberVO.getMemberIntroduce()==null)? "" : memberVO.getMemberIntroduce()%></textarea><br>
-    <input type="hidden" name="action" value="update_Member">
-    <input type="hidden" name="memberAccount" value="${memberVO.memberAccount}">
-    <input type="submit" value="送出"></FORM>
-	</form>
-	
+
+<!-- File Button --> 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="MemberPhoto"></label>
+  <div class="col-md-4">
+    <label class="col-md-4 control-label" for="MemberPhoto"><img id="Preview" src="<%=request.getContextPath()%>/GetPhoto?memberAccount=${memberVO.memberAccount}"></label>
+    <input type="file" class="input-file" id="MemberPhoto" name="memberPhoto" style="display: none;">
+  </div>
+</div>
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="MemberName">姓名</label>  
+  <div class="col-md-4">
+ <div class="input-group">
+       <input  id="MemberName" name="memberName" type="text"  class="form-control" value="<%= (memberVO.getMemberName()==null)? "" : memberVO.getMemberName()%>">
+      </div>
+  </div>
+</div>
+
+
+<!-- Multiple Radios (inline) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Gender">性別</label>
+  <div class="col-md-4"> 
+    <label class="radio-inline" for="male">
+      <input id="male" type="radio" name="memberGender"  value="1" checked="checked">
+      男生
+    </label> 
+    <label class="radio-inline" for="female">
+      <input id="female" type="radio" name="memberGender"  value="2" ${(memberVO.memberGender==2)?'checked':'' }>
+      女生
+    </label> 
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="MemberBirthday">生日</label>  
+  <div class="col-md-4">
+  <div class="input-group">
+       <input  id="MemberBirthday" name="memberBirthday" type="text"  class="form-control input-md">
+      </div>
+  </div>
+</div>
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="MemberJob">職業</label>  
+  <div class="col-md-4">
+  <div class="input-group">
+    <input  id="MemberJob" name="memberJob" type="text"  class="form-control input-md" value="<%= (memberVO.getMemberJob()==null)? "" : memberVO.getMemberJob()%>">
+      </div>
+  </div>
+</div>
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="MemberPhone">手機</label>  
+  <div class="col-md-4">
+  <div class="input-group">
+    <input  id="MemberPhone" name="memberPhone" type="text"  class="form-control input-md" value="<%= (memberVO.getMemberPhone()==null)? "" : memberVO.getMemberPhone()%>">
+      </div>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="MemberCountry">居住地</label>  
+  <div class="col-md-4">
+  <div class="input-group">
+    <select id="MemberCountry" name="memberCountry" class="form-control input-md">
+      <option value="1" ${(memberVO.memberCountry==1)?'selected':'' }>臺北市</option>
+      <option value="2" ${(memberVO.memberCountry==2)?'selected':'' }>新北市</option>
+      <option value="3" ${(memberVO.memberCountry==3)?'selected':'' }>桃園市</option>
+      <option value="4" ${(memberVO.memberCountry==4)?'selected':'' }>臺中市</option>
+      <option value="5" ${(memberVO.memberCountry==5)?'selected':'' }>臺南市</option>
+      <option value="6" ${(memberVO.memberCountry==6)?'selected':'' }>高雄市</option>
+      <option value="7" ${(memberVO.memberCountry==7)?'selected':'' }>基隆市</option>
+      <option value="8" ${(memberVO.memberCountry==8)?'selected':'' }>新竹市</option>
+      <option value="9" ${(memberVO.memberCountry==9)?'selected':'' }>嘉義市</option>
+      <option value="10" ${(memberVO.memberCountry==10)?'selected':'' }>新竹縣</option>
+      <option value="11" ${(memberVO.memberCountry==11)?'selected':'' }>苗栗縣</option>
+      <option value="12" ${(memberVO.memberCountry==12)?'selected':'' }>彰化縣</option>
+      <option value="13" ${(memberVO.memberCountry==13)?'selected':'' }>南投縣</option>
+      <option value="14" ${(memberVO.memberCountry==14)?'selected':'' }>雲林縣</option>
+      <option value="15" ${(memberVO.memberCountry==15)?'selected':'' }>嘉義縣</option>
+      <option value="16" ${(memberVO.memberCountry==16)?'selected':'' }>屏東縣</option>
+      <option value="17" ${(memberVO.memberCountry==17)?'selected':'' }>宜蘭縣</option>
+      <option value="18" ${(memberVO.memberCountry==18)?'selected':'' }>花蓮縣</option>
+      <option value="19" ${(memberVO.memberCountry==19)?'selected':'' }>臺東縣</option>
+      <option value="20" ${(memberVO.memberCountry==20)?'selected':'' }>澎湖縣</option>
+  </select>
+      </div>
+  </div>
+</div>
+
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="MemberIntroduce">自我介紹</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" rows="10"  id="MemberIntroduce" name="memberIntroduce"><%= (memberVO.getMemberIntroduce()==null)? "" : memberVO.getMemberIntroduce()%></textarea></textarea>
+  </div>
+</div>
+
+
+<div class="form-group">
+  <label class="col-md-4 control-label" ></label>  
+  <div class="col-md-4">
+  
+  <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up"></span> 送出</button>
+
+  <button type="reset" class="btn btn-danger"><span class="glyphicon glyphicon-remove-sign"></span> 清空</button>
+    
+  </div>
+</div>
+<input type="hidden" name="action" value="update_Member">
+<input type="hidden" name="memberAccount" value="${memberVO.memberAccount}">
+</fieldset>
+</form>
+</div>
+
+</div>
+   </div>
+
+
+
+
+
+
+
+	</div>
+
+	<!-- Footer Start -->
+	<jsp:include page="/front_end/footer.jsp" flush="true" />
+	<!-- Footer End -->
+
+	<!-- Back to top button -->
+	<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+	<!-- Pre Loader -->
+	<div id="loader" class="show">
+		<div class="loader"></div>
+	</div>
+
+	<%@ include file="/front_end/pages/script.file"%>
+
+	<script>
+        // $(".nav-item.dropdown").click(()=>{
+        //     console.log("ijoioi")
+        // //    $(this).next().toggle();
+        // // $(this).children().html("99999999999")
+        // // $(".dropdown-menu.dropdown-menu-end").toggle();
+        // //    console.log($(this).children(".dropdown-menu.dropdown-menu-end").toggle());
+        // //    $(".dropdown-menu.dropdown-menu-end").hover();
+        // //    $(".dropdown-menu.dropdown-menu-end").toggle();
+        // })
+        let newsText = [
+            "大受歡迎",
+            "名額有限",
+            "成為受歡迎對象吧"
+        ];
+        let i = 0;
+
+        let carouselNews = window.setInterval(() => {
+            $("#news").html(newsText[i++ % 3]);
+
+            if(i%2==0){
+                $("#news").addClass("run");
+            }else{
+                $("#news").removeClass("run");
+            }
+        }, 4000);
+
+
+    </script>	
 	<!-- =========================================以下為 datetimepicker 之相關設定========================================== -->
 
 <% 

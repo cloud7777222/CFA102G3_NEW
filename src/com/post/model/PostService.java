@@ -3,6 +3,9 @@ package com.post.model;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import com.postmessage.model.PostMessageVO;
 
 public class PostService {
 
@@ -61,5 +64,11 @@ public class PostService {
 	public List<PostVO> getAll(Map<String, String[]> map) {
 		return dao.getAll(map);
 	}
+	
+	
+	public Set<PostMessageVO> getMessagesByPostNo(Integer postNo) {
+		return dao.getMessagesByPostNo(postNo);
+	}
+
 
 }

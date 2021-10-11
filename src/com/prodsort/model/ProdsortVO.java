@@ -1,8 +1,12 @@
 package com.prodsort.model;
 
+
+
 public class ProdsortVO {
 	private Integer prodsortno;
 	private String prodsortname;
+
+
 	public ProdsortVO() {
 		
 	}

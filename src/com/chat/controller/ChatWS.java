@@ -34,11 +34,7 @@ public class ChatWS {
 	@OnOpen
 	public void onOpen(@PathParam("memberAccount") String memberAccount,Session userSession) {
 		sessionsMap.put(memberAccount, userSession);//上線就把自己的Session放到Map裡面
-		
 		Set<String> userNames = sessionsMap.keySet();//拿出所有Map的Key
-		for(String a:userNames) {
-			System.out.println(a);
-		}
 		
 		State stateMessage = new State("open", memberAccount, userNames);//送所有人的
 		String stateMessageJson = gson.toJson(stateMessage);
@@ -61,7 +57,6 @@ public class ChatWS {
 		ChatDAO chatDAO=new ChatDAO();
 		Session receiverSession = sessionsMap.get(memberAccountB);//因為他沒有在線上所以沒有key
 		if("unreadMessage".equals(chatVO.getType())) {//未讀訊息數量
-			System.out.println("YAYAYA");
 			Gson gson=new Gson();
 			FriendService friendService=new FriendService();
 			MemberVO memberVO=new MemberVO();
@@ -72,15 +67,19 @@ public class ChatWS {
 			list=friendService.getFriend(memberNoA);//拿出所有好友
 			for(MemberVO friend:list) {
 				ChatVO friendUnread=new ChatVO();
-				friendUnread.setMemberAccountA(friend.getMemberAccount());
+				ChatVO lastMessageVO=gson.fromJson(chatDAO.get_last_message(memberAccountA, friend.getMemberAccount()), ChatVO.class);
+				friendUnread.setMemberAccountA(memberAccountA);
+				friendUnread.setMemberAccountB(friend.getMemberAccount());
 				friendUnread.setUnreadMessage(chatDAO.unread_number(memberAccountA, friend.getMemberAccount()).toString());
+				friendUnread.setLastMessage(lastMessageVO.getLastMessage());
 				unreadFriendList.add(gson.toJson(friendUnread));
+				System.out.println(friendUnread.getUnreadMessage());
 			}
 			ChatVO unreadMsg=new ChatVO();
 			unreadMsg.setType("unreadMessage");
 			unreadMsg.setMessage(gson.toJson(unreadFriendList));
 			if (userSession != null && userSession.isOpen()) {
-				userSession.getAsyncRemote().sendText(gson.toJson(unreadMsg));////////
+				userSession.getAsyncRemote().sendText(gson.toJson(unreadMsg));
 				System.out.println("history = " + gson.toJson(unreadMsg));//可以刪掉
 			return;
 			}
@@ -93,16 +92,24 @@ public class ChatWS {
 				List<String> historyDataB =chatDAO.get_all(memberAccountB, memberAccountA);
 				String historyMsgB = gson.toJson(historyDataB);
 				ChatVO chatVOHistoryB=new ChatVO();
+				chatVOHistoryB.setMemberAccountA(memberAccountB);
+				chatVOHistoryB.setMemberAccountB(memberAccountA);
 				chatVOHistoryB.setType("history");
 				chatVOHistoryB.setMessage(historyMsgB);//訊息list
-				if (receiverSession != null && receiverSession.isOpen()) {
+				if (receiverSession != null && receiverSession.isOpen()) {//////////
+					String myname=memberService.getOneMember(memberAccountA).getMemberName();//自己的名字
+					String friendChoose=whichOneMap.get(memberAccountB);//好友是不是選擇我
+					if(myname.equals(friendChoose)) {
 					receiverSession.getAsyncRemote().sendText(gson.toJson(chatVOHistoryB));//如果有未讀訊息 更新後對方有上線推給對方
 					System.out.println("history = " + gson.toJson(chatVOHistoryB));//可以刪掉
+					}
 				}
 			}
 			List<String> historyDataA =chatDAO.get_all(memberAccountA, memberAccountB);
 			String historyMsgA = gson.toJson(historyDataA);
 			ChatVO chatVOHistoryA=new ChatVO();
+			chatVOHistoryA.setMemberAccountA(memberAccountA);
+			chatVOHistoryA.setMemberAccountB(memberAccountB);
 			chatVOHistoryA.setType("history");
 			chatVOHistoryA.setMessage(historyMsgA);//訊息list
 			if (userSession != null && userSession.isOpen()) {
@@ -114,16 +121,37 @@ public class ChatWS {
 		if ("chat".equals(chatVO.getType())) {
 		String myname=memberService.getOneMember(memberAccountA).getMemberName();//自己的名字
 		String friendChoose=whichOneMap.get(memberAccountB);//好友是不是選擇我
-		
 		if (receiverSession != null && receiverSession.isOpen()) {
 			if(myname.equals(friendChoose)) {
 				chatVO.setChatSeen("已讀");//如果是就把狀態改為已讀
+				chatDAO.insert(chatVO);
+				ChatVO lastMessageVO=gson.fromJson(chatDAO.get_last_message(memberAccountA,memberAccountB), ChatVO.class);
+				chatVO.setLastMessage(lastMessageVO.getLastMessage());
+				receiverSession.getAsyncRemote().sendText(gson.toJson(chatVO));//如果有上線的話 message的seen改成""
+				userSession.getAsyncRemote().sendText(gson.toJson(chatVO));
+				return;
 			}
-			receiverSession.getAsyncRemote().sendText(gson.toJson(chatVO));//如果有上線的話 message的seen改成""
+			else{
+				chatDAO.insert(chatVO);
+				ChatVO lastMessageVO=gson.fromJson(chatDAO.get_last_message(memberAccountA,memberAccountB), ChatVO.class);
+				chatVO.setChatSeen("");
+				chatVO.setLastMessage(lastMessageVO.getLastMessage());
+				userSession.getAsyncRemote().sendText(gson.toJson(chatVO));
+				ChatVO chatVOB=chatVO;
+				chatVOB.setType("unchoose");
+				chatVOB.setUnreadMessage(chatDAO.unread_number(memberAccountB, memberAccountA).toString());
+				receiverSession.getAsyncRemote().sendText(gson.toJson(chatVOB));//如果有上線的話 message的seen改成"
+				System.out.println("Message received: " +chatVOB);
+				return;
+			}
+		}else {
+			chatDAO.insert(chatVO);
+			ChatVO lastMessageVO=gson.fromJson(chatDAO.get_last_message(memberAccountA,memberAccountB), ChatVO.class);
+			chatVO.setChatSeen("");
+			chatVO.setLastMessage(lastMessageVO.getLastMessage());
+			userSession.getAsyncRemote().sendText(gson.toJson(chatVO));
+			return;
 		}
-		userSession.getAsyncRemote().sendText(gson.toJson(chatVO));
-		chatDAO.insert(chatVO);
-		System.out.println("Message received: " +chatVO);
 	}
 	}
 	
@@ -139,6 +167,7 @@ public class ChatWS {
 		for (String userName : userNames) {
 			if (sessionsMap.get(userName).equals(userSession)) {
 				userNameClose = userName;
+				whichOneMap.remove(userName);
 				sessionsMap.remove(userName);
 				break;
 			}

@@ -46,7 +46,7 @@
 		</c:forEach>
 	</ul>
 </c:if>
-
+<img src="DBGifReader">
 <ul>
   <li><a href='<%=request.getContextPath()%>/back_end/activity/listAllActivity.jsp'>List</a> all Activitys.  <br><br></li>
   

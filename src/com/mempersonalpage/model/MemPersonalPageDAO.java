@@ -19,7 +19,7 @@ public class MemPersonalPageDAO implements MemPersonalPageDAO_interface {
 	static {
 		try {
 			Context ctx = new javax.naming.InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/belovedb");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -30,7 +30,7 @@ public class MemPersonalPageDAO implements MemPersonalPageDAO_interface {
 	public static final String UpdateBy_postNo_SQL = "update mempersonalpage set memberNo = ?, postPhoto = ?, postContent = ?, postTime = ?, numOfLike = ?, postState = ? where postNo = ?";
 	public static final String DeletBy_postNo_SQL = "delete from mempersonalpage where postNo = ?";
 	public static final String FindBy_postNo_SQL = "select * from mempersonalpage where postNo = ?";
-	public static final String getAll_SQL = "select * from mempersonalpage";
+	public static final String getAll_SQL = "select * from mempersonalpage order by postNo desc";
 
 	// 實作新增: 會員新增一筆個人頁面貼文
 	@Override

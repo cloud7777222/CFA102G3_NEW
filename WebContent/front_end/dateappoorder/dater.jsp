@@ -5,6 +5,8 @@
 <%@ page import="java.util.stream.Collectors"%>
 <%-- <%@ page import="com.dateappoorder.model.*"%> --%>
 <%@ page import="com.member.model.*"%>
+
+<%@ page import="redis.clients.jedis.Jedis"%>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
 
 <%
@@ -19,6 +21,7 @@
 				.filter(i->i.toString().toLowerCase().indexOf(request.getAttribute("keyword").toString().toLowerCase())!=-1)
 				.collect(Collectors.toList());
 	}
+
 	String[] country = {"國外","臺北市","新北市","桃園市","臺中市","臺南市","高雄市","基隆市","新竹市","嘉義市","新竹縣","苗栗縣","彰化縣","南投縣","雲林縣","嘉義縣","屏東縣","宜蘭縣","花蓮縣","臺東縣","澎湖縣"};
 // 	List<MemberVO> list = isNull
 // 			?(List<MemberVO>)request.getAttribute("keywordOfList")
@@ -36,6 +39,57 @@
 // 	List<DateappoorderVO> list = dateappoorderSvc.getAll();
 	pageContext.setAttribute("list", list);
 	pageContext.setAttribute("country", country);
+	
+	//惠君
+	Jedis jedis = new Jedis("localhost", 6379);
+// 	String who = "men:"+ request.getParameter("memberNo")+":page.view";
+// 	String who = "men:"+ 1+":page.view";
+	String field = "points";
+	List<String> count = new ArrayList<String>();
+	String allCount = null;
+	
+// 	if(jedis.hexists(who, field)){
+// 		jedis.hincrByFloat(who, field, 1);
+// 	}else{
+		
+// 	jedis.hset(who, field, "1");
+// 	}
+	String all ="men:all:page.view";
+// 	if(jedis.hexists(all, field)){
+// 		jedis.hincrByFloat(all, field, 1);
+// 	}else{
+		
+// 	jedis.hset(all, field, "1");
+// 	}
+	
+	
+	
+	//list 給計數
+	allCount=jedis.hget(all, field);
+	
+	for(MemberVO i : list){
+// 		try{
+// 		if(i.getMemberNo()==((MemberVO)session.getAttribute("memberVO")).getMemberNo())continue;
+			
+// 		}catch(Exception e){
+			
+// 		}
+		String c = jedis.hget("men:"+ i.getMemberNo()+":page.view", "points");
+		//個人點擊次數
+		c=c==null?"0":c;
+		count.add(c);
+	}
+// 	String countAll
+	
+	jedis.close();
+	
+	
+	pageContext.setAttribute("count", count);
+	pageContext.setAttribute("allCount", allCount);
+	
+	
+	
+	
 %>
 <%-- <jsp:useBean id="memberSvc" scope="page" class="com.member.model.MemberService" /> --%>
 	
@@ -206,7 +260,8 @@
                 </div>
                 <div class="owl-carousel causes-carousel">
 
-                    <c:forEach var="memberVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
+                    <c:forEach var="memberVO" items="${list}" varStatus="tableCount" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
+                        
                         <div class="causes-item" ${(param.dateOrderNo==dateappoorderVO.dateOrderNo)
                             ? "style='background-color: #fff3cd;'" : "" }>
                             <div class="member-no">
@@ -215,7 +270,7 @@
                                     <input type="hidden" name="memberNo" value="${memberVO.memberNo}">
                                     <input type="hidden" name="action" value="getOne_For_Display">
 
-                                    <button type="submit" class="btn btn-info">${memberVO.memberNo}</button>
+                                    <button type="button" class="btn btn-info">${memberVO.memberNo}</button>
                                 </FORM>
                             </div>
                             <div class="causes-img">
@@ -226,14 +281,14 @@
                             </div>
                             <div class="causes-progress">
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0"
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="${count.get(tableCount.index)/allCount*100}" aria-valuemin="0"
                                         aria-valuemax="100">
-                                        <span>85%</span>
+                                        <span>${Integer.valueOf(count.get(tableCount.index)/allCount*100)}%</span>
                                     </div>
                                 </div>
                                 <div class="progress-text">
-                                    <p><strong>點擊次數:</strong> 0</p>
-                                    <p><strong>全站點擊次數:</strong> 50000</p>
+                                    <p><strong>點擊次數:</strong> ${count.get(tableCount.index)}</p>
+                                    <p><strong>全站點擊次數:</strong> ${allCount }</p>
                                 </div>
                             </div>
                             <div class="causes-text">
@@ -251,16 +306,19 @@
                                 </div>
                             </div>
                             <div class="causes-btn">
-                                <a class="btn btn-custom">查看動態</a>
+                                <a href="<%=request.getContextPath()%>/front_end/memPersonalPage/memPersonalPage_main.jsp?memberNo=${memberVO.memberNo}&memberName=${memberVO.memberName}" class="btn btn-custom">查看動態</a>
                                 <FORM id="datingBtn${memberVO.memberNo}" METHOD="post" ACTION="<%=request.getContextPath()%>/memTime/memTime.do"
                                     style="margin-bottom: 0px;">
                                     <input type="hidden" name="memberNoB" value="${memberVO.memberNo}">
                                     <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 									<input type="hidden" name="action" value="datingCheck">
                                 </FORM>
+                                <c:if test="${sessionScope.memberVO.memberNo!=memberVO.memberNo}">
                                 <a class="btn btn-custom" onclick="$('#datingBtn${memberVO.memberNo}').submit()">立即預約</a>
+                       			</c:if>
                                 
                             </div>
+                        
                         </div>
                     </c:forEach>
                     
